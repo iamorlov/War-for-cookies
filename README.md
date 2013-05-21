@@ -1,4 +1,4 @@
-RTS-for-Linux
+TTS-for-Linux
 =============
 
-Great RTS game for Linux =]
+Great TTS game for Linux =]
