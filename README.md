@@ -1,4 +1,4 @@
-RPG-for-Linux
+RTS-for-Linux
 =============
 
-Console old-style RPG game
+Great RTS game for Linux =]
