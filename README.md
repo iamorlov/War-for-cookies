@@ -1,4 +1,4 @@
-TTS-for-Linux
+War for cookies
 =============
 
-Great TTS game for Linux =]
+Great TBS game for Linux =]
