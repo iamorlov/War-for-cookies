@@ -18,46 +18,59 @@ class Window(Core):
         pygame.display.flip()
         i = 0
     
+    def Entry_type(self):
+        cell = Rect((20,20),(700,700))
+        pygame.draw.rect(self.display,(0,204,0),cell,0)
+        pygame.display.flip()
+        
+    
     def Maps_grid(self):
         if self.map_type == 0:  
-           step_p = 14
-           steps = 50
+           self.step_p = 14
+           self.steps = 50
         elif self.map_type == 1:
-            step_p = 7
-            steps = 100
+            self.step_p = 7
+            self.steps = 100
         elif self.map_type == 2:
-            step_p = 5
-            steps = 140
-        for i in range(steps):
-            for j in range(steps):
-                cell = Rect((20+step_p*i,20+step_p*j),(step_p,step_p))
+            self.step_p = 5
+            self.steps = 140
+        for i in range(self.steps):
+            for j in range(self.steps):
+                cell = Rect((20+self.step_p*i,20+self.step_p*j),(self.step_p,self.step_p))
                 pygame.draw.rect(self.display,(0,0,0),cell,1)
         pygame.display.flip()
         
-    def Type_of_grids(self):       
-        # Ололо, я індус
+    def colours(self):
+        self.colour = []
         for i in range(3):
             for j in range(3):
                 if i+j == 0:
-                    colour = (0,204,0)
+                    self.colour.append((0,204,0))
                 elif i+j == 1:
-                    colour = (255,204,0)
+                    self.colour.append((255,204,0))
                 elif i+j == 2:
-                    colour = (153,102,51)
+                    self.colour.append((153,102,51))
                 elif i+j == 3:
-                    colour = (51,51,255)
+                    self.colour.append((51,51,255))
                 elif i+j == 4:
-                    colour = (51,102,51)
+                    self.colour.append((51,102,51))
                 elif i+j == 5:
-                    colour = (204,204,153)
+                    self.colour.append((204,204,153))
                 elif i+j == 6:
-                    colour = (204,204,102)
+                    self.colour.append((204,204,102))
                 elif i+j == 7:
-                    colour = (225,225,102)
+                    self.colour.append((225,225,102))
                 elif i+j == 8:
-                    colour = (0,0,0)              
+                    self.colour.append((0,0,0))
+        print self.colour[2]   
+    
+    def Type_of_grids(self):       
+        # Ололо, я індус
+        self.colours()
+        for i in range(3):
+            for j in range(3):             
                 cell = Rect((850+50*i,270+50*j),(50,50))
-                pygame.draw.rect(self.display,colour,cell,0)
+                pygame.draw.rect(self.display,self.colour[i+j],cell,0)
                 
         for i in range(3):
             for j in range(3):
@@ -73,7 +86,8 @@ class Window(Core):
         pygame.draw.rect(self.display,(0,0,0),cell,1)
         pygame.display.flip()
     
-    def Mouse_events(self):
+    def Get_cell_type(self):
+        self.cell_type = 12
         for event in pygame.event.get():
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -81,15 +95,26 @@ class Window(Core):
                     if ((click_coords[0] > 850) and (click_coords[1] > 270) and (click_coords[0] < 1050) and (click_coords[1] < 420)):
                         x_coord = (click_coords[0]-850)//50
                         y_coord = (click_coords[1]-270)//50
-                        cell_type = x_coord+y_coord+1
-                        print cell_type                        
+                        self.cell_type = x_coord+y_coord+1
+                        print self.cell_type                        
                         print 'first zone'
                     if ((click_coords[0] > 875) and (click_coords[1] > 420) and (click_coords[0] < 975) and (click_coords[1] < 470)):
                         x_coord = (click_coords[0]-875)//50
                         y_coord = (click_coords[1]-420)//50
-                        cell_type = x_coord+y_coord+10
-                        print cell_type   
+                        self.cell_type = x_coord+y_coord+10
+                        print self.cell_type   
                         print 'second zone'
-
-            #print event.type
         pygame.display.flip()
+        pygame.event.clear()
+        
+    def Rewrite_cell(self):
+        self.Get_cell_type() ## Але, кто нибуть, найдите как запилить окончание перехвата событий!!!!!!!!!!!!
+        for event in pygame.event.get():
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click_coords = event.pos
+                    if ((click_coords[0] > 20) and (click_coords[1] > 20) and (click_coords[0] < 750) and (click_coords[1] < 720)):
+                        x_coord = (click_coords[0]-20)//self.step_p
+                        y_coord = (click_coords[1]-20)//self.step_p
+                        print str(x_coord)+' '+str(y_coord)
+        pygame.display.flip() 
