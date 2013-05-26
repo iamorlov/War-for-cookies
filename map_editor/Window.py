@@ -33,7 +33,32 @@ class Window(Core):
                 cell = Rect((20+step_p*i,20+step_p*j),(step_p,step_p))
                 pygame.draw.rect(self.display,(0,0,0),cell,1)
         pygame.display.flip()
-    def Type_of_grids(self):
+        
+    def Type_of_grids(self):       
+        # Ололо, я індус
+        for i in range(3):
+            for j in range(3):
+                if i+j == 0:
+                    colour = (0,204,0)
+                elif i+j == 1:
+                    colour = (255,204,0)
+                elif i+j == 2:
+                    colour = (153,102,51)
+                elif i+j == 3:
+                    colour = (51,51,255)
+                elif i+j == 4:
+                    colour = (51,102,51)
+                elif i+j == 5:
+                    colour = (204,204,153)
+                elif i+j == 6:
+                    colour = (204,204,102)
+                elif i+j == 7:
+                    colour = (225,225,102)
+                elif i+j == 8:
+                    colour = (0,0,0)              
+                cell = Rect((850+50*i,270+50*j),(50,50))
+                pygame.draw.rect(self.display,colour,cell,0)
+                
         for i in range(3):
             for j in range(3):
                 cell = Rect((850+50*i,270+50*j),(50,50))
@@ -56,9 +81,14 @@ class Window(Core):
                     if ((click_coords[0] > 850) and (click_coords[1] > 270) and (click_coords[0] < 1050) and (click_coords[1] < 420)):
                         x_coord = (click_coords[0]-850)//50
                         y_coord = (click_coords[1]-270)//50
-                        print str(x_coord)+' '+str(y_coord)                        
+                        cell_type = x_coord+y_coord+1
+                        print cell_type                        
                         print 'first zone'
                     if ((click_coords[0] > 875) and (click_coords[1] > 420) and (click_coords[0] < 975) and (click_coords[1] < 470)):
+                        x_coord = (click_coords[0]-875)//50
+                        y_coord = (click_coords[1]-420)//50
+                        cell_type = x_coord+y_coord+10
+                        print cell_type   
                         print 'second zone'
 
             #print event.type
