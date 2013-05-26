@@ -47,3 +47,19 @@ class Window(Core):
         pygame.draw.rect(self.display,(51,0,255),cell,0)
         pygame.draw.rect(self.display,(0,0,0),cell,1)
         pygame.display.flip()
+    
+    def Mouse_events(self):
+        for event in pygame.event.get():
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click_coords = event.pos
+                    if ((click_coords[0] > 850) and (click_coords[1] > 270) and (click_coords[0] < 1050) and (click_coords[1] < 420)):
+                        x_coord = (click_coords[0]-850)//50
+                        y_coord = (click_coords[1]-270)//50
+                        print str(x_coord)+' '+str(y_coord)                        
+                        print 'first zone'
+                    if ((click_coords[0] > 875) and (click_coords[1] > 420) and (click_coords[0] < 975) and (click_coords[1] < 470)):
+                        print 'second zone'
+
+            #print event.type
+        pygame.display.flip()
