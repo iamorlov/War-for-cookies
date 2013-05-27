@@ -8,6 +8,6 @@ if __name__ == '__main__':
     a.Maps_grid()
     a.Type_of_grids()
     a.Rewrite_cell()
-    for i in range(3000):
+    while True:
         a.Rewrite_cell()
-        time.sleep(0.05)
+        time.sleep(0.000001)

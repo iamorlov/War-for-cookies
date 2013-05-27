@@ -47,7 +47,7 @@ class Core():
         for i in range(len(lines)):
             l+=lines[i]
         a = re.search('[(]'+str(x)+'[;]'+str(y)+'[;][0-9][;][0-2][;][0-9]+[)]',l)
-        if a.group(0)!=None:
+        if a!=None:
             base_line = a.group(0)
         else: print 'error'
         new_line = '('+str(x)+';'+str(y)+';'+str(t)+';'+str(f)+';'+str(id_army)+')' 
