@@ -54,3 +54,43 @@ class Core():
         file = open(self.file,'w')
         file.write(l.replace(base_line,new_line))
         file.close()
+    
+    def load_cells(self,x,y):
+        map_file = open(self.file,'r')
+        lines = map_file.readlines()
+        l = ''
+        for i in range(len(lines)):
+            l+=lines[i]
+        map_file.seek(0)
+        max1 = map_file.readline()
+        max2 = map_file.readline()
+        map_file.close()
+        a = int(max1) - x
+        b = int(max2) - y
+        if (x < 25):
+            self.x_coord_start = 0
+            self.x_coord_end = 25
+        elif(a<25):
+            self.x_coord_start = int(max1)-25
+            self.x_coord_end = int(max1)
+        else:
+            self.x_coord_start = x-13
+            self.x_coord_end = x+12
+        if (y < 25):
+            self.y_coord_start = 0
+            self.y_coord_end = 25
+        elif(b<25):
+            self.y_coord_start = int(max2)-25
+            self.y_coord_end = int(max2)
+        else:
+            self.y_coord_start = y-13
+            self.y_coord_end = y+12
+        list_coords = []
+        for j in range(self.x_coord_start,self.x_coord_end):
+            for k in range(self.y_coord_start,self.y_coord_end):
+                a = re.search('[(]'+str(j)+'[;]'+str(k)+'[;][0-9][;][0-2][;][0-9]+[)]',l)
+                if a!= None:
+                    list_coords.append(a.group(0))
+        return list_coords
+        
+            
