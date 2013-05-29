@@ -146,7 +146,16 @@ class Window(Core):
                     
     def Load_part_of_map(self):
         cells_list = self.load_cells(self.minimap_x, self.minimap_y)
-        print str(self.x_coord_start)+'  '+str(self.y_coord_start)
+        for i in range(self.big_steps):
+            for j in range(self.big_steps):
+                cell = Rect((20+self.big_step*i,20+self.big_step*j),(self.big_step,self.big_step))
+                cell_type = cells_list[i+j*i][2]
+                pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
+        self.Maps_grid()
+        pygame.display.flip()
+                
+        #print str(self.x_coord_start)+'  '+str(self.y_coord_start)
+        #print cells_list
 # 28x28, 25x25 cells
     def Rewrite_cell(self):
         self.Events()

@@ -25,7 +25,7 @@ class Core():
         map_file.writelines(str(x)+'\n'+str(y)+'\n2\n')
         for i in range(y):
             for j in range(x):
-                map_file.writelines('('+str(j)+';'+str(i)+';0;0;0)\n')
+                map_file.writelines('('+str(j)+';'+str(i)+';3;0;0)\n')
         map_file.close()
         self.file = 'temp'
         
@@ -54,6 +54,44 @@ class Core():
         file = open(self.file,'w')
         file.write(l.replace(base_line,new_line))
         file.close()
+    
+    def get_cell_information(self,line):
+        #Ололо я індус
+        result = []
+        x = re.search('[(][0-9]{1,3}[;]', line)
+        x = x.group(0)
+        len_x = len(x)
+        x = x[1:]
+        x = x[:-1]
+        
+        result.append(int(x))
+        y = re.search('[(][0-9]{1,3}[;][0-9]{1,3}[;]', line)
+        y = y.group(0)
+        len_y = len(y)
+        y = y[len_x:]
+        y = y[:-1]
+
+        result.append(int(y))
+        t = re.search('[(][0-9]{1,3}[;][0-9]{1,3}[;][0-9]{1,2}[;]', line)
+        t = t.group(0)
+        len_t = len(t)
+        t = t[len_y:]
+        t = t[:-1]
+
+        result.append(int(t))
+        f = re.search('[(][0-9]{1,3}[;][0-9]{1,3}[;][0-9]{1,2}[;][0-2][;]', line)
+        f = f.group(0)
+        temp_len = len(f)
+        f = f[len_t:]
+        f = f[:-1]
+
+        result.append(int(f))
+        id_army = re.search('[(][0-9]{1,3}[;][0-9]{1,3}[;][0-9]{1,2}[;][0-2][;][0-9]+', line)
+        id_army = id_army.group(0)
+        id_army = id_army[temp_len:]
+        result.append(int(id_army))
+        #print result
+        return result               
     
     def load_cells(self,x,y):
         map_file = open(self.file,'r')
@@ -90,7 +128,7 @@ class Core():
             for k in range(self.y_coord_start,self.y_coord_end):
                 a = re.search('[(]'+str(j)+'[;]'+str(k)+'[;][0-9][;][0-2][;][0-9]+[)]',l)
                 if a!= None:
-                    list_coords.append(a.group(0))
+                    list_coords.append(self.get_cell_information(a.group(0)))
         return list_coords
         
             
