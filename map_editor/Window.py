@@ -16,7 +16,7 @@ class Window(Core):
         pygame.display.set_icon(manager.get_image('icon.png'))
         pygame.display.set_caption("Map Editor")
         a = manager.get_image('logo.png')
-        self.empty_map(1)
+        self.load_file('test_map')
         self.display.fill((250,250,250))
         pygame.display.flip()
         i = 0
@@ -49,7 +49,6 @@ class Window(Core):
         cell = Rect((800,20),(300,300))
         pygame.draw.rect(self.display,(0,0,0),cell,2)
         pygame.display.flip()
-
         
     def colours(self):
         self.colour = []
@@ -77,6 +76,16 @@ class Window(Core):
             elif i == 10:
                 self.colour.append((51,0,255))
 
+    def Minimap(self):
+        cells_list = self.load_minimap_cells()
+        self.colours()
+        for i in range(self.steps):
+            for j in range(self.steps):
+                cell = Rect((800+self.step_p*i,20+self.step_p*j),(self.step_p,self.step_p))
+                cell_type = cells_list[i+j*i][2]
+                pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
+        pygame.display.flip()
+        self.Minimaps_grid()
     
     def Type_of_grids(self):       
         # Ололо, я індус

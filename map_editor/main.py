@@ -7,6 +7,7 @@ if __name__ == '__main__':
     a.Entry_type()
     a.Maps_grid()
     a.Minimaps_grid()
+    a.Minimap()
     a.Type_of_grids()
     a.Rewrite_cell()
     while True:

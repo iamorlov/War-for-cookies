@@ -18,8 +18,8 @@ class Core():
             x = 100
             y = 100
         elif self.map_type == 2:
-            x = 140
-            y = 140
+            x = 150
+            y = 150
         ##
         map_file = open ('temp', 'w')
         map_file.writelines(str(x)+'\n'+str(y)+'\n2\n')
@@ -38,7 +38,20 @@ class Core():
         map_file.close()
         self.file = name
         os.remove('temp')
-        
+    
+    def load_file(self,name):
+        self.file = name
+        map_file = open(name,'r')
+        x_coords = map_file.readline()
+        y_coords = map_file.readline()
+        map_file.close()
+        if x_coords[:-1] == y_coords[:-1] == '50':
+            self.map_type = 0
+        elif x_coords[:-1] == y_coords[:-1] == '100':
+            self.map_type = 1
+        elif x_coords[:-1] == y_coords[:-1] == '150':
+            self.map_type = 2
+            
     def change_cell(self,x,y,t,f,id_army):
         map_file = open(self.file,'r')
         lines = map_file.readlines()
@@ -131,4 +144,21 @@ class Core():
                     list_coords.append(self.get_cell_information(a.group(0)))
         return list_coords
         
+    def load_minimap_cells(self):
+        map_file = open(self.file,'r')
+        lines = map_file.readlines()
+        l = ''
+        for i in range(len(lines)):
+            l+=lines[i]
+        map_file.seek(0)
+        max1 = map_file.readline()
+        max2 = map_file.readline()
+        map_file.close()
+        list_coords = []
+        for j in range(int(max1)):
+            for k in range(int(max2)):
+                a = re.search('[(]'+str(j)+'[;]'+str(k)+'[;][0-9][;][0-2][;][0-9]+[)]',l)
+                if a!= None:
+                    list_coords.append(self.get_cell_information(a.group(0)))
+        return list_coords
             
