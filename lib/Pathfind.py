@@ -1,5 +1,5 @@
 # -*- coding: cp1251 -*-
-#mport lib, numpy#волновой алгоритм
+import lib, numpy#волновой алгоритм
 def pathfind(matrix, x1,y1,x2,y2,steps):#matrix-карта проходимости. области со своей и вражьей армией также пометить непроходимыми!
     #непроходимые ячейки - 0, проходимые - 1
     n=len(matrix)
@@ -19,12 +19,8 @@ def pathfind(matrix, x1,y1,x2,y2,steps):#matrix-карта проходимости. области со с
         nexty = []
         for j in range(lenmas):
             for i in range (xb[j]-1,xb[j]+1): #1 этап, пускаем волну
-                if i<0:
+                if i<0 or i>n:
                     continue #ну или как там ход цикла пропустить
-                if i>n:
-                    continue
-                if i>m:
-                    continue
                 temp=(z+1)*matrix[i][yb[j]]
                 if wavematrix[i][yb[j]]>temp or wavematrix[i][yb[j]]==1:
                     wavematrix[i][yb[j]]=temp
@@ -32,12 +28,8 @@ def pathfind(matrix, x1,y1,x2,y2,steps):#matrix-карта проходимости. области со с
                     nextx.append(i)
                     nexty.append(yb[j])
             for i in range (yb[j]-1,yb[j]+1): #1 этап, пускаем волну
-                if i<0:
+                if i<0 or i>m:
                     continue #ну или как там ход цикла пропустить
-                if i>n:
-                    continue
-                if i>m:
-                    continue
                 temp=(z+1)*matrix[x1][y1]
                 if wavematrix[x1][i]==1 or wavematrix[x1][i]>temp:
                     wavematrix[x1][i]=temp
@@ -46,8 +38,8 @@ def pathfind(matrix, x1,y1,x2,y2,steps):#matrix-карта проходимости. области со с
                     nexty.append(y1)
             for i in range (waveitems):
                 if nextx[i] == x2 and nexty[i] == x2:#если дошли до нужной точки
-                    flag=true
-                    k=i
+                    flag=true#флаг на выход
+                    u=z#записали длину волны
         if flag:
             break
         lenmas=waveitems           
@@ -56,12 +48,23 @@ def pathfind(matrix, x1,y1,x2,y2,steps):#matrix-карта проходимости. области со с
     if !flag:
         #сообщение об ошибке, жень сделай красиво через пугейм
     trase = [][]
-    trase[0][0]=nextx[k]
-    trase[0][1]=nexty[k]
-    for i in range(z,2,-1):
-        
-        
-
-
-        
-            
+    retmove = [][]
+    trase[0][0]=x2
+    trase[0][1]=y2
+    for i in range(1,u):
+        if wavematrix[(trase[i-1][0])-1][trase[i-1][1]] == wavematrix[trase[i-1][0]][trase[i-1][1]]-1:
+            trase[i][0] = trase[i-1][0]-1
+            trase[i][1] = trase[i=1][0]
+        elif wavematrix[(trase[i-1][0])+1][trase[i-1][1]] == wavematrix[trase[i-1][0]][trase[i-1][1]]-1:
+            trase[i][0] = trase[i-1][0]+1
+            trase[i][1] = trase[i=1][0]
+        elif wavematrix[(trase[i-1][0])][trase[i-1][1]-1] == wavematrix[trase[i-1][0]][trase[i-1][1]]-1:
+            trase[i][0] = trase[i-1][0]
+            trase[i][1] = trase[i=1][0]-1
+        elif wavematrix[(trase[i-1][0])][trase[i-1][1]+1] == wavematrix[trase[i-1][0]][trase[i-1][1]]-1:
+            trase[i][0] = trase[i-1][0]
+            trase[i][1] = trase[i=1][0]+1
+        #все, обратная дорожка получена.
+    for i in range (steps):
+        retmove[i][0] = trase[u-i][0]#переворачиваем трассу обратно, и отрезаем по кол-ву шагов
+        retmove[i][1] = trase[u-i][1]
