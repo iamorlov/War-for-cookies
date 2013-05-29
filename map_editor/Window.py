@@ -82,7 +82,7 @@ class Window(Core):
         for i in range(self.steps):
             for j in range(self.steps):
                 cell = Rect((800+self.step_p*i,20+self.step_p*j),(self.step_p,self.step_p))
-                cell_type = cells_list[i+j*i][2]
+                cell_type = cells_list[i*self.steps+j][2]
                 pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
         pygame.display.flip()
         self.Minimaps_grid()
@@ -158,7 +158,7 @@ class Window(Core):
         for i in range(self.big_steps):
             for j in range(self.big_steps):
                 cell = Rect((20+self.big_step*i,20+self.big_step*j),(self.big_step,self.big_step))
-                cell_type = cells_list[i+j*i][2]
+                cell_type = cells_list[i*self.big_steps+j][2]
                 pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
         self.Maps_grid()
         pygame.display.flip()
