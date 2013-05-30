@@ -8,8 +8,8 @@ class Game:
     # цвет которым будет залит нарисованный экран,
     # максимальный fps
     def __init__(self,
-                 width   = 640,
-                 height  = 480,
+                 width   = 1100,
+                 height  = 700,
                  color   = (255,255,255),
                  fps     = 40,
                  scene   = None,
@@ -22,7 +22,7 @@ class Game:
         self.__manager = manager
         self.scene     = scene
 
-        self.__display.fill(color)
+       # self.__display.fill(color)
         pygame.display.flip()
 
     # Создаем окно

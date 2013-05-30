@@ -71,7 +71,7 @@ class HideScene(ShowScene):
         self.plambir.toggle()
         self.plambir.set_time(1000)
 
-class Menu:
+class Menu(lib.Game, lib.Scene):
     def __init__(self, position = (0,0), loop = True):
         self.index = 0
         self.x = position[0]
@@ -89,7 +89,11 @@ class Menu:
         self.index -= 1
         if self.index < 0:
             self.index = len(self.menu)-1
-
+    def background(self):
+       background = pygame.image.load('data/image/menu.png')#Фон!!!!!!!!!!!!!!!!!
+       self.screen=pygame.display.set_mode((1100,700))
+       self.screen.blit(background, (0,0))
+       pygame.display.flip()
     # Добавляет новый элемент, нужно передать 2 изображения.
     # На 1 не выбранный вид элемента.
     # На 2 выбранный элемент
@@ -124,34 +128,34 @@ class MenuScene(lib.Scene):
       self.display.fill((255,255,255))
     def _start(self):
         self.menu = Menu((155,100))
-
         # Именно таким образом мы можем получить текст в pygame
         # В данном случае мы используем системный шрифт.
         font      = pygame.font.SysFont("Monospace", 40, bold=False, italic=False)
         font_bold = pygame.font.SysFont("Monospace", 40, bold=True, italic=False)
+        self.menu.background()
         item = u"Новая игра"
-        self.menu.add_menu_item(font.render(item,True,(0,0,0)),
-                                font_bold.render(item,True,(0,0,0)),
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
                                 self.item_call)
         item = u"Загрузить игру"
-        self.menu.add_menu_item(font.render(item,True,(0,0,0)),
-                                font_bold.render(item,True,(0,0,0)),
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
                                 self.item_call)
         item = u"Редактор карт"
-        self.menu.add_menu_item(font.render(item,True,(0,0,0)),
-                                font_bold.render(item,True,(0,0,0)),
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
                                 self.fun_exit)
         item = u"Настройки"
-        self.menu.add_menu_item(font.render(item,True,(0,0,0)),
-                                font_bold.render(item,True,(0,0,0)),
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
                                 self.item_call)
         item = u"Создатели"
-        self.menu.add_menu_item(font.render(item,True,(0,0,0)),
-                                font_bold.render(item,True,(0,0,0)),
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
                                 self.autor_print)
         item = u"Выход"
-        self.menu.add_menu_item(font.render(item,True,(0,0,0)),
-                                font_bold.render(item,True,(0,0,0)),
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
                                 self.fun_exit)
 
     def _event(self, event):
@@ -159,13 +163,15 @@ class MenuScene(lib.Scene):
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_DOWN:
                     self.menu.down()
+                    self.menu.background()
                 elif e.key == pygame.K_UP:
                     self.menu.up()
+                    self.menu.background()
                 elif e.key == pygame.K_RETURN:
                     self.menu.call()
 
     def _draw(self, dt):
-        self.display.fill((255,255,255))
+        #self.display.fill((255,255,255))
         self.menu.draw(self.display)
 
 
@@ -173,7 +179,7 @@ if __name__ == '__main__':
     # Вот так хитро все и закрутилось.
     # ждем, показываем, ждем, скрываем, ждем, меню.
     scene = WaitScene(1000, ShowScene(WaitScene(500, HideScene(WaitScene(1000,MenuScene())))))
-    game = lib.Game(640, 480, scene = scene)
+    game = lib.Game(1100, 700, scene = scene)
     game.set_caption("War for Cookies", "icon.png")
 
     game.game_loop()
