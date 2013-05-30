@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
-import fileinput
 import re
 
 class Core():
@@ -62,14 +60,10 @@ class Core():
         a = re.search('[(]'+str(x)+'[;]'+str(y)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
         if a!=None:
             base_line = a.group(0)
-        else: print 'error'
         new_line = '('+str(x)+';'+str(y)+';'+str(t)+';'+str(f)+';'+str(id_army)+')' 
         file = open(self.file,'w')
-        print base_line
-        print new_line
         file.writelines(l.replace(base_line,new_line))
         file.close()
-        print 'done!'
     
     def get_cell_information(self,line):
         #Ололо я індус
@@ -106,7 +100,6 @@ class Core():
         id_army = id_army.group(0)
         id_army = id_army[temp_len:]
         result.append(int(id_army))
-        #print result
         return result               
     
     def load_cells(self,x,y):
@@ -142,7 +135,7 @@ class Core():
         list_coords = []
         for j in range(self.x_coord_start,self.x_coord_end):
             for k in range(self.y_coord_start,self.y_coord_end):
-                a = re.search('[(]'+str(j)+'[;]'+str(k)+'[;][0-9][;][0-2][;][0-9]+[)]',l)
+                a = re.search('[(]'+str(j)+'[;]'+str(k)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
                 if a!= None:
                     list_coords.append(self.get_cell_information(a.group(0)))
         return list_coords
@@ -160,7 +153,7 @@ class Core():
         list_coords = []
         for j in range(int(max1)):
             for k in range(int(max2)):
-                a = re.search('[(]'+str(j)+'[;]'+str(k)+'[;][0-9][;][0-2][;][0-9]+[)]',l)
+                a = re.search('[(]'+str(j)+'[;]'+str(k)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
                 if a!= None:
                     list_coords.append(self.get_cell_information(a.group(0)))
         return list_coords

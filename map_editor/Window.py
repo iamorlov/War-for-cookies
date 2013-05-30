@@ -9,6 +9,7 @@ class Window(Core):
         self.cell_type = 0
         self.minimap_x =0
         self.minimap_y =0
+        self.count = 0
         
     def Main_Window(self):
         self.display = pygame.display.set_mode((1200,720))
@@ -50,7 +51,7 @@ class Window(Core):
         
     def colours(self):
         self.colour = []
-        for i in range(11):
+        for i in range(15):
             if i == 0:
                 self.colour.append((0,204,0))
             elif i == 1:
@@ -73,6 +74,14 @@ class Window(Core):
                 self.colour.append((255,51,0))
             elif i == 10:
                 self.colour.append((51,0,255))
+            elif i == 11:
+                self.colour.append((151,80,255))
+            elif i == 12:
+                self.colour.append((51,84,255))
+            elif i == 13:
+                self.colour.append((51,184,25))
+            elif i == 14:
+                self.colour.append((251,84,25))            
                 
     def load_cells_list(self):
         self.cells_list = self.load_minimap_cells()
@@ -82,11 +91,8 @@ class Window(Core):
         for i in range(self.steps):
             for j in range(self.steps):
                 cell = Rect((800+self.step_p*i,self.step_p*j),(self.step_p,self.step_p))
-                #print i*self.steps+j
-                #print len(self.cells_list)
                 cell_type = self.cells_list[i*self.steps+j][2]
                 pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
-        
         pygame.display.flip()
         self.Minimaps_grid()
     
@@ -115,7 +121,7 @@ class Window(Core):
     def Get_cell_type(self,click_coords):
         if ((click_coords[0] > 850) and (click_coords[1] > 350) and (click_coords[0] < 1050) and (click_coords[1] < 500)):
             x_coord = (click_coords[0]-850)//50
-            y_coord = (click_coords[1]-250)//50
+            y_coord = (click_coords[1]-350)//50
             self.cell_type = x_coord+y_coord*3
 
         if ((click_coords[0] > 875) and (click_coords[1] > 500) and (click_coords[0] < 975) and (click_coords[1] < 550)):
@@ -128,15 +134,16 @@ class Window(Core):
             self.minimap_x = (click_coords[0]-800)//self.step_p
             self.minimap_y = (click_coords[1])//self.step_p
             self.Load_part_of_map()
+            self.Minimap()
 
     def Get_map_coords(self,click_coords):                
         if ((click_coords[0] > 20) and (click_coords[1] > 0) and (click_coords[0] < 720) and (click_coords[1] < 700)):
             self.x_coord = (click_coords[0]-20)//self.big_step
             self.y_coord = (click_coords[1])//self.big_step
             self.change_cell(self.x_coord+self.x_coord_start, self.y_coord+self.y_coord_start, self.cell_type, 0, 0)
-            cell = Rect((self.x_coord*self.big_step+self.x_coord_start+20, self.y_coord*self.big_step+self.y_coord_start),(self.big_step,self.big_step))
+            cell = Rect((self.x_coord*self.big_step+20, self.y_coord*self.big_step),(self.big_step,self.big_step))
             print self.cell_type
-            pygame.draw.rect(self.display,self.colour[self.cell_type-1],cell,0)
+            pygame.draw.rect(self.display,self.colour[self.cell_type],cell,0)
             self.Maps_grid()
             pygame.display.flip()
             
@@ -154,7 +161,6 @@ class Window(Core):
         for i in range(self.big_steps):
             for j in range(self.big_steps):
                 cell = Rect((20+self.big_step*i,self.big_step*j),(self.big_step,self.big_step))
-                print len(cells_list)
                 cell_type = cells_list[i*self.big_steps+j][2]
                 pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
         cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*25,self.step_p*25))
