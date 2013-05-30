@@ -59,14 +59,17 @@ class Core():
         l = ''
         for i in range(len(lines)):
             l+=lines[i]
-        a = re.search('[(]'+str(x)+'[;]'+str(y)+'[;][0-9][;][0-2][;][0-9]+[)]',l)
+        a = re.search('[(]'+str(x)+'[;]'+str(y)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
         if a!=None:
             base_line = a.group(0)
         else: print 'error'
         new_line = '('+str(x)+';'+str(y)+';'+str(t)+';'+str(f)+';'+str(id_army)+')' 
         file = open(self.file,'w')
-        file.write(l.replace(base_line,new_line))
+        print base_line
+        print new_line
+        file.writelines(l.replace(base_line,new_line))
         file.close()
+        print 'done!'
     
     def get_cell_information(self,line):
         #Ололо я індус
