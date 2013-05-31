@@ -77,7 +77,6 @@ class Menu(lib.Game, lib.Scene):
         self.x = position[0]
         self.y = position[1]
         self.menu = list()
-
     # Метод перемещающий нас в низ циклично по всем элементам.
     def down(self):
         self.index += 1
@@ -133,6 +132,10 @@ class MenuScene(lib.Scene):
         font      = pygame.font.SysFont("Monospace", 40, bold=False, italic=False)
         font_bold = pygame.font.SysFont("Monospace", 40, bold=True, italic=False)
         self.menu.background()
+        # Загрузка музыки.
+        pygame.mixer.music.load('data/music/menu.ogg')
+        # Проигрывание музыки.
+        pygame.mixer.music.play()
         item = u"Новая игра"
         self.menu.add_menu_item(font.render(item,True,(255,255,255)),
                                 font_bold.render(item,True,(255,255,255)),
