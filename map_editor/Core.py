@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import re
+import time
 
 class Core():
 
@@ -135,7 +136,7 @@ class Core():
         list_coords = []
         for j in range(self.x_coord_start,self.x_coord_end):
             for k in range(self.y_coord_start,self.y_coord_end):
-                a = re.search('[(]'+str(j)+'[;]'+str(k)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
+                a = re.search('[(]'+str(k)+'[;]'+str(j)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
                 if a!= None:
                     list_coords.append(self.get_cell_information(a.group(0)))
         return list_coords
@@ -151,10 +152,8 @@ class Core():
         max2 = map_file.readline()
         map_file.close()
         list_coords = []
-        for j in range(int(max1)):
-            for k in range(int(max2)):
-                a = re.search('[(]'+str(j)+'[;]'+str(k)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
-                if a!= None:
-                    list_coords.append(self.get_cell_information(a.group(0)))
+        a = re.findall('[(][0-9]{1,3}[;][0-9]{1,3}[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
+        for i in range(10000):
+           list_coords.append(self.get_cell_information(a[i]))
         return list_coords
             

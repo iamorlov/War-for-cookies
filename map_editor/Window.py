@@ -3,7 +3,7 @@ import pygame, sys
 from Core import *
 from ResManager import *
 
-class Window(Core):
+class Window(Core): #Люди, користуйтеся цим кодом для виконання завдань по рпз. Я хз поки, чому перше перемалювання вікна йде 3,5 секунд :((((((
     def __init__(self):
         pygame.init()
         self.cell_type = 0
@@ -20,11 +20,6 @@ class Window(Core):
         self.display.fill((250,250,250))
         pygame.display.flip()
         i = 0
-    
-    def Entry_type(self):
-        cell = Rect((20,0),(700,700))
-        pygame.draw.rect(self.display,(0,204,0),cell,0)
-        pygame.display.flip()
         
     def Maps_grid(self):
         self.big_step = 28
@@ -134,13 +129,17 @@ class Window(Core):
             self.minimap_x = (click_coords[0]-800)//self.step_p
             self.minimap_y = (click_coords[1])//self.step_p
             self.Load_part_of_map()
+            cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*25,self.step_p*25))
             self.Minimap()
+            pygame.draw.rect(self.display,(0,0,0),cell,2)
+            self.Maps_grid()
+            #self.Minimap()
 
     def Get_map_coords(self,click_coords):                
         if ((click_coords[0] > 20) and (click_coords[1] > 0) and (click_coords[0] < 720) and (click_coords[1] < 700)):
             self.x_coord = (click_coords[0]-20)//self.big_step
             self.y_coord = (click_coords[1])//self.big_step
-            self.change_cell(self.x_coord+self.x_coord_start, self.y_coord+self.y_coord_start, self.cell_type, 0, 0)
+            self.change_cell(self.y_coord+self.y_coord_start,self.x_coord+self.x_coord_start,  self.cell_type, 0, 0)
             cell = Rect((self.x_coord*self.big_step+20, self.y_coord*self.big_step),(self.big_step,self.big_step))
             print self.cell_type
             pygame.draw.rect(self.display,self.colour[self.cell_type],cell,0)
@@ -155,6 +154,8 @@ class Window(Core):
                     self.Get_cell_type(click_coords)
                     self.Get_map_coords(click_coords)
                     self.Get_minimap_coords(click_coords)
+            if event.type == QUIT:
+                sys.exit()
 
     def Load_part_of_map(self):
         cells_list = self.load_cells(self.minimap_x, self.minimap_y)
@@ -175,3 +176,41 @@ class Window(Core):
     def Rewrite_cell(self):
         self.Events()
 
+    def Run(self):
+        start = time.time()
+        self.Main_Window()
+        finish = time.time()
+        print (finish - start)
+        
+        start = time.time() 
+        self.load_cells_list()
+        finish = time.time()
+        print (finish - start)
+        
+        start = time.time() 
+        self.Maps_grid()
+        finish = time.time()
+        print (finish - start)
+                
+        start = time.time() 
+        self.Minimaps_grid()
+        finish = time.time()
+        print (finish - start)
+                
+        start = time.time() 
+        self.Minimap()
+        finish = time.time()
+        print (finish - start)
+        
+        start = time.time() 
+        self.Load_part_of_map()
+        finish = time.time()
+        print (finish - start)
+        
+        start = time.time() 
+        self.Type_of_grids()
+        finish = time.time()
+        print (finish - start)
+        
+        while True:
+            self.Rewrite_cell()
