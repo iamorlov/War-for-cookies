@@ -3,6 +3,12 @@ import pygame, sys
 from Core import *
 from ResManager import *
 
+#Після того, як більша частина функціоналу буде працювати
+#треба розділити вітку для версії з текстурами та версії з
+#з кольорами клітинок замість них
+#
+
+
 class Window(Core): #Люди, користуйтеся цим кодом для виконання завдань по рпз. Я хз поки, чому перше перемалювання вікна йде 3,5 секунд :((((((
     def __init__(self):
         pygame.init()
@@ -16,7 +22,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         manager = ResManager()
         pygame.display.set_icon(manager.get_image('icon.png'))
         pygame.display.set_caption("Map Editor")
-        self.load_file('test_map')
+        self.empty_map(0)
         self.display.fill((250,250,250))
         pygame.display.flip()
         i = 0
@@ -44,9 +50,9 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         pygame.draw.rect(self.display,(0,0,0),cell,2)
         pygame.display.flip()
         
-    def colours(self):
+    def colours(self): # замінити на текстури #Для вітки без текстур
         self.colour = []
-        for i in range(15):
+        for i in range(11):
             if i == 0:
                 self.colour.append((0,204,0))
             elif i == 1:
@@ -68,15 +74,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
             elif i == 9:
                 self.colour.append((255,51,0))
             elif i == 10:
-                self.colour.append((51,0,255))
-            elif i == 11:
-                self.colour.append((151,80,255))
-            elif i == 12:
-                self.colour.append((51,84,255))
-            elif i == 13:
-                self.colour.append((51,184,25))
-            elif i == 14:
-                self.colour.append((251,84,25))            
+                self.colour.append((51,0,255))           
                 
     def load_cells_list(self):
         self.cells_list = self.load_minimap_cells()
@@ -130,6 +128,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
             self.minimap_y = (click_coords[1])//self.step_p
             self.Load_part_of_map()
             cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*25,self.step_p*25))
+            self.load_cells_list()
             self.Minimap()
             pygame.draw.rect(self.display,(0,0,0),cell,2)
             self.Maps_grid()
@@ -145,7 +144,42 @@ class Window(Core): #Люди, користуйтеся цим кодом для
             pygame.draw.rect(self.display,self.colour[self.cell_type],cell,0)
             self.Maps_grid()
             pygame.display.flip()
-            
+###
+###
+###ЗАВТРА ОБОВ’ЯЗКОВО ДОРОБИТИ!!!!!
+###
+###
+    def window_for_save(self):
+        cell = Rect((360,260),(300,200))
+        pygame.draw.rect(self.display,(204,204,204),cell,0)
+        
+        cell = Rect((385,280),(250,50))
+        pygame.draw.rect(self.display,(255,255,204),cell,0)
+        pygame.draw.rect(self.display,(0,0,0),cell,2)
+        
+        #text = pygame.font.SysFont(name, size, bold, italic)
+        font      = pygame.font.SysFont("Monospace", 40, bold=False, italic=False)
+        font_bold = pygame.font.SysFont("Monospace", 40, bold=True, italic=False)        
+        item = u'Press enter for save'
+        font.render(item,True,(20,20,20))
+        font_bold.render(item,True,(20,20,20))
+        
+        
+        
+        pygame.display.flip()
+
+    def Reload_window(self):
+        self.display.fill((250,250,250))
+        self.Maps_grid()
+        self.Minimaps_grid()
+        self.Minimap()
+        self.Type_of_grids()
+        pygame.display.flip()                
+#    def Save_map(self,event):
+#        if event.type == KEYDOWN:
+#            if event.key == K_F5:
+#                self.       
+    
     def Events(self):
         for event in pygame.event.get():
             if event.type == MOUSEBUTTONDOWN:
@@ -211,6 +245,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         self.Type_of_grids()
         finish = time.time()
         print (finish - start)
-        
+        self.window_for_save()
         while True:
             self.Rewrite_cell()
+

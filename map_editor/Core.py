@@ -153,7 +153,7 @@ class Core():
         map_file.close()
         list_coords = []
         a = re.findall('[(][0-9]{1,3}[;][0-9]{1,3}[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
-        for i in range(10000):
+        for i in range(int(max1)*int(max2)):
            list_coords.append(self.get_cell_information(a[i]))
         return list_coords
             
