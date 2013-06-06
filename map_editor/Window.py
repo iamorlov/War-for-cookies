@@ -76,35 +76,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
             elif i == 10:
                 self.colour.append((51,0,255))
     
-    def keyboard_constants(self,type): #повертає символи замість типу подій при натиску на клавішу
-        for i in range(26):
-            if type == 'K_a':  return 'a'
-            elif type == 'K_b':return 'b'
-            elif type == 'K_c':return 'c'
-            elif type == 'K_d':return 'd'
-            elif type == 'K_e':return 'e'
-            elif type == 'K_f':return 'f'
-            elif type == 'K_g':return 'g'
-            elif type == 'K_h':return 'h'
-            elif type == 'K_i':return 'i'
-            elif type == 'K_j':return 'j'
-            elif type == 'K_k':return 'k'
-            elif type == 'K_l':return 'l'
-            elif type == 'K_m':return 'm'
-            elif type == 'K_n':return 'n'
-            elif type == 'K_o':return 'o'
-            elif type == 'K_p':return 'p'
-            elif type == 'K_q':return 'q'
-            elif type == 'K_r':return 'r'
-            elif type == 'K_s':return 's'
-            elif type == 'K_t':return 't'
-            elif type == 'K_u':return 'u'
-            elif type == 'K_v':return 'v'
-            elif type == 'K_w':return 'w'
-            elif type == 'K_x':return 'x'
-            elif type == 'K_y':return 'y'
-            elif type == 'K_z':return 'z'        
-                
+
     def load_cells_list(self):
         self.cells_list = self.load_minimap_cells()
 
@@ -178,47 +150,73 @@ class Window(Core): #Люди, користуйтеся цим кодом для
 ###ЗАВТРА ОБОВ’ЯЗКОВО ДОРОБИТИ!!!!!
 ###
 ###
+    def event_scan_keyes(self,event):
+        for event in pygame.event.get():
+            if event.type == KEYDOWN:
+                name_key =(re.search('[a-z]',pygame.key.name(event.key)))
+                if name_key != None:
+                    text = (name_key).group(0)
+                    return text
+            return ''
+                
+                        
+    
     def window_for_save(self):
         cell = Rect((360,260),(300,200))
         pygame.draw.rect(self.display,(204,204,204),cell,0)
-        
         cell = Rect((385,280),(250,50))
         pygame.draw.rect(self.display,(255,255,204),cell,0)
         pygame.draw.rect(self.display,(0,0,0),cell,2)
-        
         #text = pygame.font.SysFont(name, size, bold, italic)
-        font      = pygame.font.SysFont("Monospace", 40, bold=False, italic=False)
-        font_bold = pygame.font.SysFont("Monospace", 40, bold=True, italic=False)        
+        font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
+        font2 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)        
         item = u'Press enter for save'
-        font.render(item,True,(20,20,20))
-        font_bold.render(item,True,(20,20,20))
-        
-        
-        
-        pygame.display.flip()
+        item2 = u'Press ESC for exit'
+        font1 = font1.render(item,0,(20,20,20))
+        self.display.blit(font1,(385,360))
+        font2 = font2.render(item2,0,(20,20,20))
+        self.display.blit(font2,(385,410))
+        text = ''
+        for i in range (7):
+            text += self.event_scan_keyes(self.event)
+        pygame.display.update()
+        print text
 
     def Reload_window(self):
+        helloText = "Hello, World and GCUP"
+        (x,y,fontSize) = (10,40,40)
+        myFont = pygame.font.SysFont("None", fontSize)
+        fontColor = (255,255,0)
+        bgColor = (255,255,255)
+        fontImage = myFont.render(helloText, 0, (fontColor))
         self.display.fill((250,250,250))
+        self.display.blit(fontImage,(x,y)) 
         self.Maps_grid()
         self.Minimaps_grid()
         self.Minimap()
         self.Type_of_grids()
-        pygame.display.flip()                
+        pygame.display.flip()
+                
 #    def Save_map(self,event):
 #        if event.type == KEYDOWN:
 #            if event.key == K_F5:
 #                self.       
     
     def Events(self):
-        for event in pygame.event.get():
-            if event.type == MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click_coords = event.pos
+ 
+        for self.event in pygame.event.get():
+            if self.event.type == MOUSEBUTTONDOWN:
+                if self.event.button == 1:
+                    click_coords = self.event.pos
                     self.Get_cell_type(click_coords)
                     self.Get_map_coords(click_coords)
                     self.Get_minimap_coords(click_coords)
-            if event.type == QUIT:
+            if self.event.type == QUIT:
                 sys.exit()
+            if self.event.type == KEYDOWN:
+                if self.event.key == K_F5:
+                    self.window_for_save()
+
 
     def Load_part_of_map(self):
         cells_list = self.load_cells(self.minimap_x, self.minimap_y)
@@ -238,6 +236,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
 # 28x28, 25x25 cells
     def Rewrite_cell(self):
         self.Events()
+
 
     def Run(self):
         start = time.time()
@@ -274,7 +273,6 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         self.Type_of_grids()
         finish = time.time()
         print (finish - start)
-        self.window_for_save()
         while True:
             self.Rewrite_cell()
 
