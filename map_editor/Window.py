@@ -76,13 +76,46 @@ class Window(Core): #Люди, користуйтеся цим кодом для
             elif i == 10:
                 self.colour.append((51,0,255))
     
-    def textures(self):
+    def Textures(self):
         manager = ResManager()
+        self.textures = []
         texture = manager.get_image("grass.png")
         texture = pygame.transform.scale(texture,(28,28))
-        first_texture = texture.get_rect()
-        first_texture.center=(36,14)
-        self.display.blit(texture,first_texture)
+        self.textures.append(texture)
+        texture = manager.get_image("sand.png")
+        texture = pygame.transform.scale(texture,(28,28))
+        self.textures.append(texture)
+        texture = manager.get_image("dirt.png")
+        texture = pygame.transform.scale(texture,(28,28))
+        self.textures.append(texture)
+        texture = manager.get_image("water.png")
+        texture = pygame.transform.scale(texture,(28,28))
+        self.textures.append(texture)
+        texture = manager.get_image("tree.png")
+        texture = pygame.transform.scale(texture,(28,28))
+        self.textures.append(texture)
+        texture = manager.get_image("rock.png")
+        texture = pygame.transform.scale(texture,(28,28))
+        self.textures.append(texture)
+        texture = manager.get_image("lava.png")
+        texture = pygame.transform.scale(texture,(28,28))
+        self.textures.append(texture)
+        texture = manager.get_image("farm.png")
+        texture = pygame.transform.scale(texture,(28,28))
+        self.textures.append(texture)
+        texture = manager.get_image("mine.png")
+        texture = pygame.transform.scale(texture,(28,28))
+        self.textures.append(texture)
+        #Тимчасове обозначення баз
+        texture = manager.get_image("milk.png")
+        texture = pygame.transform.scale(texture,(28,28))
+        self.textures.append(texture)
+        
+        texture = manager.get_image("cookie.png")
+        texture = pygame.transform.scale(texture,(28,28))
+        self.textures.append(texture)
+                        
+
 
         pygame.display.flip() 
 
@@ -104,8 +137,11 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         self.colours()
         for i in range(3):
             for j in range(3):             
-                cell = Rect((850+50*i,350+50*j),(50,50))
-                pygame.draw.rect(self.display,self.colour[i+j*3],cell,0)
+                first_texture = self.textures[i+j*3].get_rect()
+                first_texture.center=(25+850+50*i,25+350+50*j)
+                self.display.blit(self.textures[i+j*3],first_texture) 
+#                cell = Rect((850+50*i,350+50*j),(50,50))
+#                pygame.draw.rect(self.display,self.colour[i+j*3],cell,0)
         for i in range(3):
             for j in range(3):
                 cell = Rect((850+50*i,350+50*j),(50,50))
@@ -149,9 +185,14 @@ class Window(Core): #Люди, користуйтеся цим кодом для
             self.x_coord = (click_coords[0]-20)//self.big_step
             self.y_coord = (click_coords[1])//self.big_step
             self.change_cell(self.y_coord+self.y_coord_start,self.x_coord+self.x_coord_start,  self.cell_type, 0, 0)
-            cell = Rect((self.x_coord*self.big_step+20, self.y_coord*self.big_step),(self.big_step,self.big_step))
+            
+            first_texture = self.textures[self.cell_type].get_rect()
+            first_texture.center=(35+self.x_coord*self.big_step,14+self.y_coord*self.big_step)
+            self.display.blit(self.textures[self.cell_type],first_texture)   
+#            cell = Rect((self.x_coord*self.big_step+20, self.y_coord*self.big_step),(self.big_step,self.big_step))
+
             print self.cell_type
-            pygame.draw.rect(self.display,self.colour[self.cell_type],cell,0)
+#            pygame.draw.rect(self.display,self.colour[self.cell_type],cell,0)
             self.Maps_grid()
             pygame.display.flip()
 ###
@@ -243,9 +284,13 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         cells_list = self.load_cells(self.minimap_x, self.minimap_y)
         for i in range(self.big_steps):
             for j in range(self.big_steps):
-                cell = Rect((20+self.big_step*i,self.big_step*j),(self.big_step,self.big_step))
                 cell_type = cells_list[i*self.big_steps+j][2]
-                pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
+                first_texture = self.textures[cell_type].get_rect()
+                first_texture.center=(35+self.big_step*i,14+self.big_step*j)
+                self.display.blit(self.textures[cell_type],first_texture)                
+#                cell = Rect((20+self.big_step*i,self.big_step*j),(self.big_step,self.big_step))
+#                
+#                pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
         cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*25,self.step_p*25))
         self.Minimap()
         pygame.draw.rect(self.display,(0,0,0),cell,2)
@@ -284,7 +329,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         self.Minimap()
         finish = time.time()
         print (finish - start)
-        
+        self.Textures()
         start = time.time() 
         self.Load_part_of_map()
         finish = time.time()
@@ -294,7 +339,6 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         self.Type_of_grids()
         finish = time.time()
         print (finish - start)
-        self.textures()
         while True:
             self.Rewrite_cell()
 
