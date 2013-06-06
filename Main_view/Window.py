@@ -12,7 +12,6 @@ from ResManager import *
 class Window(Core): #Люди, користуйтеся цим кодом для виконання завдань по рпз. Я хз поки, чому перше перемалювання вікна йде 3,5 секунд :((((((
     def __init__(self):
         pygame.init()
-        self.cell_type = 0
         self.minimap_x =0
         self.minimap_y =0
         self.count = 0
@@ -92,7 +91,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
         texture = manager.get_image("tree.png")
-        texture = pygame.transform.scale(texture,(28,28))
+        texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
         texture = manager.get_image("rock.png")
         texture = pygame.transform.scale(texture,(50,50))
@@ -138,7 +137,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
             self.minimap_x = (click_coords[0]-800)//self.step_p
             self.minimap_y = (click_coords[1])//self.step_p
             self.Load_part_of_map()
-            cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*25,self.step_p*25))
+            cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*14,self.step_p*14))
             self.load_cells_list()
             self.Minimap()
             pygame.draw.rect(self.display,(0,0,0),cell,2)
@@ -149,14 +148,14 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         if ((click_coords[0] > 20) and (click_coords[1] > 0) and (click_coords[0] < 720) and (click_coords[1] < 700)):
             self.x_coord = (click_coords[0]-20)//self.big_step
             self.y_coord = (click_coords[1])//self.big_step
-            self.change_cell(self.y_coord+self.y_coord_start,self.x_coord+self.x_coord_start,  self.cell_type, 0, 0)
+#            self.change_cell(self.y_coord+self.y_coord_start,self.x_coord+self.x_coord_start,  self.cell_type, 0, 0)
             
-            first_texture = self.textures[self.cell_type].get_rect()
-            first_texture.center=(35+self.x_coord*self.big_step,14+self.y_coord*self.big_step)
-            self.display.blit(self.textures[self.cell_type],first_texture)   
+#            first_texture = self.textures[self.cell_type].get_rect()
+#            first_texture.center=(35+self.x_coord*self.big_step,14+self.y_coord*self.big_step)
+#            self.display.blit(self.textures[self.cell_type],first_texture)   
 #            cell = Rect((self.x_coord*self.big_step+20, self.y_coord*self.big_step),(self.big_step,self.big_step))
 
-            print self.cell_type
+#            print self.cell_type
 #            pygame.draw.rect(self.display,self.colour[self.cell_type],cell,0)
             self.Maps_grid()
             pygame.display.flip()
@@ -253,7 +252,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
 #                cell = Rect((20+self.big_step*i,self.big_step*j),(self.big_step,self.big_step))
 #                
 #                pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
-        cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*25,self.step_p*25))
+        cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*14,self.step_p*14))
         self.Minimap()
         pygame.draw.rect(self.display,(0,0,0),cell,2)
         self.Maps_grid()

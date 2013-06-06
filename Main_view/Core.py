@@ -95,24 +95,24 @@ class Core():
         map_file.close()
         a = int(max1) - x
         b = int(max2) - y
-        if (x < 25):
+        if (x < 14):
             self.x_coord_start = 0
-            self.x_coord_end = 25
-        elif(a<25):
-            self.x_coord_start = int(max1)-25
+            self.x_coord_end = 14
+        elif(a<14):
+            self.x_coord_start = int(max1)-14
             self.x_coord_end = int(max1)
         else:
-            self.x_coord_start = x-13
-            self.x_coord_end = x+12
-        if (y < 25):
+            self.x_coord_start = x-7
+            self.x_coord_end = x+7
+        if (y < 14):
             self.y_coord_start = 0
-            self.y_coord_end = 25
-        elif(b<25):
-            self.y_coord_start = int(max2)-25
+            self.y_coord_end = 14
+        elif(b<7):
+            self.y_coord_start = int(max2)-14
             self.y_coord_end = int(max2)
         else:
-            self.y_coord_start = y-13
-            self.y_coord_end = y+12
+            self.y_coord_start = y-7
+            self.y_coord_end = y+7
         list_coords = []
         for j in range(self.x_coord_start,self.x_coord_end):
             for k in range(self.y_coord_start,self.y_coord_end):
