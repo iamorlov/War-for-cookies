@@ -76,6 +76,15 @@ class Window(Core): #Люди, користуйтеся цим кодом для
             elif i == 10:
                 self.colour.append((51,0,255))
     
+    def textures(self):
+        manager = ResManager()
+        texture = manager.get_image("grass.png")
+        texture = pygame.transform.scale(texture,(28,28))
+        first_texture = texture.get_rect()
+        first_texture.center=(36,14)
+        self.display.blit(texture,first_texture)
+
+        pygame.display.flip() 
 
     def load_cells_list(self):
         self.cells_list = self.load_minimap_cells()
@@ -150,18 +159,28 @@ class Window(Core): #Люди, користуйтеся цим кодом для
 ###ЗАВТРА ОБОВ’ЯЗКОВО ДОРОБИТИ!!!!!
 ###
 ###
-    def event_scan_keyes(self,event):
+    def event_scan_keyes(self):
+        pygame.event.clear()
         for event in pygame.event.get():
+            print type(event)
+            print event.type
             if event.type == KEYDOWN:
+                print event.type
+                print type(event.key)
                 name_key =(re.search('[a-z]',pygame.key.name(event.key)))
                 if name_key != None:
                     text = (name_key).group(0)
                     return text
-            return ''
+                else:
+                    return ''
+            else:
+                print 'lol'
+                return 'lol'
                 
                         
     
     def window_for_save(self):
+        pygame.event.clear()
         cell = Rect((360,260),(300,200))
         pygame.draw.rect(self.display,(204,204,204),cell,0)
         cell = Rect((385,280),(250,50))
@@ -177,18 +196,20 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         font2 = font2.render(item2,0,(20,20,20))
         self.display.blit(font2,(385,410))
         text = ''
-        for i in range (7):
-            text += self.event_scan_keyes(self.event)
+
         pygame.display.update()
+        print text
+        time.sleep(1)
+#        event = pygame.event.wait()
+#        print pygame.key.name(event.key)
+        for i in range (7):
+            print type(self.event_scan_keyes())
+            text += self.event_scan_keyes()
+        pygame.display.update()
+        pygame.event.clear()
         print text
 
     def Reload_window(self):
-        helloText = "Hello, World and GCUP"
-        (x,y,fontSize) = (10,40,40)
-        myFont = pygame.font.SysFont("None", fontSize)
-        fontColor = (255,255,0)
-        bgColor = (255,255,255)
-        fontImage = myFont.render(helloText, 0, (fontColor))
         self.display.fill((250,250,250))
         self.display.blit(fontImage,(x,y)) 
         self.Maps_grid()
@@ -273,6 +294,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         self.Type_of_grids()
         finish = time.time()
         print (finish - start)
+        self.textures()
         while True:
             self.Rewrite_cell()
 
