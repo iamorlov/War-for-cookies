@@ -16,7 +16,7 @@ class ResManager:
     def get_image(self,name):
         fullname = os.path.join(self.data_dir, os.path.join(self.image_dir,name))
         try:
-            image = pygame.image.load(fullname).convert()
+            image = pygame.image.load(fullname)
         except pygame.error, message:
             print('Cannot load image; {0}'.format(name))
             raise SystemExit, message

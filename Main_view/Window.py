@@ -106,11 +106,11 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
         #Тимчасове обозначення баз
-        texture = manager.get_image("milk.png")
+        texture = manager.get_image("base_blue.png")
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
         
-        texture = manager.get_image("cookie.png")
+        texture = manager.get_image("base_red.png")
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
                         
@@ -239,13 +239,42 @@ class Window(Core): #Люди, користуйтеся цим кодом для
             if self.event.type == KEYDOWN:
                 if self.event.key == K_F5:
                     self.window_for_save()
-
-
+                    
     def Load_part_of_map(self):
         cells_list = self.load_cells(self.minimap_x, self.minimap_y)
         for i in range(self.big_steps):
             for j in range(self.big_steps):
                 cell_type = cells_list[i*self.big_steps+j][2]
+                if (cell_type >7) and (cell_type<12):
+                    mass_cell_type = []
+                    for k in range(9):
+                        type_cell = cells_list[i*self.big_steps+j-4+k][2]
+                        if (k !=4) and (type_cell !=3) and (type_cell <7):
+                            mass_cell_type.append(type_cell)
+                    types = [0,0,0,0,0,0]
+                    for k in range(0,len(mass_cell_type)):
+                        if mass_cell_type[k] == 0:
+                            types[0]+=1;
+                        elif mass_cell_type[k] == 1:
+                            types[1]+=1;
+                        elif mass_cell_type[k] == 2:
+                            types[2]+=1;
+                        elif mass_cell_type[k] == 4:
+                            types[3]+=1;
+                        elif mass_cell_type[k] == 5:
+                            types[4]+=1;
+                        elif mass_cell_type[k] == 6:
+                            types[5]+=1;
+                    max_cells = max(types)
+                    for k in range(0,len(types)):
+                        if (max_cells == types[k]):
+                            if k <3:
+                                result_type = k
+                            else:
+                                result_type = k+1
+                    first_texture = self.textures[result_type].get_rect()
+                    first_texture.center=(45+self.big_step*i,25+self.big_step*j)
+                    self.display.blit(self.textures[result_type],first_texture)                        
                 first_texture = self.textures[cell_type].get_rect()
                 first_texture.center=(45+self.big_step*i,25+self.big_step*j)
                 self.display.blit(self.textures[cell_type],first_texture)                
