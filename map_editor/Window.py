@@ -82,31 +82,39 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         texture = manager.get_image("grass.png")
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
+        
         texture = manager.get_image("sand.png")
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
+        
         texture = manager.get_image("dirt.png")
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
+        
         texture = manager.get_image("water.png")
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
+        
         texture = manager.get_image("tree.png")
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
+        
         texture = manager.get_image("rock.png")
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
+        
         texture = manager.get_image("lava.png")
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
+        
         texture = manager.get_image("farm.png")
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
+      
         texture = manager.get_image("mine.png")
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
-        #Тимчасове обозначення баз
+        
         texture = manager.get_image("base_blue.png")
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
@@ -148,15 +156,13 @@ class Window(Core): #Люди, користуйтеся цим кодом для
                 pygame.draw.rect(self.display,(0,0,0),cell,1)
 
         ## червоний 
-        cell = Rect((875,500),(50,50))
-        self.textures[i+j*3] = pygame.transform.scale(self.textures[9],(50,50))             
+        cell = Rect((875,500),(50,50))           
         first_texture = self.textures[9].get_rect()
         first_texture.center=(25+875,25+500)
         self.display.blit(self.textures[9],first_texture)
         pygame.draw.rect(self.display,(0,0,0),cell,1)
         
-        cell = Rect((925,500),(50,50))
-        self.textures[i+j*3] = pygame.transform.scale(self.textures[10],(50,50))             
+        cell = Rect((925,500),(50,50))            
         first_texture = self.textures[10].get_rect()
         first_texture.center=(25+925,25+500)
         self.display.blit(self.textures[10],first_texture)
@@ -328,10 +334,11 @@ class Window(Core): #Люди, користуйтеся цим кодом для
                     first_texture = textures[result_type].get_rect()
                     first_texture.center=(45+self.big_step*i,25+self.big_step*j)
                     self.display.blit(textures[result_type],first_texture) 
-                print cell_type
                 first_texture = textures[cell_type].get_rect()
                 first_texture.center=(35+self.big_step*i,14+self.big_step*j)
-                self.display.blit(textures[cell_type],first_texture)                
+                self.display.blit(textures[cell_type],first_texture)
+
+                print cell_type                
 #                cell = Rect((20+self.big_step*i,self.big_step*j),(self.big_step,self.big_step))
 #                
 #                pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
