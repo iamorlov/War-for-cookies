@@ -15,6 +15,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         self.cell_type = 0
         self.minimap_x =0
         self.minimap_y =0
+        self.fraction = 0
         self.count = 0
         
     def Main_Window(self):
@@ -174,11 +175,13 @@ class Window(Core): #Люди, користуйтеся цим кодом для
             x_coord = (click_coords[0]-850)//50
             y_coord = (click_coords[1]-350)//50
             self.cell_type = x_coord+y_coord*3
+            self.fraction = 0
 
         if ((click_coords[0] > 875) and (click_coords[1] > 500) and (click_coords[0] < 975) and (click_coords[1] < 550)):
             x_coord = (click_coords[0]-875)//50
             y_coord = (click_coords[1]-500)//50
-            self.cell_type = x_coord+y_coord+9
+            self.cell_type = 9
+            self.fraction = x_coord+1
 
     def Get_minimap_coords(self,click_coords):                 
         if ((click_coords[0] > 800) and (click_coords[1] > 0) and (click_coords[0] < 1100) and (click_coords[1] < 300)):
@@ -196,12 +199,18 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         if ((click_coords[0] > 20) and (click_coords[1] > 0) and (click_coords[0] < 720) and (click_coords[1] < 700)):
             self.x_coord = (click_coords[0]-20)//self.big_step
             self.y_coord = (click_coords[1])//self.big_step
-            self.change_cell(self.y_coord+self.y_coord_start,self.x_coord+self.x_coord_start,  self.cell_type, 0, 0)
-            textures = pygame.transform.scale(self.textures[self.cell_type],(28,28))
-            print self.cell_type
-            first_texture = textures.get_rect()
-            first_texture.center=(35+self.x_coord*self.big_step,14+self.y_coord*self.big_step)
-            self.display.blit(textures,first_texture)   
+            self.change_cell(self.y_coord+self.y_coord_start,self.x_coord+self.x_coord_start,  self.cell_type, self.fraction, 0)
+            if self.fraction > 0:
+                textures = pygame.transform.scale(self.textures[self.cell_type+self.fraction-1],(28,28))
+                first_texture = textures.get_rect()
+                first_texture.center=(35+self.x_coord*self.big_step,14+self.y_coord*self.big_step)
+                self.display.blit(textures,first_texture)
+            else:
+                textures = pygame.transform.scale(self.textures[self.cell_type],(28,28))
+                first_texture = textures.get_rect()
+                first_texture.center=(35+self.x_coord*self.big_step,14+self.y_coord*self.big_step)
+                self.display.blit(textures,first_texture)                    
+
 #            cell = Rect((self.x_coord*self.big_step+20, self.y_coord*self.big_step),(self.big_step,self.big_step))
 
             print self.cell_type
@@ -264,8 +273,6 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         print text
 
     def Reload_window(self):
-        self.display.fill((250,250,250))
-        self.display.blit(fontImage,(x,y)) 
         self.Maps_grid()
         self.Minimaps_grid()
         self.Minimap()
@@ -301,6 +308,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         for i in range(self.big_steps):
             for j in range(self.big_steps):
                 cell_type = cells_list[i*self.big_steps+j][2]
+                fraction  = cells_list[i*self.big_steps+j][3]
                 if (cell_type >6) and (cell_type<12):
                     print 'start coords = '+str(i)+' '+str(j)
                     mass_cell_type = []
@@ -334,11 +342,15 @@ class Window(Core): #Люди, користуйтеся цим кодом для
                     first_texture = textures[result_type].get_rect()
                     first_texture.center=(45+self.big_step*i,25+self.big_step*j)
                     self.display.blit(textures[result_type],first_texture) 
-                first_texture = textures[cell_type].get_rect()
-                first_texture.center=(35+self.big_step*i,14+self.big_step*j)
-                self.display.blit(textures[cell_type],first_texture)
-
-                print cell_type                
+                if (fraction > 0) and (cell_type == 9):
+                    first_texture = textures[cell_type+fraction-1].get_rect()
+                    first_texture.center=(35+self.big_step*i,14+self.big_step*j)
+                    self.display.blit(textures[cell_type+fraction-1],first_texture)
+                else:
+                    first_texture = textures[cell_type].get_rect()
+                    first_texture.center=(35+self.big_step*i,14+self.big_step*j)
+                    self.display.blit(textures[cell_type],first_texture)                    
+                print cell_type+self.fraction                
 #                cell = Rect((20+self.big_step*i,self.big_step*j),(self.big_step,self.big_step))
 #                
 #                pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
