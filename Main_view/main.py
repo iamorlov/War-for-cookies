@@ -2,5 +2,5 @@
 from Window import *
 
 if __name__ == '__main__':
-    a = Window('temp_map')
+    a = Window('first_map_for_test')
     a.Run()

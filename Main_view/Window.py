@@ -32,10 +32,6 @@ class Window(Core): #Люди, користуйтеся цим кодом для
     def Maps_grid(self):
         self.big_step = 50
         self.big_steps =14
-        for i in range(self.big_steps):
-            for j in range(self.big_steps):
-                cell = Rect((20+self.big_step*i,self.big_step*j),(self.big_step,self.big_step))
-                pygame.draw.rect(self.display,(0,0,0),cell,1)
         pygame.display.flip()
 
     def Minimaps_grid(self):
@@ -108,17 +104,12 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         texture = manager.get_image("mine.png")
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
-        #Тимчасове обозначення баз
         texture = manager.get_image("base_blue.png")
         texture = pygame.transform.scale(texture,(50,50))
-        self.textures.append(texture)
-        
+        self.textures.append(texture)        
         texture = manager.get_image("base_red.png")
         texture = pygame.transform.scale(texture,(50,50))
         self.textures.append(texture)
-                        
-
-
         pygame.display.flip() 
 
     def load_cells_list(self):
@@ -133,7 +124,9 @@ class Window(Core): #Люди, користуйтеся цим кодом для
                 pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
         pygame.display.flip()
         self.Minimaps_grid()
-    
+
+    def moving_army(self):
+        pass
            
     def Get_minimap_coords(self,click_coords):                 
         if ((click_coords[0] > 800) and (click_coords[1] > 0) and (click_coords[0] < 1100) and (click_coords[1] < 300)):
@@ -248,7 +241,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         for i in range(self.big_steps):
             for j in range(self.big_steps):
                 cell_type = cells_list[i*self.big_steps+j][2]
- 
+                fraction  = cells_list[i*self.big_steps+j][3]
                 if (cell_type >6) and (cell_type<12):
                     print 'start coords = '+str(i)+' '+str(j)
                     mass_cell_type = []
@@ -281,10 +274,15 @@ class Window(Core): #Люди, користуйтеся цим кодом для
                                 result_type = k+1
                     first_texture = self.textures[result_type].get_rect()
                     first_texture.center=(45+self.big_step*i,25+self.big_step*j)
-                    self.display.blit(self.textures[result_type],first_texture)                        
-                first_texture = self.textures[cell_type].get_rect()
-                first_texture.center=(45+self.big_step*i,25+self.big_step*j)
-                self.display.blit(self.textures[cell_type],first_texture)                
+                    self.display.blit(self.textures[result_type],first_texture) 
+                if (fraction > 0) and (cell_type == 9):
+                    first_texture = self.textures[cell_type+fraction-1].get_rect()
+                    first_texture.center=(45+self.big_step*i,25+self.big_step*j)
+                    self.display.blit(self.textures[cell_type+fraction-1],first_texture)
+                else:
+                    first_texture = self.textures[cell_type].get_rect()
+                    first_texture.center=(45+self.big_step*i,25+self.big_step*j)
+                    self.display.blit(self.textures[cell_type],first_texture)               
 #                cell = Rect((20+self.big_step*i,self.big_step*j),(self.big_step,self.big_step))
 #                
 #                pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
