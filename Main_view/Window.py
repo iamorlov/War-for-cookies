@@ -10,18 +10,21 @@ from ResManager import *
 
 
 class Window(Core): #Люди, користуйтеся цим кодом для виконання завдань по рпз. Я хз поки, чому перше перемалювання вікна йде 3,5 секунд :((((((
-    def __init__(self):
+    def __init__(self,map_name):
         pygame.init()
         self.minimap_x =0
         self.minimap_y =0
         self.count = 0
+        self.days = 0
+        self.fraction = 1 # першими ходять червоні
+        self.map_name = map_name
         
     def Main_Window(self):
         self.display = pygame.display.set_mode((1200,720))
         manager = ResManager()
         pygame.display.set_icon(manager.get_image('icon.png'))
         pygame.display.set_caption("War for cookies")
-        self.load_file('temp_map')
+        self.load_file(self.map_name)
         self.display.fill((220,220,250))
         pygame.display.flip()
         i = 0

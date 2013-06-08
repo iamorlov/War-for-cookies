@@ -82,6 +82,64 @@ class Core():
         id_army = id_army[temp_len:]
         result.append(int(id_army))
         return result               
+
+    def get_army_information(self,line):
+        #Ололо я індус дубль 2
+        #коли буде зайвий час - переробити
+        result, x, len_x = []
+        for i in range(7):
+            x.append('')
+            len_x.append(0)
+        x[0] = re.search('[(][0-9]{1,3}[;]', line)# id_army
+        x[0] = x[0].group(0)
+        len_x[0] = len(x[0])
+        x[0] = x[0][1:]
+        x[0] = x[0][:-1]
+        
+        result.append(int(x[0]))
+        x[1] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;]', line)#u_1
+        x[1] = x[1].group(0)
+        len_x[1] = len(x[1])#len_y
+        x[1] = x[1][len_x[0]:]
+        x[1] = x[1][:-1]
+
+        result.append(int(x[1]))
+        x[2] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;]', line)#u_2
+        x[2] = x[2].group(0)
+        len_x[2] = len(x[2])
+        x[2] = x[2][len_x[1]:]
+        x[2] = x[2][:-1]
+
+        result.append(int(x[2]))
+        x[3] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;]', line)#u_3
+        x[3] = x[3].group(0)
+        len_x[3] = len(x[3])
+        x[3] = x[3][len_x[2]:]
+        x[3] = x[3][:-1]
+
+        result.append(int(x[3]))
+        x[4] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;]', line)#u_4
+        x[4] = x[4].group(0)
+        len_x[4] = len(x[4])
+        x[4] = x[4][len_x[3]:]
+        x[4] = x[4][:-1]
+        
+        result.append(int(x[4]))
+        x[5] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;]', line)#u_5
+        x[5] = x[5].group(0)
+        len_x[5] = len(x[5])
+        x[5] = x[5][len_x[4]:]
+        x[5] = x[5][:-1]
+
+        result.append(int(x[5]))
+        x[6] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}', line)#count
+        x[6] = x[6].group(0)
+        len_x[6] = len(x[6])
+        x[6] = x[6][len_x[5]:]
+        x[6] = x[6][:-1]
+        result.append(int(x[6]))
+        return result
+    #СВЯТА ДЖИГУРДА! Мені соромно за ті верхні два шматки коду :((((((( 
     
     def load_cells(self,x,y):
         map_file = open(self.file,'r')
@@ -136,4 +194,17 @@ class Core():
         for i in range(int(max1)*int(max2)):
            list_coords.append(self.get_cell_information(a[i]))
         return list_coords
-            
+
+    def load_army(self):
+        map_file = open(self.file,'r')
+        lines = map_file.readlines()
+        l = ''
+        for i in range(len(lines)):
+            l+=lines[i]
+        map_file.close()
+        list_army = []
+        a = re.findall('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[)]',l)
+        for i in range(len(a)):
+           list_army.append(self.get_army_information(a[i]))
+        return list_army          
+#[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[)]
