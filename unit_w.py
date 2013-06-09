@@ -24,5 +24,5 @@ class unit():
                 
 if __name__ == '__main__':
        Unir=unit()
-       Unir.set_un('infantry.txt')
+       Unir.set_un('data/units/infantry.txt')
        Unir.get_print()
