@@ -77,7 +77,7 @@ class Menu(lib.Game, lib.Scene):
         self.x = position[0]
         self.y = position[1]
         self.menu = list()
-    # Метод перемещающий нас в низ циклично по всем элементам.
+    # Метод перемещающий нас циклично в низ по всем элементам.
     def down(self):
         self.index += 1
         if self.index >= len(self.menu):
@@ -121,7 +121,7 @@ class MenuScene(lib.Scene):
     def item_call(self):
         print("item_call")
         self.the_end()
-    def fun_exit(self):#кнопка закрить
+    def fun_exit(self):#кнопка закрыть
         exit(1)
     def autor_print(self):
       self.display.fill((255,255,255))
