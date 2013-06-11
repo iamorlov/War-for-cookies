@@ -20,7 +20,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         self.map_name = map_name
         
     def Main_Window(self):
-        self.display = pygame.display.set_mode((1200,720))
+        self.display = pygame.display.set_mode((1280,720))
         manager = ResManager()
         pygame.display.set_icon(manager.get_image('icon.png'))
         pygame.display.set_caption("War for cookies")

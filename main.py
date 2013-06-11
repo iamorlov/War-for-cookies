@@ -126,11 +126,11 @@ class MenuScene(lib.Scene):
     def autor_print(self):
       self.display.fill((255,255,255))
     def _start(self):
-        self.menu = Menu((155,100))
+        self.menu = Menu((250,110))
         # Именно таким образом мы можем получить текст в pygame
         # В данном случае мы используем системный шрифт.
-        font      = pygame.font.SysFont("Monospace", 40, bold=False, italic=False)
-        font_bold = pygame.font.SysFont("Monospace", 40, bold=True, italic=False)
+        font      = pygame.font.SysFont("Verdana", 50, bold=False, italic=False)
+        font_bold = pygame.font.SysFont("Verdana", 50, bold=True, italic=False)
         self.menu.background()
         # Загрузка музыки.
         pygame.mixer.music.load('data/music/menu.ogg')
@@ -182,7 +182,7 @@ if __name__ == '__main__':
     # Вот так хитро все и закрутилось.
     # ждем, показываем, ждем, скрываем, ждем, меню.
     scene = WaitScene(1000, ShowScene(WaitScene(500, HideScene(WaitScene(1000,MenuScene())))))
-    game = lib.Game(1100, 700, scene = scene)
+    game = lib.Game(1280, 720, scene = scene)
     game.set_caption("War for Cookies", "icon.png")
 
     game.game_loop()
