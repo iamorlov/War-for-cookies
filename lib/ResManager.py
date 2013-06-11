@@ -11,8 +11,7 @@ class ResManager:
                  data_dir = 'data',
                  image_dir = 'image',
                  sound_dir = 'sound',
-                 music_dir = 'music'
-                 unit_dir='units'):
+                 music_dir = 'music'):
         # Это корневой каталог ресурсов
         self.data_dir = data_dir
         # Это каталог с изображениями
@@ -21,8 +20,6 @@ class ResManager:
         self.sound_dir = sound_dir
         # Это каталог с музыкой
         self.music_dir = music_dir
-       # А сюда я допилю юниты 
-        self.units_dir=units_dir
 
     # Этот метод загружает файл по имени.
     def get_image(self, name):
