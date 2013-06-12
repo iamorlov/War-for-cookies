@@ -247,8 +247,9 @@ class Window(Core): #Люди, користуйтеся цим кодом для
                     mass_cell_type = []
                     for k in range(3):
                         for z in range(3):
-                            type_cell = cells_list[(i+k-1)*self.big_steps+j+z-1][2]
-                            print 'coords = '+str(i+k-1)+' '+str(j+z-1)
+                            print 'coords = '+str(i+k-1)+' '+str((j+z-1))
+                            type_cell = cells_list[(i+k-1)+(j+z-1)*self.big_steps][2]# ТУТ БАГ!!!!!!!!!!! ТРЕБА СТВОРИТИ ПРОЦЕДУРУ ДЛЯ ОБРОБКИ ОБЛАСТІ 3х3 на глобальній карті
+                            print type_cell
                             if (type_cell !=3) and (type_cell <6):
                                 mass_cell_type.append(type_cell)
                     types = [0,0,0,0,0,0]
@@ -286,6 +287,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
 #                cell = Rect((20+self.big_step*i,self.big_step*j),(self.big_step,self.big_step))
 #                
 #                pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
+                print '  '
         cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*14,self.step_p*14))
         self.Minimap()
         pygame.draw.rect(self.display,(0,0,0),cell,2)

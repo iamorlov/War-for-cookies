@@ -23,6 +23,8 @@ class Core():
         map_file = open(name,'r')
         x_coords = map_file.readline()
         y_coords = map_file.readline()
+        map_file.seek(0)
+        buff = map_file.readlines()
         map_file.close()
         if x_coords[:-1] == y_coords[:-1] == '50':
             self.map_type = 0
@@ -30,6 +32,10 @@ class Core():
             self.map_type = 1
         elif x_coords[:-1] == y_coords[:-1] == '150':
             self.map_type = 2
+        self.file = 'ingame_temp'
+        map_file = open(self.file,'w')
+        map_file.writelines(buff)
+        map_file.close()
             
     def change_cell(self,x,y,t,f,id_army):
         map_file = open(self.file,'r')
@@ -165,7 +171,7 @@ class Core():
         if (y < 14):
             self.y_coord_start = 0
             self.y_coord_end = 14
-        elif(b<7):
+        elif(b<14):
             self.y_coord_start = int(max2)-14
             self.y_coord_end = int(max2)
         else:
