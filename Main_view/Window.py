@@ -332,6 +332,11 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         finish = time.time()
         print (finish - start)
         
+        start = time.time() 
+        print(self.load_cells_for_transparent_textures(13, 45))
+        finish = time.time()
+        print (finish - start)
+        
         print (finish - start)
         while True:
             self.Rewrite_cell()

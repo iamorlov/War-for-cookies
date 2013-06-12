@@ -184,7 +184,21 @@ class Core():
                 if a!= None:
                     list_coords.append(self.get_cell_information(a.group(0)))
         return list_coords
-        
+
+    def load_cells_for_transparent_textures(self,x,y):
+        map_file = open(self.file,'r')
+        lines = map_file.readlines()
+        l = ''
+        for i in range(len(lines)):
+            l+=lines[i]
+        map_file.close()
+        result = []
+        for i in range(0,3):
+            for j in range(3):
+                a = re.search('[(]'+str(x-1+i)+'[;]'+str(y-1+j)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
+                result.append(self.get_cell_information(a.group(0)))
+        return result
+           
     def load_minimap_cells(self):
         map_file = open(self.file,'r')
         lines = map_file.readlines()
