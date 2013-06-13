@@ -242,16 +242,15 @@ class Window(Core): #Люди, користуйтеся цим кодом для
             for j in range(self.big_steps):
                 cell_type = cells_list[i*self.big_steps+j][2]
                 fraction  = cells_list[i*self.big_steps+j][3]
-                if (cell_type >6) and (cell_type<12):
-                    print 'start coords = '+str(i)+' '+str(j)
+                if (cell_type >6) and (cell_type<12) or (fraction!=0):
+                    x = cells_list[i*self.big_steps+j][0]
+                    y = cells_list[i*self.big_steps+j][1]
+                    local_list = self.load_cells_for_transparent_textures(x, y)
                     mass_cell_type = []
-                    for k in range(3):
-                        for z in range(3):
-                            print 'coords = '+str(i+k-1)+' '+str((j+z-1))
-                            type_cell = cells_list[(i+k-1)+(j+z-1)*self.big_steps][2]# ТУТ БАГ!!!!!!!!!!! ТРЕБА СТВОРИТИ ПРОЦЕДУРУ ДЛЯ ОБРОБКИ ОБЛАСТІ 3х3 на глобальній карті
-                            print type_cell
-                            if (type_cell !=3) and (type_cell <6):
-                                mass_cell_type.append(type_cell)
+                    for k in range(len(local_list)):
+                        type_cell = local_list[k][2]
+                        if (type_cell !=3) and (type_cell <6):
+                            mass_cell_type.append(type_cell)
                     types = [0,0,0,0,0,0]
                     for k in range(0,len(mass_cell_type)):
                         if mass_cell_type[k] == 0:
@@ -284,18 +283,11 @@ class Window(Core): #Люди, користуйтеся цим кодом для
                     first_texture = self.textures[cell_type].get_rect()
                     first_texture.center=(45+self.big_step*i,25+self.big_step*j)
                     self.display.blit(self.textures[cell_type],first_texture)               
-#                cell = Rect((20+self.big_step*i,self.big_step*j),(self.big_step,self.big_step))
-#                
-#                pygame.draw.rect(self.display,self.colour[cell_type],cell,0)
-                print '  '
         cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*14,self.step_p*14))
         self.Minimap()
         pygame.draw.rect(self.display,(0,0,0),cell,2)
         self.Maps_grid()
         pygame.display.flip()
-                
-        #print str(self.x_coord_start)+'  '+str(self.y_coord_start)
-        #print cells_list
 # 28x28, 25x25 cells
     def Rewrite_cell(self):
         self.Events()
@@ -332,12 +324,9 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         finish = time.time()
         print (finish - start)
         
-        start = time.time() 
+
         print(self.load_cells_for_transparent_textures(13, 45))
-        finish = time.time()
-        print (finish - start)
-        
-        print (finish - start)
+
         while True:
             self.Rewrite_cell()
 
