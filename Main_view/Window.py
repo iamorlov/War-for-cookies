@@ -3,6 +3,7 @@ import pygame, sys
 from Core import *
 from ResManager import *
 from Resources import *
+from Graphical_logic import *
 #from Events import *
 
 class Window(Core):
@@ -10,6 +11,7 @@ class Window(Core):
     def __init__(self,map_name):
         pygame.init()
         self.resources = Resources()
+        self.graphical_logic = Graphical_logic()
 #        self.w_event = Events()
         print 'lol'
         self.minimap_x =0
@@ -33,7 +35,7 @@ class Window(Core):
     def Maps_grid(self):
         self.big_step = 50
         self.big_steps =14
-        pygame.display.flip()
+        pygame.display.flip()# лол, костЫль
 
     def Minimaps_grid(self):
         if self.map_type == 0:  
@@ -175,32 +177,7 @@ class Window(Core):
                     x = cells_list[i*self.big_steps+j][0]
                     y = cells_list[i*self.big_steps+j][1]
                     local_list = self.load_cells_for_transparent_textures(x, y)
-                    mass_cell_type = []
-                    for k in range(len(local_list)):
-                        type_cell = local_list[k][2]
-                        if (type_cell !=3) and (type_cell <6):
-                            mass_cell_type.append(type_cell)
-                    types = [0,0,0,0,0,0]
-                    for k in range(0,len(mass_cell_type)):
-                        if mass_cell_type[k] == 0:
-                            types[0]+=1;
-                        elif mass_cell_type[k] == 1:
-                            types[1]+=1;
-                        elif mass_cell_type[k] == 2:
-                            types[2]+=1;
-                        elif mass_cell_type[k] == 4:
-                            types[3]+=1;
-                        elif mass_cell_type[k] == 5:
-                            types[4]+=1;
-                        elif mass_cell_type[k] == 6:
-                            types[5]+=1;
-                    max_cells = max(types)
-                    for k in range(0,len(types)):
-                        if (max_cells == types[k]):
-                            if k <3:
-                                result_type = k
-                            else:
-                                result_type = k+1
+                    result_type = self.graphical_logic.get_type_background_textures(x, y, local_list)
                     first_texture = textures[result_type].get_rect()
                     first_texture.center=(45+self.big_step*i,25+self.big_step*j)
                     self.display.blit(textures[result_type],first_texture) 
@@ -223,36 +200,12 @@ class Window(Core):
         self.Events()
 
     def Run(self):
-        start = time.time()
         self.Main_Window()
-        finish = time.time()
-        print (finish - start)
-        
-        start = time.time() 
         self.load_cells_list()
-        finish = time.time()
-        print (finish - start)
-        
-        start = time.time() 
         self.Maps_grid()
-        finish = time.time()
-        print (finish - start)
-                
-        start = time.time() 
         self.Minimaps_grid()
-        finish = time.time()
-        print (finish - start)
-                
-        start = time.time() 
         self.Minimap()
-        finish = time.time()
-        print (finish - start)
-        
-        start = time.time() 
         self.Load_part_of_map()
-        finish = time.time()
-        print (finish - start)
-
         while True:
             self.Rewrite_cell()
 
