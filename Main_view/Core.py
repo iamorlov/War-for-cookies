@@ -159,19 +159,19 @@ class Core():
         map_file.close()
         a = int(max1) - x
         b = int(max2) - y
-        if (x < 14):
+        if (x < 7):
             self.x_coord_start = 0
             self.x_coord_end = 14
-        elif(a<14):
+        elif(a<7):
             self.x_coord_start = int(max1)-14
             self.x_coord_end = int(max1)
         else:
             self.x_coord_start = x-7
             self.x_coord_end = x+7
-        if (y < 14):
+        if (y < 7):
             self.y_coord_start = 0
             self.y_coord_end = 14
-        elif(b<14):
+        elif(b<7):
             self.y_coord_start = int(max2)-14
             self.y_coord_end = int(max2)
         else:

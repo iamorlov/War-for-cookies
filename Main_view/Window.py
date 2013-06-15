@@ -140,7 +140,8 @@ class Window(Core): #Люди, користуйтеся цим кодом для
             self.Maps_grid()
             #self.Minimap()
 
-    def Get_map_coords(self,click_coords):                
+    def Get_map_coords(self,click_coords):
+        self.Load_part_of_map()                
         if ((click_coords[0] > 20) and (click_coords[1] > 0) and (click_coords[0] < 720) and (click_coords[1] < 700)):
             self.x_coord = (click_coords[0]-20)//self.big_step
             self.y_coord = (click_coords[1])//self.big_step
@@ -149,10 +150,10 @@ class Window(Core): #Люди, користуйтеся цим кодом для
 #            first_texture = self.textures[self.cell_type].get_rect()
 #            first_texture.center=(35+self.x_coord*self.big_step,14+self.y_coord*self.big_step)
 #            self.display.blit(self.textures[self.cell_type],first_texture)   
-#            cell = Rect((self.x_coord*self.big_step+20, self.y_coord*self.big_step),(self.big_step,self.big_step))
+            cell = Rect((self.x_coord*self.big_step+20, self.y_coord*self.big_step),(self.big_step,self.big_step))
 
 #            print self.cell_type
-#            pygame.draw.rect(self.display,self.colour[self.cell_type],cell,0)
+            pygame.draw.rect(self.display,(0,0,0),cell,2)
             self.Maps_grid()
             pygame.display.flip()
 ###
@@ -162,6 +163,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
 ###
     def event_scan_keyes(self):
         pygame.event.clear()
+        self.window_for_save()
         for event in pygame.event.get():
             print type(event)
             print event.type
@@ -171,13 +173,16 @@ class Window(Core): #Люди, користуйтеся цим кодом для
                 name_key =(re.search('[a-z]',pygame.key.name(event.key)))
                 if name_key != None:
                     text = (name_key).group(0)
+                    print text
                     return text
                 else:
                     return ''
             else:
                 print 'lol'
                 return 'lol'
-                
+        pygame.display.update()
+        pygame.event.clear()
+
                         
     
     def window_for_save(self):
@@ -197,18 +202,8 @@ class Window(Core): #Люди, користуйтеся цим кодом для
         font2 = font2.render(item2,0,(20,20,20))
         self.display.blit(font2,(385,410))
         text = ''
+        pygame.display.update()
 
-        pygame.display.update()
-        print text
-        time.sleep(1)
-#        event = pygame.event.wait()
-#        print pygame.key.name(event.key)
-        for i in range (7):
-            print type(self.event_scan_keyes())
-            text += self.event_scan_keyes()
-        pygame.display.update()
-        pygame.event.clear()
-        print text
 
     def Reload_window(self):
         self.Maps_grid()
@@ -221,9 +216,11 @@ class Window(Core): #Люди, користуйтеся цим кодом для
 #        if event.type == KEYDOWN:
 #            if event.key == K_F5:
 #                self.       
+
+
+# Система подій підлягає повній переробці, потрібно вводити flags для нормального функціонування і відслідковування іншихз подій.
     
     def Events(self):
- 
         for self.event in pygame.event.get():
             if self.event.type == MOUSEBUTTONDOWN:
                 if self.event.button == 1:
@@ -234,7 +231,7 @@ class Window(Core): #Люди, користуйтеся цим кодом для
                 sys.exit()
             if self.event.type == KEYDOWN:
                 if self.event.key == K_F5:
-                    self.window_for_save()
+                    self.event_scan_keyes()
                     
     def Load_part_of_map(self):
         cells_list = self.load_cells(self.minimap_x, self.minimap_y)
