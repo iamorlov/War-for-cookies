@@ -144,7 +144,7 @@ class Window(Core):
                 elif (event[0]=='save_mode'):
                     self.stage = event[1]
             if self.stage == 1:
-                self.action_for_save()
+                self.action_for_save(self.save_load_name)
                 if len(event) > 2:
                     self.stage = event[1]
                     if event[3] == 'continue':
@@ -183,13 +183,13 @@ class Window(Core):
         pygame.draw.rect(self.display,(0,0,0),cell,2)
         self.Maps_grid()
     
-    def action_for_save(self):
+    def action_for_save(self,text):
         cell = Rect((360,260),(300,200))
         pygame.draw.rect(self.display,(204,204,204),cell,0)
         cell = Rect((385,280),(250,50))
         pygame.draw.rect(self.display,(255,255,204),cell,0)
         pygame.draw.rect(self.display,(0,0,0),cell,2)
-#        text = pygame.font.SysFont(name, size, bold, italic)
+        filename = pygame.font.SysFont("Times New Roman", 20, bold=False, italic=True)
         font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
         font2 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)        
         item = u'Press enter for save'
@@ -198,7 +198,8 @@ class Window(Core):
         self.display.blit(font1,(385,360))
         font2 = font2.render(item2,0,(20,20,20))
         self.display.blit(font2,(385,410))
-#        text = ''
+        filename = filename.render(text,0,(20,20,20))
+        self.display.blit(filename,(455,290))
         pygame.display.update()
             #self.Minimap()        
 # 28x28, 25x25 cells
