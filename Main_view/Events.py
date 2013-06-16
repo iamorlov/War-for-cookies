@@ -39,22 +39,29 @@ class Events():
             if self.event.key == pygame.K_F5:
                 stage = 1
                 return ['save_mode', stage]
-        if stage == 1:
+            if self.event.key == pygame.K_F7:
+                stage = 2
+                return ['load_mode', stage]
+        if (stage == 1) or (stage == 2):
+            if (stage == 1):
+                mode = 'save_mode'
+            if (stage == 2):
+                mode = 'load_mode'
             if self.event.key == pygame.K_ESCAPE:
                 stage = 0
-                return ['save_mode', stage, '', 'cancel']
+                return [mode, stage, '', 'cancel']
             elif self.event.key == pygame.K_RETURN:
                 stage = 0
-                return ['save_mode', stage, '', 'save']
+                return [mode, stage, '', 'save']
             elif self.event.key == pygame.K_BACKSPACE:
-                return ['save_mode', stage, '', 'backspace']
+                return [mode, stage, '', 'backspace']
             else:
                 name_key =(re.search('[a-z]',pygame.key.name(self.event.key)))
                 if name_key != None:
                     text = (name_key).group(0) 
-                    return ['save_mode', stage, text, 'continue']
+                    return [mode, stage, text, 'continue']
                 else:
-                    return ['save_mode', stage, '', 'continue']
+                    return [mode, stage, '', 'continue']
         
     def get_event(self,stage,big_step,step_p):#,flag):
         for self.event in pygame.event.get():

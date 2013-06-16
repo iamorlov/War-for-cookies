@@ -13,7 +13,6 @@ class Window(Core):
         self.resources = Resources()
         self.graphical_logic = Graphical_logic()
         self.w_event = Events()
-        print 'lol'
         self.minimap_x =0
         self.minimap_y =0
         self.count = 0
@@ -67,25 +66,6 @@ class Window(Core):
 
     def moving_army(self):
         pass
-    
-#    def window_for_save(self):
-#        pygame.event.clear()
-#        cell = Rect((360,260),(300,200))
-#        pygame.draw.rect(self.display,(204,204,204),cell,0)
-#        cell = Rect((385,280),(250,50))
-#        pygame.draw.rect(self.display,(255,255,204),cell,0)
-#        pygame.draw.rect(self.display,(0,0,0),cell,2)
-#        #text = pygame.font.SysFont(name, size, bold, italic)
-#        font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
-#        font2 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)        
-#        item = u'Press enter for save'
-#        item2 = u'Press ESC for exit'
-#        font1 = font1.render(item,0,(20,20,20))
-#        self.display.blit(font1,(385,360))
-#        font2 = font2.render(item2,0,(20,20,20))
-#        self.display.blit(font2,(385,410))
-#        text = ''
-#        pygame.display.update()
 
     def reload_window(self,x,y):
         self.Maps_grid()
@@ -94,11 +74,6 @@ class Window(Core):
         self.Load_part_of_map(x,y)
         pygame.display.flip()
                 
-#    def Save_map(self,event):
-#        if event.type == KEYDOWN:
-#            if event.key == K_F5:
-#                self.       
-
     def Load_part_of_map(self,x,y):
         textures = self.resources.textures()
         cells_list = self.load_cells(x, y)
@@ -150,22 +125,28 @@ class Window(Core):
                     if event[3] == 'continue':
                         if len(self.save_load_name) <10:
                             self.save_load_name += event[2]
+                            self.action_for_save(self.save_load_name)
                     if event[3] == 'backspace':
                         if len(self.save_load_name)>0:
                             self.save_load_name = self.save_load_name[:-1]
+                            self.action_for_save(self.save_load_name)
                     if event[3] == 'save':
-                        self.save_load_name = ''
-                        try:
-                            self.reload_window(self.last_x,self.last_y)
-                        except AttributeError:
-                            self.reload_window(0,0)
+                        if self.save_load_name >2:
+                            self.save_file(self.save_load_name)
+                            self.save_load_name = ''
+                            try:
+                                self.reload_window(self.last_x,self.last_y)
+                            except AttributeError:
+                                self.reload_window(0,0)
                     if event[3] == 'cancel':
                         self.save_load_name = ''
                         try:
                             self.reload_window(self.last_x,self.last_y)
                         except AttributeError:
                             self.reload_window(0,0)
+
                     print self.save_load_name
+
                 
 
     def action_to_map_coords(self,x,y):
