@@ -20,7 +20,8 @@ class Window(Core):
         self.days = 0
         self.fraction = 1 # першими ходять червоні
         self.map_name = map_name
-        self.flag = 0
+        self.stage = 0
+        self.save_load_name = ''
         
     def Main_Window(self):
         self.display = pygame.display.set_mode((1280,720))
@@ -150,14 +151,30 @@ class Window(Core):
         pygame.display.flip()
 
     def event_handler(self):
-        event = self.w_event.get_event(self.big_step, self.step_p)
+        event = self.w_event.get_event(self.stage, self.big_step, self.step_p)
         if (event != None):
-            if (event[0]=='map_coords'):
-                print event
-                self.action_to_map_coords(event[1],event[2])
-            elif (event[0]=='minimap_coords'):
-                print event
-                self.action_to_minimap_coords(event[1],event[2])
+            print self.stage
+            if self.stage == 0:
+                if (event[0]=='map_coords'):
+                    self.action_to_map_coords(event[2],event[3])
+                    self.stage = event[1]
+                elif (event[0]=='minimap_coords'):
+                    self.action_to_minimap_coords(event[2],event[3])
+                    self.stage = event[1]
+                elif (event[0]=='save_mode'):
+                    self.stage = event[1]
+            if self.stage == 1:
+                if len(event) > 2:
+                    self.action_for_save()
+                    self.stage = event[1]
+                    if event[3] == 'continue':
+                        self.save_load_name += event[2]
+                    if event[3] == 'save':
+                        self.save_load_name = ''
+                    if event[3] == 'cancel':
+                        self.save_load_name = ''
+                    print self.save_load_name
+                
 
     def action_to_map_coords(self,x,y):
 #        self.Load_part_of_map(x,y)                
@@ -173,6 +190,9 @@ class Window(Core):
         self.Minimap()
         pygame.draw.rect(self.display,(0,0,0),cell,2)
         self.Maps_grid()
+    
+    def action_for_save(self):
+        pass
             #self.Minimap()        
 # 28x28, 25x25 cells
     def Rewrite_cell(self):
