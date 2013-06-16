@@ -46,6 +46,8 @@ class Events():
             elif self.event.key == pygame.K_RETURN:
                 stage = 0
                 return ['save_mode', stage, '', 'save']
+            elif self.event.key == pygame.K_BACKSPACE:
+                return ['save_mode', stage, '', 'backspace']
             else:
                 name_key =(re.search('[a-z]',pygame.key.name(self.event.key)))
                 if name_key != None:

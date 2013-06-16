@@ -67,28 +67,6 @@ class Window(Core):
 
     def moving_army(self):
         pass
-           
-#    def event_scan_keyes(self):
-#        pygame.event.clear()
-#        self.window_for_save()
-#        for event in pygame.event.get():
-#            print type(event)
-#            print event.type
-#            if event.type == KEYDOWN:
-#                print event.type
-#                print type(event.key)
-#                name_key =(re.search('[a-z]',pygame.key.name(event.key)))
-#                if name_key != None:
-#                    text = (name_key).group(0)
-#                    print text
-#                    return text
-#                else:
-#                    return ''
-#            else:
-#                print 'lol'
-#                return 'lol'
-#        pygame.display.update()
-#        pygame.event.clear()                      
     
 #    def window_for_save(self):
 #        pygame.event.clear()
@@ -109,12 +87,12 @@ class Window(Core):
 #        text = ''
 #        pygame.display.update()
 
-#    def Reload_window(self):
-#        self.Maps_grid()
-#        self.Minimaps_grid()
-#        self.Minimap()
-#        self.Type_of_grids()
-#        pygame.display.flip()
+    def reload_window(self,x,y):
+        self.Maps_grid()
+        self.Minimaps_grid()
+        self.Minimap()
+        self.Load_part_of_map(x,y)
+        pygame.display.flip()
                 
 #    def Save_map(self,event):
 #        if event.type == KEYDOWN:
@@ -161,18 +139,32 @@ class Window(Core):
                 elif (event[0]=='minimap_coords'):
                     self.action_to_minimap_coords(event[2],event[3])
                     self.stage = event[1]
+                    self.last_x = event[2]
+                    self.last_y = event[3]
                 elif (event[0]=='save_mode'):
                     self.stage = event[1]
             if self.stage == 1:
+                self.action_for_save()
                 if len(event) > 2:
-                    self.action_for_save()
                     self.stage = event[1]
                     if event[3] == 'continue':
-                        self.save_load_name += event[2]
+                        if len(self.save_load_name) <10:
+                            self.save_load_name += event[2]
+                    if event[3] == 'backspace':
+                        if len(self.save_load_name)>0:
+                            self.save_load_name = self.save_load_name[:-1]
                     if event[3] == 'save':
                         self.save_load_name = ''
+                        try:
+                            self.reload_window(self.last_x,self.last_y)
+                        except AttributeError:
+                            self.reload_window(0,0)
                     if event[3] == 'cancel':
                         self.save_load_name = ''
+                        try:
+                            self.reload_window(self.last_x,self.last_y)
+                        except AttributeError:
+                            self.reload_window(0,0)
                     print self.save_load_name
                 
 
@@ -192,7 +184,22 @@ class Window(Core):
         self.Maps_grid()
     
     def action_for_save(self):
-        pass
+        cell = Rect((360,260),(300,200))
+        pygame.draw.rect(self.display,(204,204,204),cell,0)
+        cell = Rect((385,280),(250,50))
+        pygame.draw.rect(self.display,(255,255,204),cell,0)
+        pygame.draw.rect(self.display,(0,0,0),cell,2)
+#        text = pygame.font.SysFont(name, size, bold, italic)
+        font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
+        font2 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)        
+        item = u'Press enter for save'
+        item2 = u'Press ESC for exit'
+        font1 = font1.render(item,0,(20,20,20))
+        self.display.blit(font1,(385,360))
+        font2 = font2.render(item2,0,(20,20,20))
+        self.display.blit(font2,(385,410))
+#        text = ''
+        pygame.display.update()
             #self.Minimap()        
 # 28x28, 25x25 cells
     def Rewrite_cell(self):
