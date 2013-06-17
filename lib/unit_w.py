@@ -1,28 +1,36 @@
 # -*- coding: utf-8 -*-
 import os
-
-class unit():
-    def __init__(self):
-        pass
-        
-    def set_un(self,name):# тут индусятина ибо я говнокодер
-         if os.path.exists(name):
+from core import get_datapath
+class Unit():
+    def __init__(self,name):
+        if os.path.exists(name):
             f=open(name)
-            v=[]
-            i=0
+            self.data=[]
+            self.bonus=[]
+            self.explain = {'id' : 0, 'name' : 1,'xp':2,
+                            'move':3,'cost_cookie':4,'cost_milk':5,
+                            'attack':6,'range':7,'bonus':8,'description':9}
             for line in f.xreadlines():
-                v.append(line)
-            self.id_unit=v[0]
-            self.name=v[1]
-            self.hit_point=v[2]
-            self.cost_milk=v[4]
-            self.kick=v[5]
-            self.rang=v[6]
-            
-    def get_print(self):
-             print(self.name)
-                
+                self.data.append(line)
+            self.bonus.extend(self.data[8].split(' '))
+        
+    
+    def get_print(self,n,m):#n-что надо, m-если надо бонусы, его номер
+        if(n==8):
+            return(self.bonus[self.explain[m]])
+        else:
+            return(self.data[self.explain[n]])
+        # перенесено в core как востребованная ф-ция
+    #def get_datapath(self):
+     #   path=os.getcwd().split(os.sep)
+     #   path.pop()
+      #  path.append('data')
+      #  print os.sep.join(path)
+       # print path
 if __name__ == '__main__':
-       Unir=unit()
-       Unir.set_un('infantry.txt')
-       Unir.get_print()
+    dir_path=get_datapath()
+    infantry=Unit(dir_path+'units\infantry.txt')
+    marines=Unit(dir_path+'units\marines.txt')
+    mob_infantry=Unit(dir_path+'units\mobinf.txt')
+    tank=Unit(dir_path+'units\tank.txt')
+    artillery=Unit(dir_path+'units\artillery.txt')
