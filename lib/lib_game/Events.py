@@ -23,6 +23,19 @@ class Events():
             minimap_y = (click_coords[1])//step
             return minimap_x, minimap_y
     
+    def move_coords(self):
+        if self.event.key ==pygame.K_DOWN:
+            return ['move_army', 0, 1]
+        
+        if self.event.key ==pygame.K_UP:
+            return ['move_army', 0, -1]
+        
+        if self.event.key ==pygame.K_LEFT:
+            return ['move_army', 1, 0]
+        
+        if self.event.key ==pygame.K_RIGHT:
+            return ['move_army', -1, 0]
+    
     def mousebuttondown_terms(self, stage, click_coords,big_step,step_p):
         if stage == 0:
             if ((click_coords[0] > 20) and (click_coords[1] > 0) and (click_coords[0] < 720) and (click_coords[1] < 700)):        
@@ -62,6 +75,8 @@ class Events():
                     return [mode, stage, text, 'continue']
                 else:
                     return [mode, stage, '', 'continue']
+        if (stage == 3):
+            return self.move_coords() 
         
     def get_event(self,stage,big_step,step_p):#,flag):
         for self.event in pygame.event.get():

@@ -125,6 +125,11 @@ class MenuScene(lib.Scene):
         exit(1)
     def autor_print(self):
       self.display.fill((255,255,255))
+    
+    def game_window(self):
+        a = lib.Window('first_map_for_test')
+        a.Run()
+    
     def _start(self):
         self.menu = Menu((250,110))
         # Именно таким образом мы можем получить текст в pygame
@@ -139,7 +144,7 @@ class MenuScene(lib.Scene):
         item = u"Новая игра"
         self.menu.add_menu_item(font.render(item,True,(255,255,255)),
                                 font_bold.render(item,True,(255,255,255)),
-                                self.item_call)
+                                self.game_window)
         item = u"Загрузить игру"
         self.menu.add_menu_item(font.render(item,True,(255,255,255)),
                                 font_bold.render(item,True,(255,255,255)),

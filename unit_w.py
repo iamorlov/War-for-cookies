@@ -23,21 +23,6 @@ class unit():
              print(self.name)
                 
 if __name__ == '__main__':
-       Unit_inf=unit()
-       Unit_inf.set_un('data/units/infantry.txt')
-     #  Unit_inf.get_print()
-       Unit_art=unit()
-       Unit_art.set_un('data/units/artillery.txt')
-      # Unit_art.get_print()
-       Unit_tank=unit()
-       Unit_tank.set_un('data/units/tank.txt')
-      # Unit_tank.get_print()
-       Unit_marines=unit()
-       Unit_marines.set_un('data/units/marines.txt')
-       #Unit_marines.get_print()
-       Unit_mobinf=unit()
-       Unit_mobinf.set_un('data/units/mobinf.txt')
-       #Unit_mobinf.get_print()
-       
-       
-       
+       Unir=unit()
+       Unir.set_un('data/units/infantry.txt')
+       Unir.get_print()

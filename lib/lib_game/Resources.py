@@ -5,7 +5,7 @@ Created on 16 черв. 2013
 @author: antimoskal
 '''
 import pygame
-from ResManager import *
+from lib import ResManager
 
 class Resources():
     
@@ -13,39 +13,38 @@ class Resources():
         self.manager = ResManager()
         
     def textures(self):
-        manager = ResManager()
         textures = []
-        texture = manager.get_image("grass.png")
+        texture = self.manager.get_terrain("grass.png")
         texture = pygame.transform.scale(texture,(50,50))
         textures.append(texture)
-        texture = manager.get_image("sand.png")
+        texture = self.manager.get_terrain("sand.png")
         texture = pygame.transform.scale(texture,(50,50))
         textures.append(texture)
-        texture = manager.get_image("dirt.png")
+        texture = self.manager.get_terrain("dirt.png")
         texture = pygame.transform.scale(texture,(50,50))
         textures.append(texture)
-        texture = manager.get_image("water.png")
+        texture = self.manager.get_terrain("water.png")
         texture = pygame.transform.scale(texture,(50,50))
         textures.append(texture)
-        texture = manager.get_image("tree.png")
+        texture = self.manager.get_terrain("tree.png")
         texture = pygame.transform.scale(texture,(50,50))
         textures.append(texture)
-        texture = manager.get_image("rock.png")
+        texture = self.manager.get_terrain("rock.png")
         texture = pygame.transform.scale(texture,(50,50))
         textures.append(texture)
-        texture = manager.get_image("lava.png")
+        texture = self.manager.get_terrain("lava.png")
         texture = pygame.transform.scale(texture,(50,50))
         textures.append(texture)
-        texture = manager.get_image("farm.png")
+        texture = self.manager.get_terrain("farm.png")
         texture = pygame.transform.scale(texture,(50,50))
         textures.append(texture)
-        texture = manager.get_image("mine.png")
+        texture = self.manager.get_terrain("mine.png")
         texture = pygame.transform.scale(texture,(50,50))
         textures.append(texture)
-        texture = manager.get_image("base_blue.png")
+        texture = self.manager.get_terrain("base_blue.png")
         texture = pygame.transform.scale(texture,(50,50))
         textures.append(texture)        
-        texture = manager.get_image("base_red.png")
+        texture = self.manager.get_terrain("base_red.png")
         texture = pygame.transform.scale(texture,(50,50))
         textures.append(texture)
         return textures
@@ -76,3 +75,15 @@ class Resources():
             elif i == 10:
                 colour.append((51,0,255))
         return colour
+
+    def arrows(self):
+        textures = []
+        for i in range(4):
+            texture = self.manager.get_image("free-go"+str(i+1)+".png")
+            texture = pygame.transform.scale(texture,(50,50))
+            textures.append(texture)        
+        for i in range(4):
+            texture = self.manager.get_image("enemy-go"+str(i+1)+".png")
+            texture = pygame.transform.scale(texture,(50,50))
+            textures.append(texture)
+        return textures
