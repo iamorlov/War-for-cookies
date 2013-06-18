@@ -18,7 +18,8 @@ class Window(Core):
         self.minimap_y =0
         self.count = 0
         self.days = 0
-        self.fraction = 1 # першими ходять червоні
+        self.cell_type = 0
+        self.fraction = 0 
         self.map_name = map_name
         self.stage = 0
         self.save_load_name = ''
@@ -59,9 +60,9 @@ class Window(Core):
     def load_cells_list(self):
         self.cells_list = self.load_minimap_cells()
 
-    def Type_of_grids(self):       
+    def type_of_grids(self):       
         textures = self.resources.textures()
-        self.colours()
+        colours = self.resources.colours()
         for i in range(3):
             for j in range(3):            
                 first_texture = textures[i+j*3].get_rect()
@@ -74,15 +75,15 @@ class Window(Core):
                 pygame.draw.rect(self.display,(0,0,0),cell,1)
         
         cell = Rect((875,500),(50,50))           
-        first_texture = self.textures[9].get_rect()
+        first_texture = textures[9].get_rect()
         first_texture.center=(25+875,25+500)
-        self.display.blit(self.textures[9],first_texture)
+        self.display.blit(textures[9],first_texture)
         pygame.draw.rect(self.display,(0,0,0),cell,1)
         
         cell = Rect((925,500),(50,50))            
-        first_texture = self.textures[10].get_rect()
+        first_texture = textures[10].get_rect()
         first_texture.center=(25+925,25+500)
-        self.display.blit(self.textures[10],first_texture)
+        self.display.blit(textures[10],first_texture)
         pygame.draw.rect(self.display,(0,0,0),cell,1)  
         pygame.display.update()
                 
@@ -109,8 +110,9 @@ class Window(Core):
     def Load_part_of_map(self,x,y):
         textures = self.resources.textures()
         cells_list = self.load_cells(x, y)
+        print len(cells_list)
         for i in range(11):
-            textures[i]= pygame.transform.scale(self.textures[i],(28,28)) 
+            textures[i]= pygame.transform.scale(textures[i],(28,28)) 
         for i in range(self.big_steps):
             for j in range(self.big_steps):
                 cell_type = cells_list[i*self.big_steps+j][2]
@@ -121,17 +123,17 @@ class Window(Core):
                     local_list = self.load_cells_for_transparent_textures(x, y)
                     result_type = self.graphical_logic.get_type_background_textures(x, y, local_list)
                     first_texture = textures[result_type].get_rect()
-                    first_texture.center=(45+self.big_step*i,25+self.big_step*j)
+                    first_texture.center=(35+self.big_step*i,14+self.big_step*j)
                     self.display.blit(textures[result_type],first_texture) 
                 if (fraction > 0) and (cell_type == 9):
                     first_texture = textures[cell_type+fraction-1].get_rect()
-                    first_texture.center=(45+self.big_step*i,25+self.big_step*j)
+                    first_texture.center=(35+self.big_step*i,14+self.big_step*j)
                     self.display.blit(textures[cell_type+fraction-1],first_texture)
                 else:
                     first_texture = textures[cell_type].get_rect()
-                    first_texture.center=(45+self.big_step*i,25+self.big_step*j)
+                    first_texture.center=(35+self.big_step*i,14+self.big_step*j)
                     self.display.blit(textures[cell_type],first_texture)               
-        cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*14,self.step_p*14))
+        cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*25,self.step_p*25))
         self.Minimap()
         pygame.draw.rect(self.display,(0,0,0),cell,2)
         self.Maps_grid()
@@ -143,13 +145,17 @@ class Window(Core):
             print self.stage
             if self.stage == 0:
                 if (event[0]=='map_coords'):
-                    self.action_to_map_coords(event[2],event[3],self.type,self.fraction)
+                    self.action_to_map_coords(event[2],event[3])
                     self.stage = event[1]
                 elif (event[0]=='minimap_coords'):
                     self.action_to_minimap_coords(event[2],event[3])
                     self.stage = event[1]
                     self.last_x = event[2]
                     self.last_y = event[3]
+                elif (event[0]=='type_cell'):
+                    self.stage = event[1]
+                    self.type = event[2]
+                    self.fraction = event[3]
                 
                 elif (event[0]=='save_mode'):
                     self.stage = event[1]
@@ -188,25 +194,25 @@ class Window(Core):
         textures = self.resources.textures()
         cells_list = self.load_cells(x, y)
         for i in range(11):
-            textures[i]= pygame.transform.scale(self.textures[i],(28,28)) 
-        self.change_cell(self.last_y+y,self.last_x+x,  self.cell_type, self.fraction, 0)
+            textures[i]= pygame.transform.scale(textures[i],(28,28)) 
+        self.change_cell(cells_list[0][1]+y,cells_list[0][0]+x,self.type, self.fraction, 0)
         if self.fraction > 0:
-            textures = pygame.transform.scale(self.textures[self.cell_type+self.fraction-1],(28,28))
+            textures = pygame.transform.scale(textures[self.type+self.fraction-1],(28,28))
             first_texture = textures.get_rect()
-            first_texture.center=(35+self.x_coord*self.big_step,14+self.y_coord*self.big_step)
+            first_texture.center=(35+x*self.big_step,14+y*self.big_step)
             self.display.blit(textures,first_texture)
         else:
-            textures = pygame.transform.scale(self.textures[self.cell_type],(28,28))
+            textures = pygame.transform.scale(textures[self.type],(28,28))
             first_texture = textures.get_rect()
-            first_texture.center=(35+self.x_coord*self.big_step,14+self.y_coord*self.big_step)
+            first_texture.center=(35+x*self.big_step,14+y*self.big_step)
             self.display.blit(textures,first_texture)  
-        pygame.draw.rect(self.display,(0,0,0),cell,2)
+        #pygame.draw.rect(self.display,(0,0,0),cell,2)
         self.Maps_grid()
         pygame.display.flip()        
 
     def action_to_minimap_coords(self,x,y):
         self.Load_part_of_map(x,y)
-        cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*14,self.step_p*14))
+        cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*25,self.step_p*25))
         self.load_cells_list()
         self.Minimap()
         pygame.draw.rect(self.display,(0,0,0),cell,2)
@@ -242,6 +248,7 @@ class Window(Core):
         self.Minimaps_grid()
         self.Minimap()
         self.Load_part_of_map(0,0)
+        self.type_of_grids()
         while True:
             self.Rewrite_cell()
 

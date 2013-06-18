@@ -23,7 +23,7 @@ class Events():
             minimap_y = (click_coords[1])//step
             return minimap_x, minimap_y
     
-    def get_type_coords(self,click_coords,step):
+    def get_type_coords(self,click_coords):
         if ((click_coords[0] > 850) and (click_coords[1] > 350) and (click_coords[0] < 1050) and (click_coords[1] < 500)):
             x_coord = (click_coords[0]-850)//50
             y_coord = (click_coords[1]-350)//50

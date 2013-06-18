@@ -130,6 +130,10 @@ class MenuScene(lib.Scene):
         a = lib.Window('first_map_for_test')
         a.Run()
     
+    def map_editor(self):
+        a = lib.lib_map_editor.Window(0)
+        a.Run()
+    
     def _start(self):
         self.menu = Menu((250,110))
         # Именно таким образом мы можем получить текст в pygame
@@ -152,7 +156,7 @@ class MenuScene(lib.Scene):
         item = u"Редактор карт"
         self.menu.add_menu_item(font.render(item,True,(255,255,255)),
                                 font_bold.render(item,True,(255,255,255)),
-                                self.fun_exit)
+                                self.map_editor)
         item = u"Настройки"
         self.menu.add_menu_item(font.render(item,True,(255,255,255)),
                                 font_bold.render(item,True,(255,255,255)),
