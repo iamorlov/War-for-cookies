@@ -118,6 +118,11 @@ class Menu(lib.Game, lib.Scene):
             index += 1
 
 class MenuScene(lib.Scene):
+    def music(self,i): #для музона 0 стоп остальное играть
+         pygame.mixer.music.load('data/music/menu.ogg')
+         pygame.mixer.music.play()
+         if(i==0):
+          pygame.mixer.music.stop()
     def item_call(self):
         print("item_call")
         self.the_end()
@@ -127,13 +132,15 @@ class MenuScene(lib.Scene):
       self.display.fill((255,255,255))
     
     def game_window(self):
+        self.music(0)
         a = lib.Window('first_map_for_test')
         a.Run()
-    
     def map_editor(self):
+        self.music(0)
         a = lib.lib_map_editor.Window(0)
         a.Run()
-    
+        
+       # return pygame.mixer.music.stop()
     def _start(self):
         self.menu = Menu((250,110))
         # Именно таким образом мы можем получить текст в pygame
@@ -142,9 +149,10 @@ class MenuScene(lib.Scene):
         font_bold = pygame.font.SysFont("Verdana", 50, bold=True, italic=False)
         self.menu.background()
         # Загрузка музыки.
-        pygame.mixer.music.load('data/music/menu.ogg')
+        #pygame.mixer.music.load('data/music/menu.ogg')
         # Проигрывание музыки.
-        pygame.mixer.music.play()
+        #pygame.mixer.music.play()
+        self.music(1)
         item = u"Новая игра"
         self.menu.add_menu_item(font.render(item,True,(255,255,255)),
                                 font_bold.render(item,True,(255,255,255)),
