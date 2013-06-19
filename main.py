@@ -129,8 +129,34 @@ class MenuScene(lib.Scene):
     def fun_exit(self):#кнопка закрыть
         exit(1)
     def autor_print(self):
+      pygame.display.flip()
       self.display.fill((255,255,255))
-    
+      pygame.init()
+      background = pygame.image.load('data/image/autors.png')#Фон!!!!!!!!!!!!!!!!!
+      self.screen=pygame.display.set_mode((1100,700))
+      self.screen.blit(background, (0,0))
+      pygame.display.flip()
+      #self.background()
+      filename = pygame.font.SysFont("Times New Roman", 20, bold=False, italic=True)
+      font1 = pygame.font.SysFont("Monospace", 45, bold=True, italic=False)
+      font2 = pygame.font.SysFont("Monospace", 44, bold=True, italic=False)
+      font3 = pygame.font.SysFont("Monospace", 44, bold=True, italic=False)
+      font4 = pygame.font.SysFont("Monospace", 44, bold=True, italic=False)
+      font5 = pygame.font.SysFont("Monospace", 44, bold=True, italic=False)
+      item = u'Evgen azon Darnrpuk'
+     # item2 = u'Roman "Merorh" Lukov'
+     # item1 = u'Vadim "Heiker" Orlov'
+     # item3 =u'Igor KIO Kandyba'
+     # item4 =u'Denis Dnina Goncharow'
+      #item = u'Press enter for save'
+      #item = u'Press enter for save'
+      font1 = font1.render(item,0,(225,225,225))
+     # font2 = font2.render(item1,0,(225,225,225))
+      #font3 = font2.render(item2,0,(225,225,225))
+      #font4 = font2.render(item3,0,(225,225,225))
+     # font5 = font2.render(item4,0,(225,225,225))
+      self.screen.blit(font1,(455,290))
+      pygame.display.update()
     def game_window(self):
         self.music(0)
         a = lib.Window('first_map_for_test')

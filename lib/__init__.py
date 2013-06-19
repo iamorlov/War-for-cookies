@@ -5,3 +5,4 @@ from Transparent import Transparent
 from Game import Game
 from lib_game import *
 import lib_map_editor
+from  autor import *
