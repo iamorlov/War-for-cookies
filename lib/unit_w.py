@@ -1,28 +1,35 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 import os
-
-class unit():
-    def __init__(self):
-        pass
-        
-    def set_un(self,name):# тут индусятина ибо я говнокодер
-         if os.path.exists(name):
+class Unit():
+    def __init__(self,name):
+        if os.path.exists(name):
             f=open(name)
-            v=[]
-            i=0
+            self.data=[]
+            self.bonus=[]
+            self.explain = {'id' : 0, 'name' : 1,'xp':2,
+                        'move':3,'cost_cookie':4,'cost_milk':5,
+                        'kick':6,'range':7,'bonus':8,'description':9}
             for line in f.xreadlines():
-                v.append(line)
-            self.id_unit=v[0]
-            self.name=v[1]
-            self.hit_point=v[2]
-            self.cost_milk=v[4]
-            self.kick=v[5]
-            self.rang=v[6]
-            
-    def get_print(self):
-             print(self.name)
-                
-if __name__ == '__main__':
-       Unir=unit()
-       Unir.set_un('infantry.txt')
-       Unir.get_print()
+                self.data.append(line)
+            self.bonus.extend(self.data[8].split(' '))
+            for i in range(1,5):
+                self.bonus[i]=float(self.bonus[i])
+            for i in range(2,7):
+                self.data[i]=int(self.data[i])
+        else:
+             print name
+    def get_abil(self,n,m):
+        if(self.explain.get(n)==8):
+            return(self.bonus[m])
+        else:
+            return(self.data[self.explain[n]])
+    def set_abil(self,n, data):
+        self.data[self.explain[n]] = data
+    #def set_units(self):
+        #infantry=Unit('data\units\infantry.txt')
+       # marines=Unit('data\units\marines.txt')
+        #mob_infantry=Unit('data\units\mobinf.txt')
+        #tank=Unit('data\units\tank.txt')
+        #artillery=Unit('data\units\artillery.txt')
+       # return [infantry,marines,mob_infantry,tank,artillery]
+    
