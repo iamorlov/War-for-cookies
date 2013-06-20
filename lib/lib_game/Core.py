@@ -192,6 +192,17 @@ class Core():
                     list_coords.append(self.get_cell_information(a.group(0)))
         return list_coords
 
+    def load_cell(self,x,y):
+        map_file = open(self.file,'r')
+        lines = map_file.readlines()
+        l = ''
+        for i in range(len(lines)):
+            l+=lines[i]        
+        map_file.close()
+        cell = re.search('[(]'+str(x)+'[;]'+str(y)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
+        if cell!= None:
+            return self.get_cell_information(cell.group(0))
+        
     def load_cells_for_transparent_textures(self,x,y):
         map_file = open(self.file,'r')
         lines = map_file.readlines()

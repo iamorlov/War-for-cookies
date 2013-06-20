@@ -75,9 +75,6 @@ class Window(Core):
             y+=175
         pygame.display.update()
 
-    def moving_army(self):
-        pass
-
     def reload_window(self,x,y):
         self.Maps_grid()
         self.Minimaps_grid()
@@ -181,15 +178,35 @@ class Window(Core):
 
                     print self.save_load_name
 
+            if self.stage == 3:
+                if (event[0] == 'move_army'):
+                    self.moving_army(event[1],event[2])
+                elif (event[0] == 'end_of_army_stroke'):
+                    self.stage = event[1]
+                    
+
                 
 
     def action_to_map_coords(self,x,y):
-#        self.Load_part_of_map(x,y)                
-        cell = Rect((x*self.big_step+20, y*self.big_step),(self.big_step,self.big_step))
-        pygame.draw.rect(self.display,(0,0,0),cell,2)
-        self.Maps_grid()
-        pygame.display.flip()        
+#        self.Load_part_of_map(x,y)
+        cell = self.load_cell(x,y)
+        if ((cell[3] == self.fraction) and (cell[4]>0)):
+            self.stage = 3
+            self.army_coords = [x,y]
 
+    def moving_army(self,x,y):
+        cell = self.load_cell(self.army_coords[0],self.army_coords[1])
+        id_army = cell[4]
+        self.change_cell(cell[0],cell[1],cell[2],0,0)
+        if ((self.army_coords[0]+x>-1) and (self.army_coords[1]+y>-1)):
+            cell = self.load_cell(self.army_coords[0]+x,self.army_coords[1]+y)
+            print cell
+            if (((cell[2]>=0) and (cell<3)) and (cell[4] == 0)):
+                self.change_cell(self.army_coords[0]+x,self.army_coords[1]+y,cell[2],self.fraction,id_army)
+            else:
+                print 'error'
+                
+            
     def action_to_minimap_coords(self,x,y):
         self.Load_part_of_map(x,y)
         cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*14,self.step_p*14))
