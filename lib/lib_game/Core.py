@@ -236,7 +236,7 @@ class Core():
             l+=lines[i]
         map_file.close()
         list_army = []
-        a = re.findall('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[)]',l)
+        a = re.findall('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}[)]',l)
         for i in range(len(a)):
             army = self.get_army_information(a[i])
             a_dict = dict([('id_army',army[0]),('infantry',army[1]),('marines',army[2]),('mob_inf',army[3]),('tank',army[4]),('arta',army[5]),('move',army[6]),('move_last',army[7])])

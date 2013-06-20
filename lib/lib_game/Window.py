@@ -130,6 +130,28 @@ class Window(Core):
                     self.last_y = event[3]
                 elif (event[0]=='save_mode'):
                     self.stage = event[1]
+                elif (event[0]=='end_of_army_stroke'):
+                    print 'end_of_army_stroke'
+                elif (event[0]=='base_mode'):
+                    self.stage = event[1]
+                elif (event[0]=='end_of_players_stroke'):
+                    if self.fraction == 1:
+                        self.fraction = 2
+                    elif self.fraction == 2:
+                        self.fraction = 1
+                        self.days +=1
+                    days = 'Day '+str(self.days+1)
+                    fraction = str(self.fraction)
+                    cell = Rect((800,650),(300,50))
+                    pygame.draw.rect(self.display,(220,220,250),cell,0)
+                    font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
+                    font2 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)        
+                    font1 = font1.render(days,0,(20,20,20))
+                    self.display.blit(font1,(825,675))
+                    font2 = font2.render(fraction,0,(20,20,20))
+                    self.display.blit(font2,(975,675))
+                    pygame.display.update()                    
+                    
             if self.stage == 1:
                 self.action_for_save(self.save_load_name)
                 if len(event) > 2:
