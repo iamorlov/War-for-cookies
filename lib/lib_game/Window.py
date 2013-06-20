@@ -63,6 +63,17 @@ class Window(Core):
                 pygame.draw.rect(self.display,colour[cell_type],cell,0)
         pygame.display.flip()
         self.Minimaps_grid()
+        
+    def game_buttons(self):
+        x = 1150
+        y = 0
+        colour = self.resources.colours()
+        for i in range(4):
+            cell = Rect((x,y),(130,175))
+            pygame.draw.rect(self.display,colour[i],cell,0)
+            pygame.draw.rect(self.display,(0,0,0),cell,1)
+            y+=175
+        pygame.display.update()
 
     def moving_army(self):
         pass
@@ -72,6 +83,7 @@ class Window(Core):
         self.Minimaps_grid()
         self.Minimap()
         self.Load_part_of_map(x,y)
+        self.game_buttons()
         pygame.display.flip()
                 
     def Load_part_of_map(self,x,y):
@@ -110,7 +122,7 @@ class Window(Core):
             if self.stage == 0:
                 if (event[0]=='map_coords'):
                     self.action_to_map_coords(event[2],event[3])
-                    self.stage = event[1]
+
                 elif (event[0]=='minimap_coords'):
                     self.action_to_minimap_coords(event[2],event[3])
                     self.stage = event[1]
@@ -191,6 +203,7 @@ class Window(Core):
         self.Main_Window()
         self.load_cells_list()
         self.Maps_grid()
+        self.game_buttons()
         self.Minimaps_grid()
         self.Minimap()
         self.Load_part_of_map(0,0)

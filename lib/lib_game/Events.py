@@ -23,6 +23,17 @@ class Events():
             minimap_y = (click_coords[1])//step
             return minimap_x, minimap_y
     
+    def get_buttons_type(self,stage,click_coords):
+            type = (click_coords[1])//175
+            if type == 0:
+                return ['end_of_army_stroke',stage]            
+            elif type == 1:
+                return ['base_mode',4]
+            elif type == 2:
+                pass
+            elif type == 3:
+                return ['end_of_players_stroke',stage]
+                
     def move_coords(self):
         if self.event.key ==pygame.K_DOWN:
             return ['move_army', 0, 1]
@@ -44,6 +55,8 @@ class Events():
             elif ((click_coords[0] > 800) and (click_coords[1] > 0) and (click_coords[0] < 1100) and (click_coords[1] < 300)):
                 x, y = self.get_minimap_coords(click_coords,step_p)
                 return ['minimap_coords',stage,x,y]
+            elif (click_coords[0]>=1150):
+                return self.get_buttons_type(stage, click_coords)                
             else:
                 return None
 

@@ -144,6 +144,13 @@ class Core():
         x[6] = x[6][len_x[5]:]
         x[6] = x[6][:-1]
         result.append(int(x[6]))
+        
+        x[7] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}', line)#count
+        x[7] = x[7].group(0)
+        len_x[7] = len(x[7])
+        x[7] = x[7][len_x[6]:]
+        x[7] = x[7][:-1]
+        result.append(int(x[7]))
         return result
     #СВЯТА ДЖИГУРДА! Мені соромно за ті верхні два шматки коду :((((((( 
     
@@ -231,6 +238,8 @@ class Core():
         list_army = []
         a = re.findall('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[)]',l)
         for i in range(len(a)):
-           list_army.append(self.get_army_information(a[i]))
+            army = self.get_army_information(a[i])
+            a_dict = dict([('id_army',army[0]),('infantry',army[1]),('marines',army[2]),('mob_inf',army[3]),('tank',army[4]),('arta',army[5]),('move',army[6]),('move_last',army[7])])
+            list_army.append(a_dict)
         return list_army          
 #[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[)]
