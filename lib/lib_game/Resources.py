@@ -87,3 +87,14 @@ class Resources():
             texture = pygame.transform.scale(texture,(50,50))
             textures.append(texture)
         return textures
+    
+    def textures_for_army(self):
+        textures = []
+        fraction = ['neutral','red','blue']
+        type_units=['','_ak47','_m4a','_rpg','_tank','_artillery']
+        for i in range(len(fraction)):
+            for j in range(len(type_units)):
+                texture = self.manager.get_units(fraction[i]+type_units[j]+".png")
+                texture = pygame.transform.scale(texture,(50,50))
+                textures.append(texture)  
+        return textures

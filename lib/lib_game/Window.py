@@ -85,12 +85,14 @@ class Window(Core):
                 
     def Load_part_of_map(self,x,y):
         textures = self.resources.textures()
+        textures_army = self.resources.textures_for_army()
         cells_list = self.load_cells(x, y)
         for i in range(self.big_steps):
             for j in range(self.big_steps):
                 cell_type = cells_list[i*self.big_steps+j][2]
                 fraction  = cells_list[i*self.big_steps+j][3]
-                if (cell_type >6) and (cell_type<12) or (fraction!=0):
+                army = cells_list[i*self.big_steps+j][4]
+                if (cell_type >6) and (cell_type<12) or ((fraction!=0) and (army == 0)):
                     x = cells_list[i*self.big_steps+j][0]
                     y = cells_list[i*self.big_steps+j][1]
                     local_list = self.load_cells_for_transparent_textures(x, y)
@@ -102,6 +104,10 @@ class Window(Core):
                     first_texture = textures[cell_type+fraction-1].get_rect()
                     first_texture.center=(45+self.big_step*i,25+self.big_step*j)
                     self.display.blit(textures[cell_type+fraction-1],first_texture)
+                elif((cell_type<3) and (army > 0)):
+                    first_texture = textures[cell_type].get_rect()
+                    first_texture.center=(45+self.big_step*i,25+self.big_step*j)
+                    self.display.blit(textures_army[fraction*5+1],first_texture)
                 else:
                     first_texture = textures[cell_type].get_rect()
                     first_texture.center=(45+self.big_step*i,25+self.big_step*j)
@@ -127,11 +133,11 @@ class Window(Core):
                     self.last_y = event[3]
                 elif (event[0]=='save_mode'):
                     self.stage = event[1]
-                elif (event[0]=='end_of_army_stroke'):
-                    print 'end_of_army_stroke'
+                elif (event[0]=='end_of_army_steps'):
+                    print 'end_of_army_steps'
                 elif (event[0]=='base_mode'):
                     self.stage = event[1]
-                elif (event[0]=='end_of_players_stroke'):
+                elif (event[0]=='end_of_players_steps'):
                     if self.fraction == 1:
                         self.fraction = 2
                     elif self.fraction == 2:
@@ -181,7 +187,7 @@ class Window(Core):
             if self.stage == 3:
                 if (event[0] == 'move_army'):
                     self.moving_army(event[1],event[2])
-                elif (event[0] == 'end_of_army_stroke'):
+                elif (event[0] == 'end_of_army_steps'):
                     self.stage = event[1]
                     
 
@@ -189,23 +195,29 @@ class Window(Core):
 
     def action_to_map_coords(self,x,y):
 #        self.Load_part_of_map(x,y)
-        cell = self.load_cell(x,y)
+        cell = self.load_cell(y,x)
         if ((cell[3] == self.fraction) and (cell[4]>0)):
             self.stage = 3
-            self.army_coords = [x,y]
+            self.army_coords = [y,x]
 
     def moving_army(self,x,y):
         cell = self.load_cell(self.army_coords[0],self.army_coords[1])
-        id_army = cell[4]
-        print 'army '+str(id_army)
+        print cell
+        if cell[4]!=0:
+            self.id_army = cell[4]
+        print 'army '+str(self.id_army)
         self.change_cell(cell[0],cell[1],cell[2],0,0)
         if ((self.army_coords[0]+x>-1) and (self.army_coords[1]+y>-1)):
             cell = self.load_cell(self.army_coords[0]+x,self.army_coords[1]+y)
             print cell
             if (((cell[2]>=0) and (cell[2]<3)) and (cell[4] == 0)):
-                self.change_cell(self.army_coords[0]+x,self.army_coords[1]+y,cell[2],self.fraction,id_army)
+                self.change_cell(self.army_coords[0]+x,self.army_coords[1]+y,cell[2],self.fraction,self.id_army)
                 self.army_coords[0] += x
                 self.army_coords[1] += y
+                try:
+                    self.reload_window(self.last_x,self.last_y)
+                except AttributeError:
+                    self.reload_window(0,0)
             else:
                 print 'error'
                 

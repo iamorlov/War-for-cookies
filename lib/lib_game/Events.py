@@ -26,13 +26,13 @@ class Events():
     def get_buttons_type(self,stage,click_coords):
             type = (click_coords[1])//175
             if ((type == 0) and (stage == 3)):
-                return ['end_of_army_stroke',0]            
+                return ['end_of_army_steps',0]            
             elif type == 1:
                 return ['base_mode',4]
             elif type == 2:
                 pass
             elif type == 3:
-                return ['end_of_players_stroke',stage]
+                return ['end_of_players_steps',stage]
                 
     def move_coords(self):
         if self.event.key ==pygame.K_DOWN:
