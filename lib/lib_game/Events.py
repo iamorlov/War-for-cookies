@@ -36,16 +36,16 @@ class Events():
                 
     def move_coords(self):
         if self.event.key ==pygame.K_DOWN:
-            return ['move_army', 0, 1]
-        
-        if self.event.key ==pygame.K_UP:
-            return ['move_army', 0, -1]
-        
-        if self.event.key ==pygame.K_LEFT:
             return ['move_army', 1, 0]
         
-        if self.event.key ==pygame.K_RIGHT:
+        if self.event.key ==pygame.K_UP:
             return ['move_army', -1, 0]
+        
+        if self.event.key ==pygame.K_LEFT:
+            return ['move_army', 0, -1]
+        
+        if self.event.key ==pygame.K_RIGHT:
+            return ['move_army', 0, 1]
     
     def mousebuttondown_terms(self, stage, click_coords,big_step,step_p):
         if (click_coords[0]>=1150):

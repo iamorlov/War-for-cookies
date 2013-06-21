@@ -197,12 +197,15 @@ class Window(Core):
     def moving_army(self,x,y):
         cell = self.load_cell(self.army_coords[0],self.army_coords[1])
         id_army = cell[4]
+        print 'army '+str(id_army)
         self.change_cell(cell[0],cell[1],cell[2],0,0)
         if ((self.army_coords[0]+x>-1) and (self.army_coords[1]+y>-1)):
             cell = self.load_cell(self.army_coords[0]+x,self.army_coords[1]+y)
             print cell
-            if (((cell[2]>=0) and (cell<3)) and (cell[4] == 0)):
+            if (((cell[2]>=0) and (cell[2]<3)) and (cell[4] == 0)):
                 self.change_cell(self.army_coords[0]+x,self.army_coords[1]+y,cell[2],self.fraction,id_army)
+                self.army_coords[0] += x
+                self.army_coords[1] += y
             else:
                 print 'error'
                 

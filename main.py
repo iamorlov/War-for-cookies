@@ -90,7 +90,7 @@ class Menu(lib.Game, lib.Scene):
             self.index = len(self.menu)-1
     def background(self):
        background = pygame.image.load('data/image/menu.png')#Фон!!!!!!!!!!!!!!!!!
-       self.screen=pygame.display.set_mode((1100,700))
+       self.screen=pygame.display.set_mode((1280,720))
        self.screen.blit(background, (0,0))
        pygame.display.flip()
     # Добавляет новый элемент, нужно передать 2 изображения.
@@ -133,7 +133,7 @@ class MenuScene(lib.Scene):
       self.display.fill((255,255,255))
       pygame.init()
       background = pygame.image.load('data/image/autors.png')#Фон!!!!!!!!!!!!!!!!!
-      self.screen=pygame.display.set_mode((1100,700))
+      self.screen=pygame.display.set_mode((1280,700))
       self.screen.blit(background, (0,0))
       pygame.display.flip()
       #self.background()
