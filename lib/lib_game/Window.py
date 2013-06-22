@@ -53,7 +53,7 @@ class Window():
             self.steps = 100
         elif self.map_type == 2:
             self.step_p = 2
-            self.steps = 140
+            self.steps = 150
         cell = Rect((800,0),(300,300))
         pygame.draw.rect(self.display,(0,0,0),cell,2)
         pygame.display.flip()
@@ -144,6 +144,16 @@ class Window():
                         self.stage,self.save_load_name = self.mode.stage_1(event, self.save_load_name, self.file, self.action_for_save, self.reload_window, 0,0)
                     print self.save_load_name
 
+            if self.stage == 2:
+                self.action_for_load(self.save_load_name)
+                if len(event) > 2:
+                    try:
+                        self.stage,self.save_load_name = self.mode.stage_2(event, self.save_load_name, self.file, self.action_for_load, self.reload_window, self.last_x, self.last_y)
+                    except AttributeError:
+                        self.stage,self.save_load_name = self.mode.stage_2(event, self.save_load_name, self.file, self.action_for_load, self.reload_window, 0,0)
+                    print self.save_load_name
+
+
             if self.stage == 3:
                 if (event[0] == 'move_army'):
                     self.moving_army(event[1],event[2])
@@ -159,7 +169,10 @@ class Window():
         if ((cell[3] == self.fraction) and (cell[4]>0)):
             stage = 3
             army_coords = [y,x]
-        return stage, army_coords
+            return stage, army_coords
+        else:
+            return 0,0
+
 
     def moving_army(self,x,y):
         cell = self.core.load_cell(self.army_coords[0],self.army_coords[1],self.file)
@@ -168,7 +181,7 @@ class Window():
             self.id_army = cell[4]
         print 'army '+str(self.id_army)
         self.core.change_cell(cell[0],cell[1],cell[2],0,0,self.file)
-        if ((self.army_coords[0]+x>-1) and (self.army_coords[1]+y>-1)):
+        if ((self.army_coords[0]+x>-1) and (self.army_coords[1]+y>-1) and (self.army_coords[1]+y<self.steps) and (self.army_coords[0]+x<self.steps)):
             cell = self.core.load_cell(self.army_coords[0]+x,self.army_coords[1]+y,self.file)
             print cell
             if (((cell[2]>=0) and (cell[2]<3)) and (cell[4] == 0)):
@@ -176,7 +189,32 @@ class Window():
                 self.army_coords[0] += x
                 self.army_coords[1] += y
                 try:
-                    self.reload_window(self.last_x,self.last_y)
+                    print 'trololo = '+str(self.army_coords[0]-self.last_y )
+                    print 'pythpyth = '+str(self.army_coords[1]-self.last_x )
+                    if (self.army_coords[1] - self.last_x >=5):
+                        self.last_x+=5
+                        if (self.last_x>self.steps-1):
+                            self.last_x = self.steps - self.big_steps
+                        self.reload_window(self.last_x,self.last_y)
+                    elif (self.army_coords[0]- self.last_y >=5):
+                        self.last_y +=5
+                        if (self.last_y>self.steps-1):
+                            self.last_y = self.steps - self.big_steps
+                        print 'Event!'
+                        self.reload_window(self.last_x,self.last_y)
+                    elif (self.army_coords[1] - self.last_x <=-5):
+                        self.last_x-=5
+                        if (self.last_x<0):
+                            self.last_x = 0
+                        self.reload_window(self.last_x,self.last_y)
+                    elif (self.army_coords[0]- self.last_y <=-5):
+                        self.last_y -=5
+                        if (self.last_y<0):
+                            self.last_y = 0
+                        print 'Event!'
+                        self.reload_window(self.last_x,self.last_y)
+                    else:
+                        self.reload_window(self.last_x,self.last_y)
                 except AttributeError:
                     self.reload_window(0,0)
             else:
@@ -202,6 +240,25 @@ class Window():
         font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
         font2 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)        
         item = u'Press enter for save'
+        item2 = u'Press ESC for exit'
+        font1 = font1.render(item,0,(20,20,20))
+        self.display.blit(font1,(385,360))
+        font2 = font2.render(item2,0,(20,20,20))
+        self.display.blit(font2,(385,410))
+        filename = filename.render(text,0,(20,20,20))
+        self.display.blit(filename,(455,290))
+        pygame.display.update()
+        
+    def action_for_load(self,text):
+        cell = Rect((360,260),(300,200))
+        pygame.draw.rect(self.display,(204,204,204),cell,0)
+        cell = Rect((385,280),(250,50))
+        pygame.draw.rect(self.display,(255,255,204),cell,0)
+        pygame.draw.rect(self.display,(0,0,0),cell,2)
+        filename = pygame.font.SysFont("Times New Roman", 20, bold=False, italic=True)
+        font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
+        font2 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)        
+        item = u'Press enter for load'
         item2 = u'Press ESC for exit'
         font1 = font1.render(item,0,(20,20,20))
         self.display.blit(font1,(385,360))

@@ -23,6 +23,8 @@ class Event_Handler():
             last_y = event[3]
         elif (event[0]=='save_mode'):
             stage = event[1]
+        elif (event[0]=='load_mode'):
+            stage = event[1]
         elif (event[0]=='end_of_army_steps'):
             print 'end_of_army_steps'
         elif (event[0]=='base_mode'):
@@ -44,7 +46,10 @@ class Event_Handler():
             font2 = font2.render(fraction_out,0,(20,20,20))
             self.display.blit(font2,(975,675))
             pygame.display.update()  
-        print 'Stage = '+ str(stage)
+        try:
+            str(stage)
+        except UnboundLocalError:
+            stage = 0
         try:
             return stage,last_x,last_y,fraction,days, army_coords
         except UnboundLocalError:
@@ -77,6 +82,34 @@ class Event_Handler():
             except AttributeError:
                 reload_window(0,0)
         return stage, name_for_saving
+    
+    def stage_2(self,event,name_for_loading,filename,action_for_load,reload_window,last_x,last_y):
+        action_for_load(name_for_loading)
+        print 'Lol = '+str(len(event))
+        stage = event[1]
+        if event[3] == 'continue':
+            if len(name_for_loading) <10:
+                name_for_loading += event[2]
+                action_for_load(name_for_loading)
+        if event[3] == 'backspace':
+            if len(name_for_loading)>0:
+                name_for_loading = name_for_loading[:-1]
+                action_for_load(name_for_loading)
+        if event[3] == 'save':
+            if name_for_loading >2:
+                self.core.load_file(name_for_loading,filename)
+                name_for_loading = ''
+                try:
+                    reload_window(last_x,last_y)
+                except AttributeError:
+                    reload_window(0,0)
+        if event[3] == 'cancel':
+            name_for_loading = ''
+            try:
+                reload_window(last_x,last_y)
+            except AttributeError:
+                reload_window(0,0)
+        return stage, name_for_loading
 '''            
 
             if self.stage == 3:

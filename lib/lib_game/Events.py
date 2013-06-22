@@ -77,12 +77,16 @@ class Events():
                 stage = 0
                 return [mode, stage, '', 'cancel']
             elif self.event.key == pygame.K_RETURN:
+                if stage == 1:
+                    text = 'save'
+                elif stage ==2:
+                    text = 'load'
                 stage = 0
-                return [mode, stage, '', 'save']
+                return [mode, stage, '', text]
             elif self.event.key == pygame.K_BACKSPACE:
                 return [mode, stage, '', 'backspace']
             else:
-                name_key =(re.search('[a-z]',pygame.key.name(self.event.key)))
+                name_key =(re.search('[a-z,_,0-9]',pygame.key.name(self.event.key)))
                 if name_key != None:
                     text = (name_key).group(0) 
                     return [mode, stage, text, 'continue']

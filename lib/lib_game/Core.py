@@ -148,6 +148,13 @@ class Core():
         x[7] = x[7][len_x[6]:]
         x[7] = x[7][:-1]
         result.append(int(x[7]))
+
+        x[8] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}', line)#count
+        x[8] = x[8].group(0)
+        len_x[8] = len(x[7])
+        x[8] = x[8][len_x[7]:]
+        x[8] = x[8][:-1]
+        result.append(int(x[8]))
         return result
     #СВЯТА ДЖИГУРДА! Мені соромно за ті верхні два шматки коду :((((((( 
     
@@ -244,10 +251,10 @@ class Core():
             l+=lines[i]
         map_file.close()
         list_army = []
-        a = re.findall('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}[)]',l)
+        a = re.findall('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}[;][0-9][)]',l)
         for i in range(len(a)):
             army = self.get_army_information(a[i])
             list_army.append(self.get_army_information(a[i]))
-#            a_dict = dict([('id_army',army[0]),('infantry',army[1]),('marines',army[2]),('mob_inf',army[3]),('tank',army[4]),('arta',army[5]),('move',army[6]),('move_last',army[7])])
+#            a_dict = dict([('id_army',army[0]),('infantry',army[1]),('marines',army[2]),('mob_inf',army[3]),('tank',army[4]),('arta',army[5]),('move',army[6]),('move_last',army[7]),('fraction', army[8])])
         return list_army          
 #[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[)]
