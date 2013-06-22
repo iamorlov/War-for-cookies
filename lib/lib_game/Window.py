@@ -5,13 +5,14 @@ from lib import ResManager
 from Resources import *
 from Graphical_logic import *
 from Events import *
+from Event_Handler import Event_Handler
 
 class Window():
      
     def __init__(self,map_name):
         pygame.init()
         self.core = Core()
-        
+        self.mode = Event_Handler()
         self.file = 'ingame_temp'#заміна self.file в Core.py
         #self.map_type - треба замінити в Core.py
         #self.x_coord_start self.x_coord_end - замінити в Core.py
@@ -129,65 +130,18 @@ class Window():
         if (event != None):
             print self.stage
             if self.stage == 0:
-                if (event[0]=='map_coords'):
-                    self.action_to_map_coords(event[2],event[3])
-
-                elif (event[0]=='minimap_coords'):
-                    self.action_to_minimap_coords(event[2],event[3])
-                    self.stage = event[1]
-                    self.last_x = event[2]
-                    self.last_y = event[3]
-                elif (event[0]=='save_mode'):
-                    self.stage = event[1]
-                elif (event[0]=='end_of_army_steps'):
-                    print 'end_of_army_steps'
-                elif (event[0]=='base_mode'):
-                    self.stage = event[1]
-                elif (event[0]=='end_of_players_steps'):
-                    if self.fraction == 1:
-                        self.fraction = 2
-                    elif self.fraction == 2:
-                        self.fraction = 1
-                        self.days +=1
-                    days = 'Day '+str(self.days+1)
-                    fraction = str(self.fraction)
-                    cell = Rect((800,650),(300,50))
-                    pygame.draw.rect(self.display,(220,220,250),cell,0)
-                    font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
-                    font2 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)        
-                    font1 = font1.render(days,0,(20,20,20))
-                    self.display.blit(font1,(825,675))
-                    font2 = font2.render(fraction,0,(20,20,20))
-                    self.display.blit(font2,(975,675))
-                    pygame.display.update()                    
+                try:
+                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,self.last_x,self.last_y)
+                except AttributeError:
+                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,0,0)
                     
             if self.stage == 1:
                 self.action_for_save(self.save_load_name)
                 if len(event) > 2:
-                    self.stage = event[1]
-                    if event[3] == 'continue':
-                        if len(self.save_load_name) <10:
-                            self.save_load_name += event[2]
-                            self.action_for_save(self.save_load_name)
-                    if event[3] == 'backspace':
-                        if len(self.save_load_name)>0:
-                            self.save_load_name = self.save_load_name[:-1]
-                            self.action_for_save(self.save_load_name)
-                    if event[3] == 'save':
-                        if self.save_load_name >2:
-                            self.core.save_file(self.save_load_name,self.file)
-                            self.save_load_name = ''
-                            try:
-                                self.reload_window(self.last_x,self.last_y)
-                            except AttributeError:
-                                self.reload_window(0,0)
-                    if event[3] == 'cancel':
-                        self.save_load_name = ''
-                        try:
-                            self.reload_window(self.last_x,self.last_y)
-                        except AttributeError:
-                            self.reload_window(0,0)
-
+                    try:
+                        self.stage,self.save_load_name = self.mode.stage_1(event, self.save_load_name, self.file, self.action_for_save, self.reload_window, self.last_x, self.last_y)
+                    except AttributeError:
+                        self.stage,self.save_load_name = self.mode.stage_1(event, self.save_load_name, self.file, self.action_for_save, self.reload_window, 0,0)
                     print self.save_load_name
 
             if self.stage == 3:
@@ -203,8 +157,9 @@ class Window():
 #        self.Load_part_of_map(x,y)
         cell = self.core.load_cell(y,x,self.file)
         if ((cell[3] == self.fraction) and (cell[4]>0)):
-            self.stage = 3
-            self.army_coords = [y,x]
+            stage = 3
+            army_coords = [y,x]
+        return stage, army_coords
 
     def moving_army(self,x,y):
         cell = self.core.load_cell(self.army_coords[0],self.army_coords[1],self.file)
