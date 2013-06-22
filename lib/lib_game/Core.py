@@ -8,37 +8,34 @@ class Core():
     def __init__(self):
         pass
 
-    def save_file(self,name):
-        map_file =open('temp','r')
-        final_file = open(name,'w')
+    def save_file(self,file_name_for_save,current_name):
+        map_file =open(current_name,'r')
+        final_file = open(file_name_for_save,'w')
         temp = map_file.readlines()
         final_file.writelines(temp)
         final_file.close()
         map_file.close()
-        self.file = name
-        os.remove('temp')
     
-    def load_file(self,name):
-        self.file = name
-        map_file = open(name,'r')
+    def load_file(self,file_name_for_loading,current_name):
+        map_file = open(file_name_for_loading,'r')
         x_coords = map_file.readline()
         y_coords = map_file.readline()
         map_file.seek(0)
         buff = map_file.readlines()
         map_file.close()
         if x_coords[:-1] == y_coords[:-1] == '50':
-            self.map_type = 0
+            map_type = 0
         elif x_coords[:-1] == y_coords[:-1] == '100':
-            self.map_type = 1
+            map_type = 1
         elif x_coords[:-1] == y_coords[:-1] == '150':
-            self.map_type = 2
-        self.file = 'ingame_temp'
-        map_file = open(self.file,'w')
+            map_type = 2
+        map_file = open(current_name,'w')
         map_file.writelines(buff)
         map_file.close()
+        return map_type
             
-    def change_cell(self,x,y,t,f,id_army):
-        map_file = open(self.file,'r')
+    def change_cell(self,x,y,t,f,id_army,current_name):
+        map_file = open(current_name,'r')
         lines = map_file.readlines()
         map_file.close()
         l = ''
@@ -48,7 +45,7 @@ class Core():
         if a!=None:
             base_line = a.group(0)
         new_line = '('+str(x)+';'+str(y)+';'+str(t)+';'+str(f)+';'+str(id_army)+')' 
-        file = open(self.file,'w')
+        file = open(current_name,'w')
         file.writelines(l.replace(base_line,new_line))
         file.close()
     
@@ -154,8 +151,8 @@ class Core():
         return result
     #СВЯТА ДЖИГУРДА! Мені соромно за ті верхні два шматки коду :((((((( 
     
-    def load_cells(self,x,y):
-        map_file = open(self.file,'r')
+    def load_cells(self,x,y,current_name):
+        map_file = open(current_name,'r')
         lines = map_file.readlines()
         l = ''
         for i in range(len(lines)):
@@ -167,33 +164,33 @@ class Core():
         a = int(max1) - x
         b = int(max2) - y
         if (x < 7):
-            self.x_coord_start = 0
-            self.x_coord_end = 14
+            x_coord_start = 0
+            x_coord_end = 14
         elif(a<7):
-            self.x_coord_start = int(max1)-14
-            self.x_coord_end = int(max1)
+            x_coord_start = int(max1)-14
+            x_coord_end = int(max1)
         else:
-            self.x_coord_start = x-7
-            self.x_coord_end = x+7
+            x_coord_start = x-7
+            x_coord_end = x+7
         if (y < 7):
-            self.y_coord_start = 0
-            self.y_coord_end = 14
+            y_coord_start = 0
+            y_coord_end = 14
         elif(b<7):
-            self.y_coord_start = int(max2)-14
-            self.y_coord_end = int(max2)
+            y_coord_start = int(max2)-14
+            y_coord_end = int(max2)
         else:
-            self.y_coord_start = y-7
-            self.y_coord_end = y+7
+            y_coord_start = y-7
+            y_coord_end = y+7
         list_coords = []
-        for j in range(self.x_coord_start,self.x_coord_end):
-            for k in range(self.y_coord_start,self.y_coord_end):
+        for j in range(x_coord_start,x_coord_end):
+            for k in range(y_coord_start,y_coord_end):
                 a = re.search('[(]'+str(k)+'[;]'+str(j)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
                 if a!= None:
                     list_coords.append(self.get_cell_information(a.group(0)))
-        return list_coords
+        return list_coords,x_coord_start,y_coord_start
 
-    def load_cell(self,x,y):
-        map_file = open(self.file,'r')
+    def load_cell(self,x,y,current_name):
+        map_file = open(current_name,'r')
         lines = map_file.readlines()
         l = ''
         for i in range(len(lines)):
@@ -203,8 +200,8 @@ class Core():
         if cell!= None:
             return self.get_cell_information(cell.group(0))
         
-    def load_cells_for_transparent_textures(self,x,y):
-        map_file = open(self.file,'r')
+    def load_cells_for_transparent_textures(self,x,y,current_name):
+        map_file = open(current_name,'r')
         lines = map_file.readlines()
         l = ''
         for i in range(len(lines)):
@@ -223,8 +220,8 @@ class Core():
                     result.append(self.get_cell_information(a.group(0)))
         return result
            
-    def load_minimap_cells(self):
-        map_file = open(self.file,'r')
+    def load_minimap_cells(self,current_name):
+        map_file = open(current_name,'r')
         lines = map_file.readlines()
         l = ''
         for i in range(len(lines)):
@@ -239,8 +236,8 @@ class Core():
            list_coords.append(self.get_cell_information(a[i]))
         return list_coords
 
-    def load_army(self):
-        map_file = open(self.file,'r')
+    def load_army(self,current_name):
+        map_file = open(current_name,'r')
         lines = map_file.readlines()
         l = ''
         for i in range(len(lines)):
@@ -250,7 +247,7 @@ class Core():
         a = re.findall('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}[)]',l)
         for i in range(len(a)):
             army = self.get_army_information(a[i])
-            list_army.append(self.get_army_information(army[i]))
+            list_army.append(self.get_army_information(a[i]))
 #            a_dict = dict([('id_army',army[0]),('infantry',army[1]),('marines',army[2]),('mob_inf',army[3]),('tank',army[4]),('arta',army[5]),('move',army[6]),('move_last',army[7])])
         return list_army          
 #[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[)]

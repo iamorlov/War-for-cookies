@@ -1,15 +1,21 @@
 # -*- coding: utf-8 -*-
 import pygame, sys
-from Core import *
+from Core import Core
 from lib import ResManager
 from Resources import *
 from Graphical_logic import *
 from Events import *
 
-class Window(Core):
+class Window():
      
     def __init__(self,map_name):
         pygame.init()
+        self.core = Core()
+        
+        self.file = 'ingame_temp'#заміна self.file в Core.py
+        #self.map_type - треба замінити в Core.py
+        #self.x_coord_start self.x_coord_end - замінити в Core.py
+        
         self.resources = Resources()
         self.graphical_logic = Graphical_logic()
         self.w_event = Events()
@@ -27,7 +33,7 @@ class Window(Core):
         manager = ResManager()
         pygame.display.set_icon(manager.get_image('icon.png'))
         pygame.display.set_caption("War for cookies")
-        self.load_file(self.map_name)
+        self.map_type = self.core.load_file(self.map_name,self.file)
         self.display.fill((220,220,250))
         pygame.display.flip()
         i = 0
@@ -52,7 +58,7 @@ class Window(Core):
         pygame.display.flip()
         
     def load_cells_list(self):
-        self.cells_list = self.load_minimap_cells()
+        self.cells_list = self.core.load_minimap_cells(self.file)
 
     def Minimap(self):
         colour = self.resources.colours()
@@ -86,7 +92,7 @@ class Window(Core):
     def Load_part_of_map(self,x,y):
         textures = self.resources.textures()
         textures_army = self.resources.textures_for_army()
-        cells_list = self.load_cells(x, y)
+        cells_list,x_coord_start,y_coord_start= self.core.load_cells(x,y,self.file)
         for i in range(self.big_steps):
             for j in range(self.big_steps):
                 cell_type = cells_list[i*self.big_steps+j][2]
@@ -95,7 +101,7 @@ class Window(Core):
                 if (cell_type >6) and (cell_type<12) or ((fraction!=0) and (army == 0)):
                     x = cells_list[i*self.big_steps+j][0]
                     y = cells_list[i*self.big_steps+j][1]
-                    local_list = self.load_cells_for_transparent_textures(x, y)
+                    local_list = self.core.load_cells_for_transparent_textures(x, y,self.file)
                     result_type = self.graphical_logic.get_type_background_textures(x, y, local_list)
                     first_texture = textures[result_type].get_rect()
                     first_texture.center=(45+self.big_step*i,25+self.big_step*j)
@@ -112,7 +118,7 @@ class Window(Core):
                     first_texture = textures[cell_type].get_rect()
                     first_texture.center=(45+self.big_step*i,25+self.big_step*j)
                     self.display.blit(textures[cell_type],first_texture)               
-        cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*14,self.step_p*14))
+        cell = Rect((800+x_coord_start*self.step_p,0+y_coord_start*self.step_p),(self.step_p*14,self.step_p*14))
         self.Minimap()
         pygame.draw.rect(self.display,(0,0,0),cell,2)
         self.Maps_grid()
@@ -169,7 +175,7 @@ class Window(Core):
                             self.action_for_save(self.save_load_name)
                     if event[3] == 'save':
                         if self.save_load_name >2:
-                            self.save_file(self.save_load_name)
+                            self.core.save_file(self.save_load_name,self.file)
                             self.save_load_name = ''
                             try:
                                 self.reload_window(self.last_x,self.last_y)
@@ -195,23 +201,23 @@ class Window(Core):
 
     def action_to_map_coords(self,x,y):
 #        self.Load_part_of_map(x,y)
-        cell = self.load_cell(y,x)
+        cell = self.core.load_cell(y,x,self.file)
         if ((cell[3] == self.fraction) and (cell[4]>0)):
             self.stage = 3
             self.army_coords = [y,x]
 
     def moving_army(self,x,y):
-        cell = self.load_cell(self.army_coords[0],self.army_coords[1])
+        cell = self.core.load_cell(self.army_coords[0],self.army_coords[1],self.file)
         print cell
         if cell[4]!=0:
             self.id_army = cell[4]
         print 'army '+str(self.id_army)
-        self.change_cell(cell[0],cell[1],cell[2],0,0)
+        self.core.change_cell(cell[0],cell[1],cell[2],0,0,self.file)
         if ((self.army_coords[0]+x>-1) and (self.army_coords[1]+y>-1)):
-            cell = self.load_cell(self.army_coords[0]+x,self.army_coords[1]+y)
+            cell = self.core.load_cell(self.army_coords[0]+x,self.army_coords[1]+y,self.file)
             print cell
             if (((cell[2]>=0) and (cell[2]<3)) and (cell[4] == 0)):
-                self.change_cell(self.army_coords[0]+x,self.army_coords[1]+y,cell[2],self.fraction,self.id_army)
+                self.core.change_cell(self.army_coords[0]+x,self.army_coords[1]+y,cell[2],self.fraction,self.id_army,self.file)
                 self.army_coords[0] += x
                 self.army_coords[1] += y
                 try:
@@ -224,7 +230,8 @@ class Window(Core):
             
     def action_to_minimap_coords(self,x,y):
         self.Load_part_of_map(x,y)
-        cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*14,self.step_p*14))
+        cells_list,x_coord_start,y_coord_start = self.core.load_cells(x, y, self.file)
+        cell = Rect((800+x_coord_start*self.step_p,0+y_coord_start*self.step_p),(self.step_p*14,self.step_p*14))
         self.load_cells_list()
         self.Minimap()
         pygame.draw.rect(self.display,(0,0,0),cell,2)
