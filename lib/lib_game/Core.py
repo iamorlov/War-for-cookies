@@ -243,7 +243,7 @@ class Core():
            list_coords.append(self.get_cell_information(a[i]))
         return list_coords
 
-    def load_army(self,current_name):
+    def load_armies(self,current_name):
         map_file = open(current_name,'r')
         lines = map_file.readlines()
         l = ''
@@ -256,5 +256,31 @@ class Core():
             army = self.get_army_information(a[i])
             list_army.append(self.get_army_information(a[i]))
 #            a_dict = dict([('id_army',army[0]),('infantry',army[1]),('marines',army[2]),('mob_inf',army[3]),('tank',army[4]),('arta',army[5]),('move',army[6]),('move_last',army[7]),('fraction', army[8])])
-        return list_army          
+        return list_army
+    
+    def load_army(self,current_name,id_army):
+        map_file = open(current_name,'r')
+        lines = map_file.readlines()
+        l = ''
+        for i in range(len(lines)):
+            l+=lines[i]        
+        map_file.close()
+        a = re.search('[(]'+id_army+'[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}[;][0-9][)]',l)
+        if a!= None:
+            return self.get_army_information(a.group(0))        
+
+    def change_army(self,current_name,id_army,unit_1,unit_2,unit_3,unit_4,unit_5,move_max,move_current,fraction):
+        map_file = open(current_name,'r')
+        lines = map_file.readlines()
+        map_file.close()
+        l = ''
+        for i in range(len(lines)):
+            l+=lines[i]
+        a = re.search('[(]'+id_army+'[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}[;][0-9][)]',l)
+        if a!=None:
+            base_line = a.group(0)
+        new_line = '('+str(id_army)+';'+str(unit_1)+';'+str(unit_2)+';'+str(unit_3)+';'+str(unit_4)+';'+str(unit_5)+';'+str(move_max)+';'+str(move_current)+';'+str(fraction)+')' 
+        file = open(current_name,'w')
+        file.writelines(l.replace(base_line,new_line))
+        file.close()                   
 #[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[)]

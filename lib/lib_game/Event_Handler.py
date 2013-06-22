@@ -110,6 +110,13 @@ class Event_Handler():
             except AttributeError:
                 reload_window(0,0)
         return stage, name_for_loading
+    
+    def stage_3(self,event,stage,moving_army):
+        if (event[0] == 'move_army'):
+            moving_army(event[1],event[2])
+        elif (event[0] == 'end_of_army_steps'):
+            stage = event[1]
+        return stage        
 '''            
 
             if self.stage == 3:

@@ -153,15 +153,9 @@ class Window():
                         self.stage,self.save_load_name = self.mode.stage_2(event, self.save_load_name, self.file, self.action_for_load, self.reload_window, 0,0)
                     print self.save_load_name
 
-
             if self.stage == 3:
-                if (event[0] == 'move_army'):
-                    self.moving_army(event[1],event[2])
-                elif (event[0] == 'end_of_army_steps'):
-                    self.stage = event[1]
-                    
+                self.stage = self.mode.stage_3(event, self.stage, self.moving_army)
 
-                
 
     def action_to_map_coords(self,x,y):
 #        self.Load_part_of_map(x,y)
