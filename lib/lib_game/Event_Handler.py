@@ -16,9 +16,9 @@ class Event_Handler():
         self.core = Core()
         self.graphical_logic = Graphical_logic()
 
-    def stage_0(self,event,fraction,days,action_to_map_coords,action_to_minimap_coords,last_x,last_y,):
+    def stage_0(self,event,fraction,days,action_to_map_coords,action_to_minimap_coords,last_x,last_y,filename):
         if (event[0]=='map_coords'):
-            stage, army_coords,id_army = action_to_map_coords(event[2],event[3])
+            stage, army_coords,id_army = action_to_map_coords(event[2],event[3],last_x,last_y)
         elif (event[0]=='minimap_coords'):
             action_to_minimap_coords(event[2],event[3])
             stage = event[1]
@@ -34,21 +34,12 @@ class Event_Handler():
             stage = event[1]
         elif (event[0]=='end_of_players_steps'):
             if fraction == 1:
+                self.graphical_logic.change_all_armies_steps_for_fraction(fraction, filename)                
                 fraction = 2
             elif fraction == 2:
+                self.graphical_logic.change_all_armies_steps_for_fraction(fraction, filename)
                 fraction = 1
-                days +=1
-            days = 'Day '+str(days+1)
-            fraction_out = str(fraction)
-            cell = Rect((800,650),(300,50))
-            pygame.draw.rect(self.display,(220,220,250),cell,0)
-            font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
-            font2 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)        
-            font1 = font1.render(days,0,(20,20,20))
-            self.display.blit(font1,(825,675))
-            font2 = font2.render(fraction_out,0,(20,20,20))
-            self.display.blit(font2,(975,675))
-            pygame.display.update()  
+                days +=1  
         try:
             str(stage)
         except UnboundLocalError:
@@ -118,12 +109,25 @@ class Event_Handler():
         if (event[0] == 'move_army'):
             current_steps = self.graphical_logic.get_current_steps(id_army, filename)
             if current_steps > 0:
-                moving_army(event[1],event[2])
-                self.graphical_logic.change_current_steps(id_army, filename, current_steps, -1)
+                move, stage = moving_army(event[1],event[2])
+                if move == True:
+                    self.graphical_logic.change_current_steps(id_army, filename, current_steps, -1)
 
         elif (event[0] == 'end_of_army_steps'):
             stage = event[1]
-        return stage        
+        return stage
+    
+    
+    def stage_6(self,event,battle_dialog,stage):
+        print event
+        if event[0] == 'battle_mode':
+            stage = event[1]
+            print stage
+            return stage
+        else:
+            stage = 6
+            return stage
+                
 '''            
 
             if self.stage == 3:

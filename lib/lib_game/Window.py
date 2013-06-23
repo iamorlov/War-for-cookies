@@ -111,10 +111,13 @@ class Window():
                     first_texture = textures[cell_type+fraction-1].get_rect()
                     first_texture.center=(45+self.big_step*i,25+self.big_step*j)
                     self.display.blit(textures[cell_type+fraction-1],first_texture)
-                elif(army > 0):
+                elif((cell_type<3) and (army > 0)):
                     first_texture = textures[cell_type].get_rect()
                     first_texture.center=(45+self.big_step*i,25+self.big_step*j)
-                    self.display.blit(textures_army[fraction*5+1],first_texture)
+                    self.display.blit(textures[cell_type],first_texture)      
+                    first_texture = textures[cell_type].get_rect()
+                    first_texture.center=(45+self.big_step*i,25+self.big_step*j)
+                    self.display.blit(textures_army[fraction*5+fraction],first_texture)
                 else:
                     first_texture = textures[cell_type].get_rect()
                     first_texture.center=(45+self.big_step*i,25+self.big_step*j)
@@ -131,10 +134,20 @@ class Window():
             print self.stage
             if self.stage == 0:
                 try:
-                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,self.last_x,self.last_y)
+                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,self.last_x,self.last_y,self.file)
                 except AttributeError:
-                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,0,0)
-                    
+                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,0,0,self.file)
+                days = 'Day '+str(self.days+1)
+                fraction_out = str(self.fraction)
+                cell = Rect((800,650),(300,50))
+                pygame.draw.rect(self.display,(220,220,250),cell,0)
+                font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
+                font2 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)        
+                font1 = font1.render(days,0,(20,20,20))
+                self.display.blit(font1,(825,675))
+                font2 = font2.render(fraction_out,0,(20,20,20))
+                self.display.blit(font2,(975,675))
+                pygame.display.update()    
             if self.stage == 1:
                 self.action_for_save(self.save_load_name)
                 if len(event) > 2:
@@ -157,12 +170,18 @@ class Window():
                 self.stage = self.mode.stage_3(event, self.stage, self.moving_army,self.file,self.id_army)
 
 
-    def action_to_map_coords(self,x,y):
+            if self.stage == 6:
+                print self.stage
+                self.battle_dialog_window()
+                self.stage = self.mode.stage_6(event, self.battle_dialog_window,self.stage)
+
+
+    def action_to_map_coords(self,x,y,last_x,last_y):
 #        self.Load_part_of_map(x,y)
-        cell = self.core.load_cell(y,x,self.file)
+        cell = self.core.load_cell(y+last_y,x+last_x,self.file)
         if ((cell[3] == self.fraction) and (cell[4]>0)):
             stage = 3
-            army_coords = [y,x]
+            army_coords = [y+last_y,x+last_x]
             id_army = cell[4]
             return stage, army_coords, id_army
         else:
@@ -212,9 +231,24 @@ class Window():
                         self.reload_window(self.last_x,self.last_y)
                 except AttributeError:
                     self.reload_window(0,0)
+                return True,3
+            elif (((cell[2]>=0) and (cell[2]<3)) and(cell[3]!=self.fraction) and (cell[4] != 0)):
+                stage = 6
+                return False, stage
             else:
-                print 'error'
-                
+                return False,3
+
+    def battle_dialog_window(self):
+        cell = Rect((300,250),(300,200))
+        pygame.draw.rect(self.display,(204,204,204),cell,0)
+        font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)       
+        cell = Rect((300,400),(100,50))
+        pygame.draw.rect(self.display,(50,50,150),cell,0)
+        cell = Rect((400,400),(100,50))
+        pygame.draw.rect(self.display,(50,150,150),cell,0)
+        cell = Rect((500,400),(100,50))
+        pygame.draw.rect(self.display,(150,150,150),cell,0)
+        pygame.display.flip()                
             
     def action_to_minimap_coords(self,x,y):
         self.Load_part_of_map(x,y)
