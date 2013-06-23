@@ -224,11 +224,27 @@ class MenuScene(lib.Scene):
         self.music(0)
         a = lib.lib_map_editor.Window(3,'temp')
         a.Run()
-        
-    def map_editor_3(self):
+
+    def bmap_editor_0(self):
         self.music(0)
-        a = lib.lib_map_editor_battle_map.Window(2)
+        a = lib.lib_map_editor_battle_map.Window(0,'')
         a.Run()
+    
+    def bmap_editor_1(self):
+        self.music(0)
+        a = lib.lib_map_editor_battle_map.Window(1,'')
+        a.Run()    
+    
+    def bmap_editor_2(self):
+        self.music(0)
+        a = lib.lib_map_editor_battle_map.Window(2,'')
+        a.Run()
+        
+    def bmap_editor_last(self):
+        self.music(0)
+        a = lib.lib_map_editor_battle_map.Window(3,'temp')
+        a.Run()        
+
                 
        # return pygame.mixer.music.stop()
     def _start(self):
@@ -302,7 +318,41 @@ class MenuScene(lib.Scene):
         item = u"Карта боя"
         self.menu.add_menu_item(font.render(item,True,(255,255,255)),
                                 font_bold.render(item,True,(255,255,255)),
-                                self.map_editor_3)
+                                self.battlemap_editor_cubmenu)
+        item = u"Назад"
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
+                                self._start)
+
+    def battlemap_editor_cubmenu(self):
+        self.menu = Menu((250,110))
+        # Именно таким образом мы можем получить текст в pygame
+        # В данном случае мы используем системный шрифт.
+        font      = pygame.font.SysFont("Verdana", 50, bold=False, italic=False)
+        font_bold = pygame.font.SysFont("Verdana", 50, bold=True, italic=False)
+        self.menu.background()
+        # Загрузка музыки.
+        #pygame.mixer.music.load('data/music/menu.ogg')
+        # Проигрывание музыки.
+        #pygame.mixer.music.play()
+        #self.music(1)
+        item = u"Трава"
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
+                                self.bmap_editor_0)
+        item = u"Песок"
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
+                                self.bmap_editor_1)
+        item = u"Грунт"
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
+                                self.bmap_editor_2)
+        item = u"Последняя несохраненная карта"
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
+                                self.bmap_editor_last)
+
         item = u"Назад"
         self.menu.add_menu_item(font.render(item,True,(255,255,255)),
                                 font_bold.render(item,True,(255,255,255)),

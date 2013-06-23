@@ -9,10 +9,12 @@ from Events import *
 
 class Window(Core):
      
-    def __init__(self,type_map):
+    def __init__(self,type_map,name):
         pygame.init()
-        print type(type_map)
-        self.empty_map(type_map)
+        if type_map < 3:
+            self.empty_map(type_map)
+        else:
+            self.load_file(name)
         self.type = 0
         self.resources = Resources()
         self.graphical_logic = Graphical_logic()
@@ -37,9 +39,9 @@ class Window(Core):
         i = 0
         
     def Maps_grid(self):
-        self.big_step = 50
+        self.big_step = 60
         self.steps_x =20
-        self.steps_y =7
+        self.steps_y =11
         for i in range(self.steps_x):
             for j in range(self.steps_y):
                 cell = Rect((20+self.big_step*i,self.big_step*j),(self.big_step,self.big_step))
@@ -66,39 +68,15 @@ class Window(Core):
     def type_of_grids(self):       
         textures = self.resources.textures()
         colours = self.resources.colours()
-        for i in range(3):
-            for j in range(3):            
-                first_texture = textures[i+j*3].get_rect()
-                first_texture.center=(25+850+50*i,25+350+50*j)
-                self.display.blit(textures[i+j*3],first_texture) 
-
-        for i in range(3):
-            for j in range(3):
-                cell = Rect((850+50*i,350+50*j),(50,50))
-                pygame.draw.rect(self.display,(0,0,0),cell,1)
-        
-        cell = Rect((875,500),(50,50))           
-        first_texture = textures[9].get_rect()
-        first_texture.center=(25+875,25+500)
-        self.display.blit(textures[9],first_texture)
-        pygame.draw.rect(self.display,(0,0,0),cell,1)
-        
-        cell = Rect((925,500),(50,50))            
-        first_texture = textures[10].get_rect()
-        first_texture.center=(25+925,25+500)
-        self.display.blit(textures[10],first_texture)
-        pygame.draw.rect(self.display,(0,0,0),cell,1)  
+        for i in range(11):
+            textures[i]= pygame.transform.scale(textures[i],(60,60)) 
+        for i in range(7):            
+            first_texture = textures[i].get_rect()
+            first_texture.center=(500+30+60*i,690)
+            self.display.blit(textures[i],first_texture)
+            cell = Rect((500+60*i,660),(60,60))       
+            pygame.draw.rect(self.display,(0,0,0),cell,3)  
         pygame.display.update()
-                
-    def Minimap(self):
-        colour = self.resources.colours()
-        for i in range(self.steps):
-            for j in range(self.steps):
-                cell = Rect((800+self.step_p*i,self.step_p*j),(self.step_p,self.step_p))
-                cell_type = self.cells_list[i*self.steps+j][2]
-                pygame.draw.rect(self.display,colour[cell_type],cell,0)
-        pygame.display.flip()
-        self.Minimaps_grid()
 
     def moving_army(self):
         pass
@@ -106,7 +84,7 @@ class Window(Core):
     def reload_window(self,x,y):
         self.Maps_grid()
         self.Minimaps_grid()
-        self.Minimap()
+        
         self.Load_part_of_map(x,y)
         pygame.display.flip()
                 
@@ -115,30 +93,27 @@ class Window(Core):
         cells_list = self.load_cells(x, y)
         print len(cells_list)
         for i in range(11):
-            textures[i]= pygame.transform.scale(textures[i],(50,50)) 
+            textures[i]= pygame.transform.scale(textures[i],(60,60)) 
         for i in range(self.steps_x):
             for j in range(self.steps_y):
-                cell_type = cells_list[i*self.steps_x+j][2]
-                fraction  = cells_list[i*self.steps_x+j][3]
-                if (cell_type >6) and (cell_type<12) or (fraction!=0):
+                print (j*self.steps_x+i)
+                print len(cells_list)
+                cell_type = cells_list[j*self.steps_x+i][2]
+
+                if (cell_type >7) and (cell_type<12):
                     x = cells_list[i*self.big_steps+j][0]
                     y = cells_list[i*self.big_steps+j][1]
                     local_list = self.load_cells_for_transparent_textures(x, y)
                     result_type = self.graphical_logic.get_type_background_textures(x, y, local_list)
                     first_texture = textures[result_type].get_rect()
-                    first_texture.center=(35+self.big_step*i,14+self.big_step*j)
+                    first_texture.center=(50+self.big_step*i,30+self.big_step*j)
                     self.display.blit(textures[result_type],first_texture) 
-                if (fraction > 0) and (cell_type == 9):
-                    first_texture = textures[cell_type+fraction-1].get_rect()
-                    first_texture.center=(35+self.big_step*i,14+self.big_step*j)
-                    self.display.blit(textures[cell_type+fraction-1],first_texture)
+
                 else:
                     first_texture = textures[cell_type].get_rect()
-                    first_texture.center=(45+self.big_step*i,25+self.big_step*j)
+                    first_texture.center=(50+self.big_step*i,30+self.big_step*j)
                     self.display.blit(textures[cell_type],first_texture)               
-        cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*25,self.step_p*25))
-        self.Minimap()
-        pygame.draw.rect(self.display,(0,0,0),cell,2)
+
         self.Maps_grid()
         pygame.display.flip()
 
@@ -194,32 +169,22 @@ class Window(Core):
     def action_to_map_coords(self,x,y):
         textures = self.resources.textures()        
         for i in range(11):
-            textures[i]= pygame.transform.scale(textures[i],(28,28)) 
-        try:
-            self.change_cell(self.y_coord_start+y,self.x_coord_start+x,self.type, self.fraction, 0)
-        except AttributeError:
-            self.change_cell(y,x,self.type, self.fraction, 0)    
-        if self.fraction > 0:
-            textures = pygame.transform.scale(textures[self.type+self.fraction-1],(28,28))
-            first_texture = textures.get_rect()
-            first_texture.center=(35+x*self.big_step,14+y*self.big_step)
-            self.display.blit(textures,first_texture)
+            textures[i]= pygame.transform.scale(textures[i],(60,60))
+        a = (y in [1,3,5,7,9])
+        if ((x == 0) and (a==True)):
+            self.change_cell(x,y,self.type, ((y+1)//2))
+        elif((x==19) and (a==True)):
+            self.change_cell(x,y,self.type, ((y+1)//2)+5)            
         else:
-            textures = pygame.transform.scale(textures[self.type],(28,28))
-            first_texture = textures.get_rect()
-            first_texture.center=(35+x*self.big_step,14+y*self.big_step)
-            self.display.blit(textures,first_texture)  
+            self.change_cell(x,y,self.type, 0)    
+        textures = pygame.transform.scale(textures[self.type],(60,60))
+        first_texture = textures.get_rect()
+        first_texture.center=(50+x*self.big_step,30+y*self.big_step)
+        self.display.blit(textures,first_texture)  
         #pygame.draw.rect(self.display,(0,0,0),cell,2)
         self.Maps_grid()
         pygame.display.flip()        
 
-    def action_to_minimap_coords(self,x,y):
-        self.Load_part_of_map(x,y)
-        cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*25,self.step_p*25))
-        self.load_cells_list()
-        self.Minimap()
-        pygame.draw.rect(self.display,(0,0,0),cell,2)
-        self.Maps_grid()
     
     def action_for_save(self,text):
         cell = Rect((360,260),(300,200))
@@ -239,7 +204,7 @@ class Window(Core):
         filename = filename.render(text,0,(20,20,20))
         self.display.blit(filename,(455,290))
         pygame.display.update()
-            #self.Minimap()        
+            #        
 # 28x28, 25x25 cells
     def Rewrite_cell(self):
         self.event_handler()
@@ -249,7 +214,7 @@ class Window(Core):
         self.load_cells_list()
         self.Maps_grid()
         self.Minimaps_grid()
-        self.Minimap()
+        
         self.Load_part_of_map(0,0)
         self.type_of_grids()
         while True:
