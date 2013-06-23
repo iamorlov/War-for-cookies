@@ -88,10 +88,11 @@ class Resources():
             textures.append(texture)
         return textures
     
+    
     def textures_for_army(self):
         textures = []
         fraction = ['neutral','red','blue']
-        type_units=['','_ak47','_m4a','_rpg','_tank','_artillery']
+        type_units=['','_infantry','_marines','_mob_inf','_tank','_artillery']
         for i in range(len(fraction)):
             for j in range(len(type_units)):
                 texture = self.manager.get_units(fraction[i]+type_units[j]+".png")

@@ -111,7 +111,7 @@ class Window():
                     first_texture = textures[cell_type+fraction-1].get_rect()
                     first_texture.center=(45+self.big_step*i,25+self.big_step*j)
                     self.display.blit(textures[cell_type+fraction-1],first_texture)
-                elif((cell_type<3) and (army > 0)):
+                elif(army > 0):
                     first_texture = textures[cell_type].get_rect()
                     first_texture.center=(45+self.big_step*i,25+self.big_step*j)
                     self.display.blit(textures_army[fraction*5+1],first_texture)

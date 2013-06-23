@@ -166,7 +166,7 @@ class Core():
             l+=lines[i]        
         map_file.close()
         cell = re.search('[(]'+str(x)+'[;]'+str(y)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
-        if cell!= None:
+        if cell!= None:#x,y,type,fraction,id_army
             return self.get_cell_information(cell.group(0))
         
     def load_cells_for_transparent_textures(self,x,y,current_name):
