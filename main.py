@@ -163,9 +163,44 @@ class MenuScene(lib.Scene):
     def fun_exit(self):#кнопка закрыть
         exit(1)
     def autor_print(self):
-        self.video()
-        #a =autor()
-        #a.autor_print()
+        self.menu = Menu((250,110))
+        # Именно таким образом мы можем получить текст в pygame
+        # В данном случае мы используем системный шрифт.        
+        font_text = pygame.font.SysFont("Verdana", 30, bold=False, italic=False)
+        font      = pygame.font.SysFont("Verdana", 50, bold=False, italic=False)
+        font_bold = pygame.font.SysFont("Verdana", 50, bold=True, italic=False)
+        self.menu.background()
+        # Загрузка музыки.
+        #pygame.mixer.music.load('data/music/menu.ogg')
+        # Проигрывание музыки.
+        #pygame.mixer.music.play()
+        if self.music_counter == 0:
+            self.music(1)
+            self.music_counter = 1
+        item = u"Evgen `Azon` Darnapuk"
+        self.menu.add_menu_item(font_text.render(item,True,(255,255,255)),
+                                font_text.render(item,True,(255,255,255)),
+                                self.empty_func)
+        item = u"Roman `Merorh` Lukov"
+        self.menu.add_menu_item(font_text.render(item,True,(255,255,255)),
+                                font_text.render(item,True,(255,255,255)),
+                                self.empty_func)
+        item = u"Vadim `Heiker` Orlov"
+        self.menu.add_menu_item(font_text.render(item,True,(255,255,255)),
+                                font_text.render(item,True,(255,255,255)),
+                                self.empty_func)
+        item = u"Igor `KIO` Kandyba"
+        self.menu.add_menu_item(font_text.render(item,True,(255,255,255)),
+                                font_text.render(item,True,(255,255,255)),
+                                self.empty_func)
+        item = u"Denis Goncharow"
+        self.menu.add_menu_item(font_text.render(item,True,(255,255,255)),
+                                font_text.render(item,True,(255,255,255)),
+                                self.empty_func)
+        item = u"Назад"
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
+                                self._start)
     def game_window(self):
         self.music(0)
         a = lib.Window('first_map_for_test')
