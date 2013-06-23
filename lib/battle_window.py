@@ -9,6 +9,8 @@ class Battle_window():
         self.b_map_name = battle_cell[2]
         self.battle = battle.Battle()
         self.resources = resources.Resources()
+        self.indent_x=100
+        self.indent_y=50
         
     def b_window(self):
         self.display = pygame.display.set_mode((1280,720))
@@ -37,11 +39,11 @@ class Battle_window():
                 unit=cells_list[i*self.big_steps+j][3])
                 if(unit > 0):
                     first_texture = textures[cell_type].get_rect()
-                    first_texture.center=(45+self.big_step*i,25+self.big_step*j)
+                    first_texture.center=(self.indent_x+self.big_step*i, self.indent_y+self.big_step*j)
                     self.display.blit(textures_army[fraction*5+1],first_texture)
                 else:
                     first_texture = textures[cell_type].get_rect()
-                    first_texture.center=(45+self.big_step*i,25+self.big_step*j)
+                    first_texture.center=(self.indent_x+self.big_step*i,self.indent_y+self.big_step*j)
                     self.display.blit(textures[cell_type],first_texture)               
         self.Maps_grid()
         pygame.display.flip()
