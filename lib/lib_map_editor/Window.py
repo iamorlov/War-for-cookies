@@ -8,8 +8,9 @@ from Events import *
 
 class Window(Core):
      
-    def __init__(self,map_name):
+    def __init__(self,type):
         pygame.init()
+        self.empty_map(type)
         self.type = 0
         self.resources = Resources()
         self.graphical_logic = Graphical_logic()
@@ -20,7 +21,6 @@ class Window(Core):
         self.days = 0
         self.cell_type = 0
         self.fraction = 0 
-        self.map_name = map_name
         self.stage = 0
         self.save_load_name = ''
         
@@ -29,7 +29,7 @@ class Window(Core):
         manager = ResManager()
         pygame.display.set_icon(manager.get_image('icon.png'))
         pygame.display.set_caption("Map Editor")
-        self.empty_map(0)
+        
         self.display.fill((220,220,250))
         pygame.display.flip()
         i = 0

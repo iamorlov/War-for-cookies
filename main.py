@@ -13,6 +13,7 @@ class WaitScene(lib.Scene):
         lib.Scene.__init__(self, *argv)
         self.run = 0
         self.time = time
+        self.music_counter = 0
 
     def _event(self, event):
         # Здесь нам нужно обработать все события.
@@ -119,6 +120,8 @@ class Menu(lib.Game, lib.Scene):
             index += 1
 
 class MenuScene(lib.Scene):
+    def __init__(self):
+        self.music_counter = 0
     def music(self,i): #для музона 0 стоп остальное играть
          pygame.mixer.music.load('data/music/menu.ogg')
          pygame.mixer.music.play()
@@ -130,9 +133,33 @@ class MenuScene(lib.Scene):
         m.set_display(overlay)
         m.play()
         pygame.display.flip()
+        
+    def empty_func(self):
+        pass
+    
     def item_call(self):
-        print("item_call")
-        self.the_end()
+        self.menu = Menu((250,110))
+        # Именно таким образом мы можем получить текст в pygame
+        # В данном случае мы используем системный шрифт.        
+        font_text = pygame.font.SysFont("Verdana", 30, bold=False, italic=False)
+        font      = pygame.font.SysFont("Verdana", 50, bold=False, italic=False)
+        font_bold = pygame.font.SysFont("Verdana", 50, bold=True, italic=False)
+        self.menu.background()
+        # Загрузка музыки.
+        #pygame.mixer.music.load('data/music/menu.ogg')
+        # Проигрывание музыки.
+        #pygame.mixer.music.play()
+        if self.music_counter == 0:
+            self.music(1)
+            self.music_counter = 1
+        item = u"Beta версия игры, элемент в разработке"
+        self.menu.add_menu_item(font_text.render(item,True,(255,255,255)),
+                                font_text.render(item,True,(255,255,255)),
+                                self.empty_func)
+        item = u"Назад"
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
+                                self._start)
     def fun_exit(self):#кнопка закрыть
         exit(1)
     def autor_print(self):
@@ -143,9 +170,19 @@ class MenuScene(lib.Scene):
         self.music(0)
         a = lib.Window('first_map_for_test')
         a.Run()
-    def map_editor(self):
+    def map_editor_0(self):
         self.music(0)
         a = lib.lib_map_editor.Window(0)
+        a.Run()
+    
+    def map_editor_1(self):
+        self.music(0)
+        a = lib.lib_map_editor.Window(1)
+        a.Run()    
+    
+    def map_editor_2(self):
+        self.music(0)
+        a = lib.lib_map_editor.Window(2)
         a.Run()
         
        # return pygame.mixer.music.stop()
@@ -160,7 +197,9 @@ class MenuScene(lib.Scene):
         #pygame.mixer.music.load('data/music/menu.ogg')
         # Проигрывание музыки.
         #pygame.mixer.music.play()
-        self.music(1)
+        if self.music_counter == 0:
+            self.music(1)
+            self.music_counter = 1
         item = u"Новая игра"
         self.menu.add_menu_item(font.render(item,True,(255,255,255)),
                                 font_bold.render(item,True,(255,255,255)),
@@ -172,7 +211,7 @@ class MenuScene(lib.Scene):
         item = u"Редактор карт"
         self.menu.add_menu_item(font.render(item,True,(255,255,255)),
                                 font_bold.render(item,True,(255,255,255)),
-                                self.map_editor)
+                                self.map_editor_cubmenu)
         item = u"Настройки"
         self.menu.add_menu_item(font.render(item,True,(255,255,255)),
                                 font_bold.render(item,True,(255,255,255)),
@@ -185,6 +224,35 @@ class MenuScene(lib.Scene):
         self.menu.add_menu_item(font.render(item,True,(255,255,255)),
                                 font_bold.render(item,True,(255,255,255)),
                                 self.fun_exit)
+
+    def map_editor_cubmenu(self):
+        self.menu = Menu((250,110))
+        # Именно таким образом мы можем получить текст в pygame
+        # В данном случае мы используем системный шрифт.
+        font      = pygame.font.SysFont("Verdana", 50, bold=False, italic=False)
+        font_bold = pygame.font.SysFont("Verdana", 50, bold=True, italic=False)
+        self.menu.background()
+        # Загрузка музыки.
+        #pygame.mixer.music.load('data/music/menu.ogg')
+        # Проигрывание музыки.
+        #pygame.mixer.music.play()
+        #self.music(1)
+        item = u"Карта 50х50"
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
+                                self.map_editor_0)
+        item = u"Карта 100х100"
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
+                                self.map_editor_1)
+        item = u"Карта 150х150"
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
+                                self.map_editor_2)
+        item = u"Назад"
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
+                                self._start)
 
     def _event(self, event):
         for e in event.get():
