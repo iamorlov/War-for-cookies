@@ -222,7 +222,8 @@ class Core():
                 #if (((x-1+i)>=0) or ((y-1+j)>=0) or ((x-1+i)<=max1) or ((y-1+j)<=max2)):
                 if (((x-1+i)>=0) and ((y-1+j)>=0)) and (((x-1+i)<=max1) and ((y-1+j)<=max2)):
                     a = re.search('[(]'+str(x-1+i)+'[;]'+str(y-1+j)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
-                    result.append(self.get_cell_information(a.group(0)))
+                    if a!=None:
+                        result.append(self.get_cell_information(a.group(0)))
         return result
            
     def load_minimap_cells(self):
