@@ -6,7 +6,7 @@ import time
 class Core():
 
     def __init__(self):
-        pass
+        self.map_scale=14#магическое число епта
 
     def save_file(self,file_name_for_save,current_name):
         map_file =open(current_name,'r')
@@ -105,29 +105,29 @@ class Core():
         for i in range(len(lines)):
             l+=lines[i]
         map_file.seek(0)
-        max1 = map_file.readline()
-        max2 = map_file.readline()
+        max1 = int(map_file.readline())
+        max2 = int(map_file.readline())
         map_file.close()
-        a = int(max1) - x
-        b = int(max2) - y
+        a = max1 - x
+        b = max2 - y
         if (x < 7):
             x_coord_start = 0
-            x_coord_end = 14
+            x_coord_end = self.map_scale
         elif(a<7):
-            x_coord_start = int(max1)-14
-            x_coord_end = int(max1)
+            x_coord_start = max1-self.map_scale
+            x_coord_end = max1
         else:
-            x_coord_start = x-7
-            x_coord_end = x+7
+            x_coord_start = x-self.map_scale/2
+            x_coord_end = x+self.map_scale/2
         if (y < 7):
             y_coord_start = 0
-            y_coord_end = 14
+            y_coord_end = self.map_scale
         elif(b<7):
-            y_coord_start = int(max2)-14
+            y_coord_start = int(max2)-self.map_scale
             y_coord_end = int(max2)
         else:
-            y_coord_start = y-7
-            y_coord_end = y+7
+            y_coord_start = y-self.map_scale/2
+            y_coord_end = y+self.map_scale/2
         list_coords = []
         for j in range(x_coord_start,x_coord_end):
             for k in range(y_coord_start,y_coord_end):
@@ -135,6 +135,28 @@ class Core():
                 if a!= None:
                     list_coords.append(self.get_cell_information(a.group(0)))
         return list_coords,x_coord_start,y_coord_start
+    
+    def load_battle_cells(self,len_x, len_y,current_name):
+        map_file = open(current_name,'r')
+        lines = map_file.readlines()
+        l = ''
+        for i in range(len(lines)):
+            l+=lines[i]
+        map_file.seek(0)
+        max1 = int(map_file.readline())
+        max2 = int(map_file.readline())
+        map_file.close()
+        x_coord_start = 0
+        x_coord_end = len_x
+        y_coord_start = 0
+        y_coord_end = len_y
+        list_coords = []
+        for j in range(x_coord_start,x_coord_end):
+            for k in range(y_coord_start,y_coord_end):
+                a = re.search('[(]'+str(k)+'[;]'+str(j)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
+                if a!= None:
+                    list_coords.append(self.get_cell_information(a.group(0)))
+        return list_coords
 
     def load_cell(self,x,y,current_name):
         map_file = open(current_name,'r')
