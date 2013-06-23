@@ -52,7 +52,7 @@ class Window(Core):
             self.steps = 100
         elif self.map_type == 2:
             self.step_p = 2
-            self.steps = 140
+            self.steps = 150
         cell = Rect((800,0),(300,300))
         pygame.draw.rect(self.display,(0,0,0),cell,2)
         pygame.display.flip()
