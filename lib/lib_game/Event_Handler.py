@@ -17,13 +17,15 @@ class Event_Handler():
         self.graphical_logic = Graphical_logic()
 
     def stage_0(self,event,fraction,days,action_to_map_coords,action_to_minimap_coords,last_x,last_y,filename):
+        x_start = y_start = 0
         if (event[0]=='map_coords'):
-            stage, army_coords,id_army = action_to_map_coords(event[2],event[3],last_x,last_y)
+            print 'Coords = '+str(event[2])+' '+str(event[3])
+            stage, army_coords,id_army = action_to_map_coords(event[2],event[3],x_start,y_start)
         elif (event[0]=='minimap_coords'):
-            action_to_minimap_coords(event[2],event[3])
+            x_start,y_start = action_to_minimap_coords(event[2],event[3])# ВОТ ТЫ ГДЕ, СЦУКА!
             stage = event[1]
-            last_x = event[2]
-            last_y = event[3]
+            last_x = event[3]
+            last_y = event[4]
         elif (event[0]=='save_mode'):
             stage = event[1]
         elif (event[0]=='load_mode'):
@@ -45,9 +47,9 @@ class Event_Handler():
         except UnboundLocalError:
             stage = 0
         try:
-            return stage,last_x,last_y,fraction,days, army_coords,id_army
+            return stage,last_x,last_y,fraction,days, army_coords,id_army,x_start,y_start
         except UnboundLocalError:
-            return stage,last_x,last_y,fraction,days, 0,0
+            return stage,last_x,last_y,fraction,days, 0,0,x_start,y_start
         
     def stage_1(self,event,name_for_saving,filename,action_for_save,reload_window,last_x,last_y):
         action_for_save(name_for_saving)
@@ -123,6 +125,7 @@ class Event_Handler():
         if event[0] == 'battle_mode':
             stage = event[1]
             print stage
+            print event
             return stage
         else:
             stage = 6

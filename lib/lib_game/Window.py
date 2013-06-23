@@ -134,9 +134,11 @@ class Window():
             print self.stage
             if self.stage == 0:
                 try:
-                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,self.last_x,self.last_y,self.file)
+                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army,self.x_start,self.y_start\
+                     = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,self.last_x,self.last_y,self.file)
                 except AttributeError:
-                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,0,0,self.file)
+                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army,self.x_start,self.y_start\
+                     = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,0,0,self.file)
                 days = 'Day '+str(self.days+1)
                 fraction_out = str(self.fraction)
                 cell = Rect((800,650),(300,50))
@@ -179,6 +181,8 @@ class Window():
     def action_to_map_coords(self,x,y,last_x,last_y):
 #        self.Load_part_of_map(x,y)
         cell = self.core.load_cell(y+last_y,x+last_x,self.file)
+        print 'cell'
+        print cell
         if ((cell[3] == self.fraction) and (cell[4]>0)):
             stage = 3
             army_coords = [y+last_y,x+last_x]
@@ -203,28 +207,32 @@ class Window():
                 self.army_coords[0] += x
                 self.army_coords[1] += y
                 try:
-                    print 'trololo = '+str(self.army_coords[0]-self.last_y )
-                    print 'pythpyth = '+str(self.army_coords[1]-self.last_x )
-                    if (self.army_coords[1] - self.last_x >=5):
-                        self.last_x+=5
-                        if (self.last_x>self.steps-1):
-                            self.last_x = self.steps - self.big_steps
+                    print 'trololo = '+str(self.army_coords[0]-self.y_start )
+                    print 'pythpyth = '+str(self.army_coords[1]-self.x_start )
+                    if (self.army_coords[1] - self.x_start >=7):
+                        self.x_start+=7
+                        self.last_x = self.x_start+7
+                        if (self.x_start>self.steps-1):
+                            self.x_start = self.steps - self.big_steps
                         self.reload_window(self.last_x,self.last_y)
-                    elif (self.army_coords[0]- self.last_y >=5):
-                        self.last_y +=5
-                        if (self.last_y>self.steps-1):
-                            self.last_y = self.steps - self.big_steps
+                    elif (self.army_coords[0]- self.y_start >=7):
+                        self.y_start +=7
+                        self.last_y = self.y_start+7
+                        if (self.y_start>self.steps-1):
+                            self.y_start = self.steps - self.big_steps
                         print 'Event!'
                         self.reload_window(self.last_x,self.last_y)
-                    elif (self.army_coords[1] - self.last_x <=-5):
-                        self.last_x-=5
-                        if (self.last_x<0):
-                            self.last_x = 0
+                    elif (self.army_coords[1] - self.x_start <=-7):
+                        self.x_start-=7
+                        if (self.x_start<0):
+                            self.x_start = 0
+                            self.last_x = self.x_start+7
                         self.reload_window(self.last_x,self.last_y)
-                    elif (self.army_coords[0]- self.last_y <=-5):
-                        self.last_y -=5
-                        if (self.last_y<0):
-                            self.last_y = 0
+                    elif (self.army_coords[0]- self.y_start <=-7):
+                        self.y_start -=7
+                        self.last_y = self.y_start+7
+                        if (self.y_start<0):
+                            self.y_start = 0
                         print 'Event!'
                         self.reload_window(self.last_x,self.last_y)
                     else:
@@ -250,7 +258,7 @@ class Window():
         pygame.draw.rect(self.display,(150,150,150),cell,0)
         pygame.display.flip()                
             
-    def action_to_minimap_coords(self,x,y):
+    def action_to_minimap_coords(self,x,y): #вернуть стартовые х и у!
         self.Load_part_of_map(x,y)
         cells_list,x_coord_start,y_coord_start = self.core.load_cells(x, y, self.file)
         cell = Rect((800+x_coord_start*self.step_p,0+y_coord_start*self.step_p),(self.step_p*14,self.step_p*14))
@@ -258,6 +266,7 @@ class Window():
         self.Minimap()
         pygame.draw.rect(self.display,(0,0,0),cell,2)
         self.Maps_grid()
+        return x_coord_start,y_coord_start
     
     def action_for_save(self,text):
         cell = Rect((360,260),(300,200))

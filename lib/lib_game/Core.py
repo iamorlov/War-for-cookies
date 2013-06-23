@@ -110,30 +110,31 @@ class Core():
         map_file.close()
         a = max1 - x
         b = max2 - y
-        if (x < 7):
+        if (x < 14):
             x_coord_start = 0
             x_coord_end = self.map_scale
-        elif(a<7):
+        elif(a<14):
             x_coord_start = max1-self.map_scale
             x_coord_end = max1
         else:
-            x_coord_start = x-self.map_scale/2
-            x_coord_end = x+self.map_scale/2
-        if (y < 7):
+            x_coord_start = x-self.map_scale//2
+            x_coord_end = x+self.map_scale//2
+        if (y < 14):
             y_coord_start = 0
             y_coord_end = self.map_scale
-        elif(b<7):
+        elif(b<14):
             y_coord_start = int(max2)-self.map_scale
             y_coord_end = int(max2)
         else:
-            y_coord_start = y-self.map_scale/2
-            y_coord_end = y+self.map_scale/2
+            y_coord_start = y-self.map_scale//2
+            y_coord_end = y+self.map_scale//2
         list_coords = []
         for j in range(x_coord_start,x_coord_end):
             for k in range(y_coord_start,y_coord_end):
                 a = re.search('[(]'+str(k)+'[;]'+str(j)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
                 if a!= None:
                     list_coords.append(self.get_cell_information(a.group(0)))
+        print str(list_coords)+'\n'+str(x_coord_start)+'\n'+str(y_coord_start)
         return list_coords,x_coord_start,y_coord_start
     
     def load_battle_cells(self,len_x, len_y,current_name):
