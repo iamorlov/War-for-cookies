@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import time, pygame, lib
-from autor import autor
+#from autor import autor
 def get_center(surface, sprite):
     return (surface.w/2 - sprite.w/2,
             surface.h/2 - sprite.h/2)
@@ -124,14 +124,21 @@ class MenuScene(lib.Scene):
          pygame.mixer.music.play()
          if(i==0):
           pygame.mixer.music.stop()
+    def video(self):
+        overlay = pygame.display.set_mode((800,600))
+        m=pygame.movie.Movie('data/video/preview234.mpg')
+        m.set_display(overlay)
+        m.play()
+        pygame.display.flip()
     def item_call(self):
         print("item_call")
         self.the_end()
     def fun_exit(self):#кнопка закрыть
         exit(1)
     def autor_print(self):
-        a =autor()
-        a.autor_print()
+        self.video()
+        #a =autor()
+        #a.autor_print()
     def game_window(self):
         self.music(0)
         a = lib.Window('first_map_for_test')
