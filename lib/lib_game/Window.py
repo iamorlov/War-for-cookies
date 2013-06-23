@@ -131,9 +131,9 @@ class Window():
             print self.stage
             if self.stage == 0:
                 try:
-                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,self.last_x,self.last_y)
+                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,self.last_x,self.last_y)
                 except AttributeError:
-                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,0,0)
+                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,0,0)
                     
             if self.stage == 1:
                 self.action_for_save(self.save_load_name)
@@ -154,7 +154,7 @@ class Window():
                     print self.save_load_name
 
             if self.stage == 3:
-                self.stage = self.mode.stage_3(event, self.stage, self.moving_army)
+                self.stage = self.mode.stage_3(event, self.stage, self.moving_army,self.file,self.id_army)
 
 
     def action_to_map_coords(self,x,y):
@@ -163,9 +163,10 @@ class Window():
         if ((cell[3] == self.fraction) and (cell[4]>0)):
             stage = 3
             army_coords = [y,x]
-            return stage, army_coords
+            id_army = cell[4]
+            return stage, army_coords, id_army
         else:
-            return 0,0
+            return 0,0,0
 
 
     def moving_army(self,x,y):

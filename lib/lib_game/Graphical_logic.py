@@ -42,7 +42,12 @@ class Graphical_logic:
                     return  k+1
                 
     def get_current_steps(self,id_army,filename): #повертаємо кількість кроків на даний момент в цій армії
+        print 'id_army '+str(id_army)
+        print 'filename '+str(filename)
         info_army = self.core.load_army(filename, id_army)
+        info_ar = self.core.load_armies(filename)
+        print info_army
+        print info_ar
         return info_army[7]
         
     def change_current_steps(self,id_army,filename,current_steps,steps):

@@ -89,72 +89,12 @@ class Core():
     def get_army_information(self,line):
         #Ололо я індус дубль 2
         #коли буде зайвий час - переробити
-        result, x, len_x = []
-        for i in range(7):
-            x.append('')
-            len_x.append(0)
-        x[0] = re.search('[(][0-9]{1,3}[;]', line)# id_army
-        x[0] = x[0].group(0)
-        len_x[0] = len(x[0])
-        x[0] = x[0][1:]
-        x[0] = x[0][:-1]
-        
-        result.append(int(x[0]))
-        x[1] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;]', line)#u_1
-        x[1] = x[1].group(0)
-        len_x[1] = len(x[1])#len_y
-        x[1] = x[1][len_x[0]:]
-        x[1] = x[1][:-1]
-
-        result.append(int(x[1]))
-        x[2] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;]', line)#u_2
-        x[2] = x[2].group(0)
-        len_x[2] = len(x[2])
-        x[2] = x[2][len_x[1]:]
-        x[2] = x[2][:-1]
-
-        result.append(int(x[2]))
-        x[3] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;]', line)#u_3
-        x[3] = x[3].group(0)
-        len_x[3] = len(x[3])
-        x[3] = x[3][len_x[2]:]
-        x[3] = x[3][:-1]
-
-        result.append(int(x[3]))
-        x[4] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;]', line)#u_4
-        x[4] = x[4].group(0)
-        len_x[4] = len(x[4])
-        x[4] = x[4][len_x[3]:]
-        x[4] = x[4][:-1]
-        
-        result.append(int(x[4]))
-        x[5] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;]', line)#u_5
-        x[5] = x[5].group(0)
-        len_x[5] = len(x[5])
-        x[5] = x[5][len_x[4]:]
-        x[5] = x[5][:-1]
-
-        result.append(int(x[5]))
-        x[6] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}', line)#count
-        x[6] = x[6].group(0)
-        len_x[6] = len(x[6])
-        x[6] = x[6][len_x[5]:]
-        x[6] = x[6][:-1]
-        result.append(int(x[6]))
-        
-        x[7] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}', line)#count
-        x[7] = x[7].group(0)
-        len_x[7] = len(x[7])
-        x[7] = x[7][len_x[6]:]
-        x[7] = x[7][:-1]
-        result.append(int(x[7]))
-
-        x[8] = re.search('[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}', line)#count
-        x[8] = x[8].group(0)
-        len_x[8] = len(x[7])
-        x[8] = x[8][len_x[7]:]
-        x[8] = x[8][:-1]
-        result.append(int(x[8]))
+        result = []
+        l = line.split(';')
+        l[0] = l[0][1:]
+        l[8] = l[8][:1]
+        for i in range(len(l)):
+            result.append(int(l[i]))
         return result
     #СВЯТА ДЖИГУРДА! Мені соромно за ті верхні два шматки коду :((((((( 
     
@@ -265,7 +205,8 @@ class Core():
         for i in range(len(lines)):
             l+=lines[i]        
         map_file.close()
-        a = re.search('[(]'+id_army+'[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}[;][0-9][)]',l)
+        a = re.search('[(]'+str(id_army)+'[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}[;][0-9][)]',l)
+        print a.group(0)
         if a!= None:
             return self.get_army_information(a.group(0))        
 
@@ -276,7 +217,7 @@ class Core():
         l = ''
         for i in range(len(lines)):
             l+=lines[i]
-        a = re.search('[(]'+id_army+'[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}[;][0-9][)]',l)
+        a = re.search('[(]'+str(id_army)+'[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}[;][0-9][)]',l)
         if a!=None:
             base_line = a.group(0)
         new_line = '('+str(id_army)+';'+str(unit_1)+';'+str(unit_2)+';'+str(unit_3)+';'+str(unit_4)+';'+str(unit_5)+';'+str(move_max)+';'+str(move_current)+';'+str(fraction)+')' 

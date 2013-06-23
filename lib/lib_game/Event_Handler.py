@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from pygame import *
 from Core import Core
+from Graphical_logic import Graphical_logic
+
 
 '''
 Created on 22 черв. 2013
@@ -12,10 +14,11 @@ class Event_Handler():
 
     def __init__(self):
         self.core = Core()
+        self.graphical_logic = Graphical_logic()
 
     def stage_0(self,event,fraction,days,action_to_map_coords,action_to_minimap_coords,last_x,last_y,):
         if (event[0]=='map_coords'):
-            stage, army_coords = action_to_map_coords(event[2],event[3])
+            stage, army_coords,id_army = action_to_map_coords(event[2],event[3])
         elif (event[0]=='minimap_coords'):
             action_to_minimap_coords(event[2],event[3])
             stage = event[1]
@@ -51,9 +54,9 @@ class Event_Handler():
         except UnboundLocalError:
             stage = 0
         try:
-            return stage,last_x,last_y,fraction,days, army_coords
+            return stage,last_x,last_y,fraction,days, army_coords,id_army
         except UnboundLocalError:
-            return stage,last_x,last_y,fraction,days, 0
+            return stage,last_x,last_y,fraction,days, 0,0
         
     def stage_1(self,event,name_for_saving,filename,action_for_save,reload_window,last_x,last_y):
         action_for_save(name_for_saving)
@@ -111,9 +114,13 @@ class Event_Handler():
                 reload_window(0,0)
         return stage, name_for_loading
     
-    def stage_3(self,event,stage,moving_army):
+    def stage_3(self,event,stage,moving_army,filename,id_army):
         if (event[0] == 'move_army'):
-            moving_army(event[1],event[2])
+            current_steps = self.graphical_logic.get_current_steps(id_army, filename)
+            if current_steps > 0:
+                moving_army(event[1],event[2])
+                self.graphical_logic.change_current_steps(id_army, filename, current_steps, -1)
+
         elif (event[0] == 'end_of_army_steps'):
             stage = event[1]
         return stage        
