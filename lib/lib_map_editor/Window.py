@@ -188,14 +188,14 @@ class Window(Core):
 
                     print self.save_load_name
 
-                
-
     def action_to_map_coords(self,x,y):
-        textures = self.resources.textures()
-        cells_list = self.load_cells(x, y)
+        textures = self.resources.textures()        
         for i in range(11):
             textures[i]= pygame.transform.scale(textures[i],(28,28)) 
-        self.change_cell(cells_list[0][1]+y,cells_list[0][0]+x,self.type, self.fraction, 0)
+        try:
+            self.change_cell(self.y_coord_start+y,self.x_coord_start+x,self.type, self.fraction, 0)
+        except AttributeError:
+            self.change_cell(y,x,self.type, self.fraction, 0)    
         if self.fraction > 0:
             textures = pygame.transform.scale(textures[self.type+self.fraction-1],(28,28))
             first_texture = textures.get_rect()

@@ -62,6 +62,7 @@ class Core():
         l = ''
         for i in range(len(lines)):
             l+=lines[i]
+        print str(x)+'[;]'+str(y)
         a = re.search('[(]'+str(x)+'[;]'+str(y)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
         if a!=None:
             base_line = a.group(0)
@@ -177,25 +178,26 @@ class Core():
         map_file.close()
         a = int(max1) - x
         b = int(max2) - y
-        if (x < 13):
+        if (x < 25):
             self.x_coord_start = 0
             self.x_coord_end = 25
-        elif(a<13):
+        elif(a<25):
             self.x_coord_start = int(max1)-25
             self.x_coord_end = int(max1)
         else:
             self.x_coord_start = x-13
             self.x_coord_end = x+12
-        if (y < 13):
+        if (y < 25):
             self.y_coord_start = 0
             self.y_coord_end = 25
-        elif(b<13):
+        elif(b<25):
             self.y_coord_start = int(max2)-25
             self.y_coord_end = int(max2)
         else:
             self.y_coord_start = y-13
             self.y_coord_end = y+12
         list_coords = []
+        print str(self.x_coord_start)+' '+ str(self.x_coord_end)+ ' ' + str(self.y_coord_start)+ ' ' + str(self.y_coord_end)
         for j in range(self.x_coord_start,self.x_coord_end):
             for k in range(self.y_coord_start,self.y_coord_end):
                 a = re.search('[(]'+str(k)+'[;]'+str(j)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
