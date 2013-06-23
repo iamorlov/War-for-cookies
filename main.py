@@ -207,19 +207,29 @@ class MenuScene(lib.Scene):
         a.Run()
     def map_editor_0(self):
         self.music(0)
-        a = lib.lib_map_editor.Window(0)
+        a = lib.lib_map_editor.Window(0,'')
         a.Run()
     
     def map_editor_1(self):
         self.music(0)
-        a = lib.lib_map_editor.Window(1)
+        a = lib.lib_map_editor.Window(1,'')
         a.Run()    
     
     def map_editor_2(self):
         self.music(0)
-        a = lib.lib_map_editor.Window(2)
+        a = lib.lib_map_editor.Window(2,'')
         a.Run()
         
+    def map_editor_last(self):
+        self.music(0)
+        a = lib.lib_map_editor.Window(3,'temp')
+        a.Run()
+        
+    def map_editor_3(self):
+        self.music(0)
+        a = lib.lib_map_editor_battle_map.Window(2)
+        a.Run()
+                
        # return pygame.mixer.music.stop()
     def _start(self):
         self.menu = Menu((250,110))
@@ -284,6 +294,15 @@ class MenuScene(lib.Scene):
         self.menu.add_menu_item(font.render(item,True,(255,255,255)),
                                 font_bold.render(item,True,(255,255,255)),
                                 self.map_editor_2)
+        item = u"Последняя несохраненная карта"
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
+                                self.map_editor_last)
+        
+        item = u"Карта боя"
+        self.menu.add_menu_item(font.render(item,True,(255,255,255)),
+                                font_bold.render(item,True,(255,255,255)),
+                                self.map_editor_3)
         item = u"Назад"
         self.menu.add_menu_item(font.render(item,True,(255,255,255)),
                                 font_bold.render(item,True,(255,255,255)),

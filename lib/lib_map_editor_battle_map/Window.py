@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import pygame, sys
 from Core import *
 from lib import ResManager
@@ -8,13 +9,10 @@ from Events import *
 
 class Window(Core):
      
-    def __init__(self,type_map,name):
+    def __init__(self,type_map):
         pygame.init()
         print type(type_map)
-        if type_map < 3:
-            self.empty_map(type_map)
-        else:
-            self.load_file(name)
+        self.empty_map(type_map)
         self.type = 0
         self.resources = Resources()
         self.graphical_logic = Graphical_logic()
@@ -39,10 +37,11 @@ class Window(Core):
         i = 0
         
     def Maps_grid(self):
-        self.big_step = 28
-        self.big_steps =25
-        for i in range(self.big_steps):
-            for j in range(self.big_steps):
+        self.big_step = 50
+        self.steps_x =20
+        self.steps_y =7
+        for i in range(self.steps_x):
+            for j in range(self.steps_y):
                 cell = Rect((20+self.big_step*i,self.big_step*j),(self.big_step,self.big_step))
                 pygame.draw.rect(self.display,(0,0,0),cell,1)
         pygame.display.flip()# лол, костЫль
@@ -116,11 +115,11 @@ class Window(Core):
         cells_list = self.load_cells(x, y)
         print len(cells_list)
         for i in range(11):
-            textures[i]= pygame.transform.scale(textures[i],(28,28)) 
-        for i in range(self.big_steps):
-            for j in range(self.big_steps):
-                cell_type = cells_list[i*self.big_steps+j][2]
-                fraction  = cells_list[i*self.big_steps+j][3]
+            textures[i]= pygame.transform.scale(textures[i],(50,50)) 
+        for i in range(self.steps_x):
+            for j in range(self.steps_y):
+                cell_type = cells_list[i*self.steps_x+j][2]
+                fraction  = cells_list[i*self.steps_x+j][3]
                 if (cell_type >6) and (cell_type<12) or (fraction!=0):
                     x = cells_list[i*self.big_steps+j][0]
                     y = cells_list[i*self.big_steps+j][1]
@@ -135,7 +134,7 @@ class Window(Core):
                     self.display.blit(textures[cell_type+fraction-1],first_texture)
                 else:
                     first_texture = textures[cell_type].get_rect()
-                    first_texture.center=(35+self.big_step*i,14+self.big_step*j)
+                    first_texture.center=(45+self.big_step*i,25+self.big_step*j)
                     self.display.blit(textures[cell_type],first_texture)               
         cell = Rect((800+self.x_coord_start*self.step_p,0+self.y_coord_start*self.step_p),(self.step_p*25,self.step_p*25))
         self.Minimap()

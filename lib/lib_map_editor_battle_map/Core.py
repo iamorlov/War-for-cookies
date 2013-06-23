@@ -23,7 +23,7 @@ class Core():
         map_file.writelines(str(x)+'\n'+str(y)+'\n2\n')
         for i in range(y):
             for j in range(x):
-                map_file.writelines('('+str(j)+';'+str(i)+';0;0;0)\n')
+                map_file.writelines('('+str(j)+';'+str(i)+';3;0;0)\n')
         map_file.close()
         self.file = 'temp'
         
