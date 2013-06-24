@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pygame, sys,resources, battle, core,events
 class Battle_window():
-    def __init__(self, x,ymcurrent_name):# Где начался бой
+    def __init__(self, x,y, current_name):# Где начался бой
         pygame.init()
         self.w_event = events.Events()
         self.fraction = attacker # першими ходять атакуючі
@@ -9,8 +9,12 @@ class Battle_window():
         self.b_map_name = battle_cell[2]
         self.battle = battle.Battle()
         self.resources = resources.Resources()
+        self.file = current_name
         self.indent_x=100
         self.indent_y=50
+        
+    def load_cells_list(self):
+        self.cells_list = self.core.load_battle_cells(self.file)
         
     def b_window(self):
         self.display = pygame.display.set_mode((1280,720))
@@ -32,15 +36,15 @@ class Battle_window():
         textures = self.resources.textures()
         textures_army = self.resources.textures_for_army()#перепахать на юнитов
         units=[]
-        load_battle_cells(self,self.big_steps_x, self.big_steps_y,current_name)
+        load_battle_cells(current_name)
         for i in range(self.big_steps_x):
             for j in range(self.big_steps_y):
-                cell_type = cells_list[i*self.big_steps+j][2]
-                unit=cells_list[i*self.big_steps+j][3])
+                cell_type = self.cells_list[i*self.big_steps+j][2]
+                unit=self.cells_list[i*self.big_steps+j][3])
                 if(unit > 0):
                     first_texture = textures[cell_type].get_rect()
                     first_texture.center=(self.indent_x+self.big_step*i, self.indent_y+self.big_step*j)
-                    self.display.blit(textures_army[fraction*5+1],first_texture)
+                    self.display.blit(textures_army[fraction*5+fraction][unit],first_texture)
                 else:
                     first_texture = textures[cell_type].get_rect()
                     first_texture.center=(self.indent_x+self.big_step*i,self.indent_y+self.big_step*j)
