@@ -127,9 +127,13 @@ class MenuScene(lib.Scene):
          pygame.mixer.music.play()
          if(i==0):
           pygame.mixer.music.stop()
+         if(i==1):
+          pygame.mixer.pause()
+         if(i==2):
+          pygame.mixer.unpause()
     def clix(self):
-         pygame.mixer.music.load('data/music/clix1.ogg')
-         pygame.mixer.music.play()
+         e=pygame.mixer.Sound('data/music/clix1.ogg')
+         e.play()
     def video(self):
         overlay = pygame.display.set_mode((800,600))
         m=pygame.movie.Movie('data/video/preview234.mpg')
