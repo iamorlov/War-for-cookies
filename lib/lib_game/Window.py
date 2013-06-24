@@ -88,6 +88,27 @@ class Window():
         self.Load_part_of_map(x,y)
         self.game_buttons()
         pygame.display.flip()
+    
+    def status_army(self,id_army):
+        cell = Rect((900,350),(225,400))
+        pygame.draw.rect(self.display,(220,220,250),cell,0)
+        textures_default = self.resources.textures_for_army()
+        fraction = self.fraction
+        textures = []
+        list_army = self.core.load_army(self.file, id_army)
+        for i in range(5):
+            textures.append(textures_default[fraction*5+fraction+i+1])
+            first_texture = textures[i].get_rect()
+            first_texture.center=(932,370+64*i)
+            self.display.blit(textures[i],first_texture)
+            try:
+                font1 = pygame.font.SysFont("Monospace", 40, bold=True, italic=False)
+                item = str(list_army[i+1])
+                font1 = font1.render(item,0,(20,20,20))
+                self.display.blit(font1,(964,350+64*i))
+            except TypeError:         
+                pass
+        pygame.display.flip()
                 
     def Load_part_of_map(self,x,y):
         textures = self.resources.textures()
@@ -132,11 +153,13 @@ class Window():
         if (event != None):
             if self.stage == 0:
                 try:
-                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army,self.x_start,self.y_start\
-                     = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,self.last_x,self.last_y,self.file,self.x_start,self.y_start)
+                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army,self.x_start,self.y_start \
+                    = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,self.last_x,self.last_y,self.file,self.x_start,self.y_start)
                 except AttributeError:
-                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army,self.x_start,self.y_start\
-                     = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,0,0,self.file,0,0)           
+                    self.status_army(0)
+                    self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army,self.x_start,self.y_start \
+                    = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,0,0,self.file,0,0)           
+
                 days = 'Day '+str(self.days+1)
                 fraction_out = str(self.fraction)
                 cell = Rect((800,650),(300,50))
@@ -193,13 +216,16 @@ class Window():
             stage = 3
             army_coords = [y+last_y,x+last_x]
             id_army = cell[4]
+            self.status_army(id_army)
             return stage, army_coords, id_army
+        
         else:
             return 0,0,0
 
 
     def moving_army(self,x,y,last_x,last_y):
         armies_lists = 0
+        self.status_army(self.id_army)
         cell = self.core.load_cell(self.army_coords[0],self.army_coords[1],self.file)
         if cell[4]!=0:
             self.id_army = cell[4]
@@ -249,7 +275,7 @@ class Window():
                     self.reload_window(0,0)
                     print 'last_x '+str(last_x)+'last_y = '+str(last_y)
                 return True,3, last_x,last_y,0
-            elif (((cell[2]>=0) and (cell[2]<3)) and(cell[3]!=self.fraction) and (cell[4] != 0)):
+            elif ((((cell[2]>=0) and (cell[2]<3)) and(cell[3]!=self.fraction) and (cell[4] != 0))or ((cell[2]==9) and (cell[3]==self.fraction))):
                 stage = 6
                 armies_lists = []
                 armies_lists.append(self.core.load_army(self.file, self.id_army))
@@ -258,7 +284,7 @@ class Window():
                 armies_lists.append(self.core.load_army(self.file, cell[4]))
                 print(armies_lists)
                 return False, stage,last_x,last_y,armies_lists
-            elif (((cell[2]>=7) and (cell[2]<9)) and (cell[3] != self.fraction)):
+            elif (((cell[2]==7) and (cell[2]==8)) and (cell[3] != self.fraction)):
                 stage = 3
                 lose_fraction  = cell[3]
                 if lose_fraction > 0:
@@ -284,6 +310,23 @@ class Window():
                         self.core.change_fraction_status(self.file, self.fraction, frac[1], frac[2], frac[3], frac[4], frac[5]+1)
                         self.core.change_cell(cell[0], cell[1], 8, self.fraction, 0, self.file)
                 return False, stage,last_x,last_y,armies_lists
+            elif ((cell[3]== self.fraction) and (cell[4]!=0)):
+                list_start = self.core.load_army(self.file,self.id_army)
+                list_end = self.core.load_army(self.file, cell[4])
+                list_resoult = []
+                for i in range(len(list_start)-3):
+                    if i == 0:
+                        list_resoult.append(list_end[i])
+                    else:
+                        list_resoult.append(list_start[i]+list_end[i])
+                list_resoult.append(20)
+                list_resoult.append(0)
+                list_resoult.append(self.fraction)
+                self.core.change_army(self.file, list_resoult[0], list_resoult[1], list_resoult[2], list_resoult[3], list_resoult[4], list_resoult[5], list_resoult[6], list_resoult[7], list_resoult[8])
+                self.core.change_army(self.file, self.id_army,0,0,0,0,0,0,0,0)
+                cell = self.core.load_cell(self.army_coords[0],self.army_coords[1],self.file)
+                self.core.change_cell(self.army_coords[0],self.army_coords[1],cell[2],0,0,self.file)
+                self.reload_window(last_x,last_y)
 #            elif (((cell[2]>=7)) and (cell[4] == 0)):
 #                stage = 5
 #                return False, stage,last_x,last_y,armies_lists            
