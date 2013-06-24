@@ -12,9 +12,9 @@ class Unit():
             for line in f.xreadlines():
                 self.data.append(line)
             self.bonus.extend(self.data[8].split(' '))
-            for i in range(1,5):
+            for i in range(5):
                 self.bonus[i]=float(self.bonus[i])
-            for i in range(2,7):
+            for i in range(2,8):
                 self.data[i]=int(self.data[i])
         else:
              print name

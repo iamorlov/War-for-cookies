@@ -17,8 +17,8 @@ class Battle():
         self.move_last1=[infantry.get_abil('move',0),marines.get_abil('move',0),mob_infantry.get_abil('move',0),tank.get_abil('move',0),artillery.get_abil('move',0)]
         self.move_last1=[infantry.get_abil('move',0),marines.get_abil('move',0),mob_infantry.get_abil('move',0),tank.get_abil('move',0),artillery.get_abil('move',0)]
         self.cells_list=self.core.load_battle_cells(filename)
-        self.coord_army1=get_army_coords(self.cells_list,0)
-        self.coord_army2=get_army_coords(self.cells_list,0)
+        self.coord_army1=self.get_army_coords(0)
+        self.coord_army2=self.get_army_coords(1)
         #остаток здоровья и остаток хода
     def find_strength(self, army):
         strength=0
@@ -52,13 +52,14 @@ class Battle():
         
     def kick(self,army1,army2,type1,type2):
         self.move_last1[type1-1]=0#no more moving
-        damag=(army1[type1]*rendom.randintself.units_list[type1].get_abil('kick',0)*self.units_list[type1].get_abil('bonus',type2))#количество*тычка*бонус
-        last_health=math.modf(army2[type2]-damag/self.units_list[type2].get_abil('xp',0))
+        damag=int((army1[type1]*randint(3,5)*self.units_list[type1].get_abil('kick',0)*self.units_list[type1].get_abil('bonus',type2-1))/4.0)#количество*тычка*бонус
+        last_health=math.modf(army2[type2]-damag/self.units_list[type2-1].get_abil('xp',0))
         if(last_health[1]<0):#если убили
-            last_health[0]=0
-            last_health[1]=0
-        self.hp_last2[type2-1]=last_health[0]*self.units_list[type2].get_abil('xp',0)
-        army2[type2]= last_health[1]
+            self.hp_last2[type2-1]=0
+            army2[type2]=0
+        else:
+            self.hp_last2[type2-1]=last_health[0]*self.units_list[type2-1].get_abil('xp',0)
+            army2[type2]= last_health[1]
         return army2
     
     def is_in_range(self,coord_army1,coord_army2,attacker,victim):
@@ -73,26 +74,27 @@ class Battle():
     def get_alive(self,army):
         alive_list=[]
         for i in range(1,5):
-            if (army[1]>0):
+            if (army[i]>0):
                 alive_list.append(i)
         return alive_list
     
     def get_vunerable(self,atacker,army2):
         victim=0
-        alive_list=get_alive(army2)
-        for i in range(alive_list.len()):
+        temp=0
+        alive_list=self.get_alive(army2)
+        for i in range(len(alive_list)):
             if (victim<self.units_list[atacker].get_abil('bonus',alive_list[i])):
                 temp=alive_list[i]
                 victim=self.units_list[atacker].get_abil('bonus',alive_list[i])
         return temp
     
     def bot_moving(self,unit_number, dir_x, dir_y ):
-        temp=self.list_coords[coord_army1[unit_number][0]*20+coord_army1[unit_number][1]]
+        temp=self.list_coords[coord_army1[unit_number][0]*11+coord_army1[unit_number][1]]
         if (temp[0]+dir_x>-1 and temp[0]+dir_x<20 and temp[1]+dir_y>-1 and temp[1]+dir_y<11):
             destination=self.list_coords[(coord_army1[unit_number][0]+dir_x)*20+(coord_army1[unit_number][1]+dir_y)]
             if (destination[3]<2 and destination[2]==0):
-                self.list_coords[coord_army1[unit_number][0]*20+coord_army1[unit_number][1]][3]=0
-                self.list_coords[(coord_army1[unit_number][0]+dir_x)*20+(coord_army1[unit_number][1]-dir_y)][3]=temp[3]
+                self.list_coords[coord_army1[unit_number][0]*11+coord_army1[unit_number][1]][3]=0
+                self.list_coords[(coord_army1[unit_number][0]+dir_x)*11+(coord_army1[unit_number][1]-dir_y)][3]=temp[3]
                 self.coord_army1[unit_number][0]+=dir_x
                 self.coord_army1[unit_number][1]+=dir_y
             else:
@@ -101,54 +103,65 @@ class Battle():
                 return False
             
     def get_army_coords(self,fraction):
-        coord_army=[]
-        for i in range(20):
-            for j in range(11):
-                if (self.cells_list[2]>(0+fraction*5)):
-                    coord_army[self.cells_list][0]=self.cells_list[0]
-                    coord_army[self.cells_list][1]=self.cells_list[1]
+        coord_army=[[0,0],[0,0],[0,0],[0,0],[0,0]]
+        for i in range(len(self.cells_list)):
+            if ((self.cells_list[i][3]>(0+fraction*5))and(self.cells_list[i][3]<(6+fraction*5))):
+                coord_army[self.cells_list[i][3]-fraction*5-1][0]=int(self.cells_list[i][0])
+                coord_army[self.cells_list[i][3]-fraction*5-1][1]=int(self.cells_list[i][1])
         return coord_army
                  
     def bot_1step(self, army1, army2, attacker):
         attacker=1
-        alive_list=get_alive(army2)
+        alive_list=self.get_alive(army2)
         no_in_range=0#если ни одного в пределах досягаемости за ход, это - просто чтобы топал
-        victim=get_vunerable(attacker,army2)
+        victim=self.get_vunerable(attacker,army2)
         victim_chosen=False
         while(victim_chosen == False):
-            for i in range('остаток хода'):
-                distance_x=self.coord_army1[attacker][0]-self.coord_army2[victim][0]-self.units_list[attacker].get_abil('range',0)
-                distance_y=self.coord_army1[attacker][1]-self.coord_army2[victim][1]-self.units_list[attacker].get_abil('range',0)
-                if (no_in_range+distanse_x+distance_y<self.units_list[attacker].get_abil('move',0)):#если дотопает за ход
-                    victim_chosen=True
-                    in_range_by_x=distance_x<=0
-                    in_range_by_y=distance_y<=0
-                    if (in_range_by_x and in_range_by_y):#если кто-то уже в радиусе атаки
-                        kick(army1,army2,atacker,victim+1)#то это его проблемы
-                        break
+            distance_x=self.coord_army1[attacker][0]-self.coord_army2[victim][0]-self.units_list[attacker].get_abil('range',0)
+            distance_y=self.coord_army1[attacker][1]-self.coord_army2[victim][1]-self.units_list[attacker].get_abil('range',0)
+            if (no_in_range+distance_x+distance_y<self.units_list[attacker].get_abil('move',0)):#если дотопает за ход
+                victim_chosen=True
+                in_range_by_x=distance_x<=0
+                in_range_by_y=distance_y<=0
+            false_army=army2
+            false_army[victim]=0
+            if(sum(false_army)>0):
+                victim=self.get_vunerable(attacker,false_army)
+            else:
+                no_in_range=20
+                victim=self.get_vunerable(attacker,army2)
+                
+        print victim
+        for i in range(self.units_list[attacker].get_abil('move',0)):
+            distance_x=self.coord_army1[attacker][0]-self.coord_army2[victim][0]-self.units_list[attacker].get_abil('range',0)
+            distance_y=self.coord_army1[attacker][1]-self.coord_army2[victim][1]-self.units_list[attacker].get_abil('range',0)
+                
+            if (in_range_by_x and in_range_by_y):#если кто-то уже в радиусе атаки
+                self.kick(army1,army2,attacker,victim+1)#то это его проблемы
+                break
             
-                    if (distance_x<abs(self.units_list[attacker].get_abil('range',0))):
-                        if (distance_x<0):
-                            bot_moving(attacker, -1, 0)  #move left           
-                        else:
-                            bot_moving(attacker, 1, 0)  #move right
-                    else:
-                        if (distance_y<abs(self.units_list[attacker].get_abil('range',0))):
-                            if (distance_x<0):
-                                bot_moving(attacker, 0, -1)      #move up
-                            else:
-                                bot_moving(attacker, 0, 1)      #move down
+            if (distance_x<abs(self.units_list[attacker].get_abil('range',0))):
+                if (distance_x<0):
+                    self.bot_moving(attacker, -1, 0)  #move left
+                    print 'left'            
                 else:
-                    false_army=army2
-                    false_army[victim]=0
-                    if(math.sum(false_army>0)):
-                        victim=get_vunerable(attacker,false_army)
+                    self.bot_moving(attacker, 1, 0)  #move right
+                    print 'right'
+            else:
+                if (distance_y<abs(self.units_list[attacker].get_abil('range',0))):
+                    if (distance_x<0):
+                        self.bot_moving(attacker, 0, -1)      #move up
+                        print 'up'
                     else:
-                        no_in_range=20
-                        victim=get_vunerable(attacker,army2)
+                        self.bot_moving(attacker, 0, 1)      #move down
+                        print 'down'
+                
+        print army1
+        print self.coord_army1
+        print army2
+        print self.coord_army2
                         
-                        
-    def who_wins(self):
+    def who_wins(self,army1,army2):
         countwarrs1=0
         countwarrs2=0
         for i in range(5):
@@ -164,16 +177,17 @@ class Battle():
     def auto_battle(self,army1,army2):
         #coord_army1 = [[1,0],[3,0],[5,0],[7,0],[9,0]]
         #coord_army2 = [[1,20],[3,20],[5,20],[7,20],[9,20]]
-        alive_list=get_alive(army1)    
-        while(who_wins() == False):
+        alive_list=self.get_alive(army1)    
+        while(self.who_wins(army1,army2) == False):
             for i in range(5):
-                bot_1step(army1, army2,coord_army1,coord_army2, i)
-                if(who_wins()):
+                self.bot_1step(army1, army2, i)
+                if(self.who_wins(army1,army2)):
                     break
-                bot_1step(army2, army1,coord_army2,coord_army1, i)
-                if(who_wins()):
+                self.bot_1step(army2, army1, i)
+                if(self.who_wins(army1,army2)):
                     break
-        return (who_wins())
+        print (self.who_wins(army1,army2))
+        return (self.who_wins(army1,army2))
 bat=Battle(2)
 #bat.find_strength([0,10,0,0,0,0])
-bat.autobattle([0,10,0,0,0,0],[0,0,20,0,0,0])
+bat.auto_battle([0,10,0,0,0,0],[0,0,20,0,0,0])

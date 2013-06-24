@@ -55,11 +55,9 @@ class Core():
         result=line.split(';')
         for i in range(len(result)):
             result[i]=int(result[i])
-        print result
+        return result
 
     def get_army_information(self,line):
-        #Ололо я індус дубль 2
-        #коли буде зайвий час - переробити
         result = []
         l = line.split(';')
         l[0] = l[0][1:]
@@ -67,7 +65,6 @@ class Core():
         for i in range(len(l)):
             result.append(int(l[i]))
         return result
-    #СВЯТА ДЖИГУРДА! Мені соромно за ті верхні два шматки коду :((((((( 
     
     def load_cells(self,x,y,current_name):
         map_file = open(current_name,'r')
@@ -211,8 +208,5 @@ class Core():
         new_line = '('+str(id_army)+';'+str(unit_1)+';'+str(unit_2)+';'+str(unit_3)+';'+str(unit_4)+';'+str(unit_5)+';'+str(move_max)+';'+str(move_current)+';'+str(fraction)+')' 
         file = open(current_name,'w')
         file.writelines(l.replace(base_line,new_line))
-        file.close() 
-core=Core()
-core.get_cell_information_cool('(0;0;3;0;0)')
-core.get_cell_information_cool('(0;0;3;0)')                  
+        file.close()               
 #[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[)]
