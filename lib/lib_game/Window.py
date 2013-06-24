@@ -108,7 +108,7 @@ class Window():
                     self.display.blit(textures[result_type],first_texture) 
                 if (fraction > 0) and (cell_type == 9):
                     first_texture = textures[cell_type+fraction-1].get_rect()
-                    first_texture.center=(350,25+self.big_step*j)
+                    first_texture.center=(45+self.big_step*i,25+self.big_step*j)
                     self.display.blit(textures[cell_type+fraction-1],first_texture)
                 elif((cell_type<3) and (army > 0)):
                     first_texture = textures[cell_type].get_rect()

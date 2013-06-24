@@ -132,6 +132,23 @@ class Core():
         if cell!= None:#x,y,type,fraction,id_army
             return self.get_cell_information(cell.group(0))
         
+    def load_base(self,fraction,current_name):
+        map_file = open(current_name,'r')
+        lines = map_file.readlines()
+        l = ''
+        for i in range(len(lines)):
+            l+=lines[i]
+        map_file.seek(0)
+        max1 = int(map_file.readline())
+        max2 = int(map_file.readline())        
+        map_file.close()
+        cell = None
+        while cell == None:
+            cell = re.search('[(][0-9]{1,3}[;][0-9]{1,3}[;]'+str(fraction)+'[;][0-2][;][0-9]+[)]',l)
+            if cell!= None:#x,y,type,fraction,id_army
+                return self.get_cell_information(cell.group(0))
+
+        
     def load_cells_for_transparent_textures(self,x,y,current_name):
         map_file = open(current_name,'r')
         lines = map_file.readlines()
@@ -149,7 +166,8 @@ class Core():
                 #if (((x-1+i)>=0) or ((y-1+j)>=0) or ((x-1+i)<=max1) or ((y-1+j)<=max2)):
                 if (((x-1+i)>=0) and ((y-1+j)>=0)) and (((x-1+i)<=max1) and ((y-1+j)<=max2)):
                     a = re.search('[(]'+str(x-1+i)+'[;]'+str(y-1+j)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
-                    result.append(self.get_cell_information(a.group(0)))
+                    if a!= None:
+                        result.append(self.get_cell_information(a.group(0)))
         return result
            
     def load_minimap_cells(self,current_name):
