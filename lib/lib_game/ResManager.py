@@ -8,6 +8,7 @@ class ResManager:
                  image_dir= 'image',
                  sound_dir= 'sound',
                  music_dir= 'music',
+                 menu_dir = 'menu',
                  textures_dir = 'textures',
                  terrain_dir = 'terrain',
                  arrows_dir = 'arrows',
@@ -20,6 +21,7 @@ class ResManager:
         self.terrain_dir = terrain_dir
         self.arrows_dir = arrows_dir
         self.units_dir = units_dir
+        self.menu_dir = menu_dir
 
     def get_image(self,name):
         fullname = os.path.join(self.data_dir, os.path.join(self.image_dir,name))
@@ -63,4 +65,18 @@ class ResManager:
             raise SystemExit, message
         else:
             image = image.convert_alpha()
-            return image        
+            return image
+        
+    def get_units_data(self,name):
+        return os.path.join(self.data_dir, os.path.join(self.units_dir, name))
+    
+    def get_menu(self,name):
+        fullname = os.path.join(self.data_dir, os.path.join(self.menu_dir, name))
+        try:
+            image = pygame.image.load(fullname)
+        except pygame.error, message:
+            print('Cannot load image; {0}'.format(name))
+            raise SystemExit, message
+        else:
+            image = image.convert_alpha()
+            return image                
