@@ -28,7 +28,16 @@ class Window():
         self.map_name = map_name
         self.stage = 0
         self.save_load_name = ''
-        
+    def print_res(self):#процедура вывода ресурсов на екран
+        font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
+        font2 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)        
+        item = u'milk'
+        item2 = u'cookies'
+        font1 = font1.render(item,0,(20,20,20))
+        self.display.blit(font1,(1000,350))
+        font2 = font2.render(item2,0,(20,20,20))
+        self.display.blit(font2,(1000,450))
+        pygame.display.update()
     def Main_Window(self):
         self.display = pygame.display.set_mode((1280,720))
         manager = ResManager()
