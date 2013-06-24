@@ -29,6 +29,7 @@ class Window():
         self.map_name = map_name
         self.stage = 0
         self.save_load_name = ''
+        self.fractions = [[1, 1, 0, 0, 3, 1],[2, 1, 0, 0, 0, 0]]
         
     def Main_Window(self):
         self.display = pygame.display.set_mode((1280,720))
@@ -137,7 +138,7 @@ class Window():
                 except AttributeError:
                     print 'Attributte error'
                     self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army,self.x_start,self.y_start\
-                     = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,0,0,self.file,0,0)
+                     = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,0,0,self.file,0,0)           
                 days = 'Day '+str(self.days+1)
                 fraction_out = str(self.fraction)
                 cell = Rect((800,650),(300,50))
@@ -170,12 +171,21 @@ class Window():
             if self.stage == 3:
                 self.stage,self.last_x,self.last_y,self.armies_list = self.mode.stage_3(event, self.stage, self.moving_army,self.file,self.id_army,self.last_x,self.last_y)
 
+            if self.stage == 4:
+                pass
+            
+            if self.stage == 5:
+                pass
 
             if self.stage == 6:
-                print self.stage
                 self.battle_dialog_window()
-                self.stage = self.mode.stage_6(event, self.battle_dialog_window,self.stage)
+                self.stage = self.mode.stage_6(event, self.battle_dialog_window,self.stage,self.reload_window,self.last_x,self.last_y)
 
+            if self.stage == 7:
+                pass
+            
+            if self.stage == 8:
+                pass
 
     def action_to_map_coords(self,x,y,last_x,last_y):
 #        self.Load_part_of_map(x,y)
@@ -245,6 +255,7 @@ class Window():
                 stage = 6
                 armies_lists = []
                 armies_lists.append(self.core.load_army(self.file, self.id_army))
+                self.core.change_cell(self.army_coords[0],self.army_coords[1],cell[2],self.fraction,self.id_army,self.file)                
                 cell = self.core.load_cell(self.army_coords[0]+x,self.army_coords[1]+y,self.file)
                 armies_lists.append(self.core.load_army(self.file, cell[4]))
                 print(armies_lists)

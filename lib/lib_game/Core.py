@@ -190,11 +190,45 @@ class Core():
         for i in range(len(lines)):
             l+=lines[i]        
         map_file.close()
-        print 'ID_ARMY = '+str(id_army)
         a = re.search('[(]'+str(id_army)+'[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}[;][0-9][)]',l)
         if a!= None:
-            return self.get_army_information(a.group(0))        
+            return self.get_army_information(a.group(0))
+    
+    def change_fraction_status(self,current_name,id,base,milk,cookies,farms,mines):
+        map_file = open(current_name,'r')
+        lines = map_file.readlines()
+        l = ''
+        for i in range(len(lines)):
+            l+=lines[i]        
+        map_file.close()                
+        fract = re.search('[(]'+str(id)+'[;][0-1][;][0-9]{1,6}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[)]',l)
+        if fract != None:
+            base_line = fract.group(0)
+        new_line = '('+str(id)+';'+str(base)+';'+str(milk)+';'+str(cookies)+';'+str(farms)+';'+str(mines)+')'
+        file = open(current_name,'w')
+        file.writelines(l.replace(base_line,new_line))
+        file.close()  
 
+    def get_fraction_information(self,line):
+        line=line[1:]
+        line=line[:-1]
+        result=line.split(';')
+        for i in range(len(result)):
+            result[i]=int(result[i])
+        return result
+        
+    def get_fraction_status(self,current_name,id):
+        map_file = open(current_name,'r')
+        lines = map_file.readlines()
+        l = ''
+        for i in range(len(lines)):
+            l+=lines[i]        
+        map_file.close()               
+        fract = re.search('[(]'+str(id)+'[;][0-1][;][0-9]{1,6}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[)]',l)
+        print (fract.group(0))
+        return (self.get_fraction_information(fract.group(0)))
+                
+            
     def change_army(self,current_name,id_army,unit_1,unit_2,unit_3,unit_4,unit_5,move_max,move_current,fraction):
         map_file = open(current_name,'r')
         lines = map_file.readlines()

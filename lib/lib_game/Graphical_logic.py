@@ -74,7 +74,13 @@ class Graphical_logic:
             current_steps = self.get_current_steps(list_id[i], filename)
             steps = abs(max_step-current_steps)
             self.change_current_steps(list_id[i], filename, current_steps, steps)
-
-                
-        
+#Fraction: id_fraction,base(0 - false, 1 - true),milk, cookies,farms,mines
+    def add_resources_for_current_fraction(self,fraction,filename):
+        fract = self.core.get_fraction_status(filename, fraction)
+        print fract
+        print 'FRACT'
+        self.core.change_fraction_status(filename, fraction, fract[1], fract[2]+fract[4], fract[3]+fract[5], fract[4], fract[5])
+        fract = self.core.get_fraction_status(filename, fraction)
+        print fract                
+        return fract
         
