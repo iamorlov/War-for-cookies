@@ -16,40 +16,46 @@ class Event_Handler():
         self.core = Core()
         self.graphical_logic = Graphical_logic()
 
-    def stage_0(self,event,fraction,days,action_to_map_coords,action_to_minimap_coords,last_x,last_y,filename):
-        x_start = y_start = 0
+#Уровень шаманизма - 90! NE ПbTauTeCb ПОНЯТb БЕЗНОГNМ 
+    def stage_0(self,event,fraction,days,action_to_map_coords,action_to_minimap_coords,last_x,last_y,filename,x_start,y_start):
         if (event[0]=='map_coords'):
-            print 'Coords = '+str(event[2])+' '+str(event[3])
+            try:
+                x_start,y_start = action_to_minimap_coords(last_x,last_y)# ВОТ ТЫ ГДЕ, СЦУКА!
+            except AttributeError:
+                print 'lol'
+                x_start,y_start = action_to_minimap_coords(event[2],event[3])# ВОТ ТЫ ГДЕ, СЦУКА!
+            #print 'Coords = '+str(event[2])+' '+str(event[3])
             stage, army_coords,id_army = action_to_map_coords(event[2],event[3],x_start,y_start)
+            return stage,last_x,last_y,fraction,days, army_coords,id_army,x_start,y_start
         elif (event[0]=='minimap_coords'):
             x_start,y_start = action_to_minimap_coords(event[2],event[3])# ВОТ ТЫ ГДЕ, СЦУКА!
             stage = event[1]
-            last_x = event[3]
-            last_y = event[4]
+            last_x = event[2]
+            last_y = event[3]
+            return stage,last_x,last_y,fraction,days, 0,0,x_start,y_start
         elif (event[0]=='save_mode'):
             stage = event[1]
+            return stage,last_x,last_y,fraction,days, 0,0,x_start,y_start
         elif (event[0]=='load_mode'):
             stage = event[1]
+            return stage,last_x,last_y,fraction,days, 0,0,x_start,y_start
         elif (event[0]=='end_of_army_steps'):
             print 'end_of_army_steps'
+            return stage,last_x,last_y,fraction,days, 0,0,x_start,y_start
         elif (event[0]=='base_mode'):
             stage = event[1]
+            return stage,last_x,last_y,fraction,days, 0,0,x_start,y_start
         elif (event[0]=='end_of_players_steps'):
             if fraction == 1:
                 self.graphical_logic.change_all_armies_steps_for_fraction(fraction, filename)                
                 fraction = 2
+                return 0,last_x,last_y,fraction,days, 0,0,x_start,y_start
             elif fraction == 2:
                 self.graphical_logic.change_all_armies_steps_for_fraction(fraction, filename)
                 fraction = 1
-                days +=1  
-        try:
-            str(stage)
-        except UnboundLocalError:
-            stage = 0
-        try:
-            return stage,last_x,last_y,fraction,days, army_coords,id_army,x_start,y_start
-        except UnboundLocalError:
-            return stage,last_x,last_y,fraction,days, 0,0,x_start,y_start
+                days +=1
+                return 0,last_x,last_y,fraction,days, 0,0,x_start,y_start
+
         
     def stage_1(self,event,name_for_saving,filename,action_for_save,reload_window,last_x,last_y):
         action_for_save(name_for_saving)
@@ -107,17 +113,17 @@ class Event_Handler():
                 reload_window(0,0)
         return stage, name_for_loading
     
-    def stage_3(self,event,stage,moving_army,filename,id_army):
+    def stage_3(self,event,stage,moving_army,filename,id_army,last_x,last_y):
         if (event[0] == 'move_army'):
             current_steps = self.graphical_logic.get_current_steps(id_army, filename)
             if current_steps > 0:
-                move, stage = moving_army(event[1],event[2])
+                move, stage,last_x,last_y = moving_army(event[1],event[2],last_x,last_y)
                 if move == True:
                     self.graphical_logic.change_current_steps(id_army, filename, current_steps, -1)
 
         elif (event[0] == 'end_of_army_steps'):
             stage = event[1]
-        return stage
+        return stage,last_x,last_y
     
     
     def stage_6(self,event,battle_dialog,stage):
