@@ -100,3 +100,24 @@ class Resources():
                 textures.append(texture)  
         return textures
     
+    def textures_for_battle_gialog_window(self):
+        textures = []
+        names = ['dialog','buttom']
+        for i in range(len(names)):
+            if i ==2:
+                for j in range(3):                       
+                    texture = self.manager.get_units(names[i]+'_'+str(j+1)+".png")
+                    textures.append(texture)
+            else:  
+                    texture = self.manager.get_units(names[i]+".png")
+                    textures.append(texture)                
+        return textures
+    
+    def textures_for_menu(self):
+        textures = []
+        names = ['','_1']
+        for i in range(len(names)):
+            for j in range(4):
+                texture = self.manager.get_units('0'+str(j+1)+names[i]+".png")
+                textures.append(texture)                
+        return textures        
