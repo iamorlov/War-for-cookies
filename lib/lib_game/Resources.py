@@ -5,7 +5,7 @@ Created on 16 черв. 2013
 @author: antimoskal
 '''
 import pygame
-from lib import ResManager
+from ResManager import ResManager
 
 class Resources():
     
@@ -99,3 +99,4 @@ class Resources():
                 texture = pygame.transform.scale(texture,(50,50))
                 textures.append(texture)  
         return textures
+    

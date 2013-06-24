@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pygame, sys
 from Core import Core
-from lib import ResManager
+from ResManager import ResManager
 from Resources import *
 from Graphical_logic import *
 from Events import *
@@ -28,6 +28,7 @@ class Window():
         self.map_name = map_name
         self.stage = 0
         self.save_load_name = ''
+
     def print_res(self):#процедура вывода ресурсов на екран
         font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
         font2 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)        
@@ -38,6 +39,7 @@ class Window():
         font2 = font2.render(item2,0,(20,20,20))
         self.display.blit(font2,(1000,450))
         pygame.display.update()
+        
     def Main_Window(self):
         self.display = pygame.display.set_mode((1280,720))
         manager = ResManager()
@@ -215,14 +217,14 @@ class Window():
                 self.army_coords[1] += y
                 print 'last_x '+str(last_x)+'last_y = '+str(last_y)
                 try:
-                    if (self.army_coords[1] - self.x_start >=7):
+                    if (self.army_coords[1] - self.x_start >7):
                         self.x_start+=7
                         last_x = self.x_start+7
                         if (self.x_start>self.steps-1):
                             self.x_start = self.steps - self.big_steps
                         self.reload_window(last_x,last_y)
                         print 'last_x '+str(last_x)+'last_y = '+str(last_y)
-                    elif (self.army_coords[0]- self.y_start >=7):
+                    elif (self.army_coords[0]- self.y_start >7):
                         self.y_start +=7
                         last_y = self.y_start+7
                         if (self.y_start>self.steps-1):
@@ -230,14 +232,14 @@ class Window():
                         print 'Event!'
                         self.reload_window(last_x,last_y)
                         print 'last_x '+str(last_x)+'last_y = '+str(last_y)
-                    elif (self.army_coords[1] - self.x_start <=-7):
+                    elif (self.army_coords[1] - self.x_start <-7):
                         self.x_start-=7
                         if (self.x_start<0):
                             self.x_start = 0
                             last_x = self.x_start+7
                         self.reload_window(last_x,last_y)
                         print 'last_x '+str(last_x)+'last_y = '+str(last_y)
-                    elif (self.army_coords[0]- self.y_start <=-7):
+                    elif (self.army_coords[0]- self.y_start <-7):
                         self.y_start -=7
                         last_y = self.y_start+7
                         if (self.y_start<0):

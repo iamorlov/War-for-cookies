@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pygame, sys
 from Core import *
-from lib import ResManager
+from ResManager import ResManager
 from Resources import *
 from Graphical_logic import *
 from Events import *

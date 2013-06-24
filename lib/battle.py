@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
-import os, math, unit_w, lib_game.core
+import os, math, unit_w
+from lib_game import Core
 from random import randint
 class Battle():
     def __init__(self):
@@ -8,7 +9,7 @@ class Battle():
         mob_infantry=unit_w.Unit('data\\units\\mobinf.txt')
         tank=unit_w.Unit('data\\units\\tank.txt')
         artillery=unit_w.Unit('data\\units\\artillery.txt')
-        self.core=core.Core()
+        self.core=Core()
         self.units_list=[infantry,marines,mob_infantry,tank,artillery]
         self.hp_last1=[infantry.get_abil('xp',0),marines.get_abil('xp',0),mob_infantry.get_abil('xp',0),tank.get_abil('xp',0),artillery.get_abil('xp',0)]
         self.hp_last2=[infantry.get_abil('xp',0),marines.get_abil('xp',0),mob_infantry.get_abil('xp',0),tank.get_abil('xp',0),artillery.get_abil('xp',0)]
