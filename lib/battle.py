@@ -54,23 +54,23 @@ class Battle():
         if (fraction==0):
             self.move_last1[type1-1]=0#no more moving
             damag=math.ceil((army1[type1]*randint(3,5)*self.units_list[type1-1].get_abil('kick',0)*self.units_list[type1-1].get_abil('bonus',type2))/4.0)#количество*тычка*бонус
-            last_health=math.modf(((army2[type2]*self.units_list[type2].get_abil('xp',0))+self.hp_last2[type2]-damag)/self.units_list[type2].get_abil('xp',0))
+            last_health=math.modf(((army2[type2+1]*self.units_list[type2].get_abil('xp',0))+self.hp_last2[type2]-damag)/self.units_list[type2].get_abil('xp',0))
             if(last_health[1]<0):#если убили
                 self.hp_last2[type2]=0
-                army2[type2]=0
+                army2[type2+1]=0
             else:
                 self.hp_last2[type2]=last_health[0]*self.units_list[type2].get_abil('xp',0)
-                army2[type2]= last_health[1]
+                army2[type2+1]= last_health[1]
         if (fraction==1):
             self.move_last2[type1-1]=0#no more moving
             damag=math.ceil((army1[type1]*randint(3,5)*self.units_list[type1-1].get_abil('kick',0)*self.units_list[type1-1].get_abil('bonus',type2))/4.0)#количество*тычка*бонус
-            last_health=math.modf(((army2[type2]*self.units_list[type2].get_abil('xp',0))+self.hp_last1[type2]-damag)/self.units_list[type2].get_abil('xp',0))
+            last_health=math.modf(((army2[type2+1]*self.units_list[type2].get_abil('xp',0))+self.hp_last1[type2]-damag)/self.units_list[type2].get_abil('xp',0))
             if(last_health[1]<0):#если убили
                 self.hp_last1[type2]=0
-                army2[type2]=0
+                army2[type2+1]=0
             else:
                 self.hp_last1[type2]=last_health[0]*self.units_list[type2].get_abil('xp',0)
-                army2[type2]= last_health[1]
+                army2[type2+1]= last_health[1]
         return army2
     
     def is_in_range(self,coord_army1,coord_army2,attacker,victim):
@@ -126,7 +126,7 @@ class Battle():
         alive_list=self.get_alive(army2)
         false_army=[-1,0,0,0,0,0]
         no_in_range=0#если ни одного в пределах досягаемости за ход, это - просто чтобы топал
-        victim=self.get_vunerable(attacker,army2)-1
+        victim=self.get_vunerable(attacker,army2)
         victim_chosen=False
         while(victim_chosen == False):
             distance_x=army1_coord[attacker][0]-army2_coord[victim][0]
@@ -143,40 +143,26 @@ class Battle():
             else:
                 victim_chosen=True
                 victim=self.get_vunerable(attacker,army2)
-        print victim
-        print attacker
-        print army2_coord[victim]
         for i in range(self.units_list[attacker].get_abil('move',0)):
             distance_x=army1_coord[attacker][0]-army2_coord[victim][0]#-self.units_list[attacker].get_abil('range',0)
             distance_y=army1_coord[attacker][1]-army2_coord[victim][1]#-self.units_list[attacker].get_abil('range',0)
             in_range_by_x=abs(distance_x)-self.units_list[attacker].get_abil('range',0)<=0
             in_range_by_y=abs(distance_y)-self.units_list[attacker].get_abil('range',0)<=0    
             if (in_range_by_x and in_range_by_y):#если кто-то уже в радиусе атаки
-                
                 army2=self.kick(army1,army2,attacker+1,victim,fraction)#то это его проблемы
-                print 'kick'
                 break
             list_plase=army1_coord[attacker][1]*20+army1_coord[attacker][0]
             if (abs(distance_x)>self.units_list[attacker].get_abil('range',0)):
-                if (distance_x<0 and (self.cells_list[list_plase-11][2]<3)and (self.cells_list[list_plase-11][3]==0)):
-                    army1_coord=self.bot_moving(attacker, 1, 0,fraction)  #move left
-                    print 'left'            
-                elif(self.cells_list[list_plase+11][2]<3 and self.cells_list[list_plase-11][3]==0):
+                if (distance_x<0 and (self.cells_list[list_plase-11][3]==0)):
+                    army1_coord=self.bot_moving(attacker, 1, 0,fraction)  #move left           
+                elif( self.cells_list[list_plase-11][3]==0):
                     army1_coord=self.bot_moving(attacker, -1, 0,fraction)  #move right
-                    print 'right'
             else:
                 if (abs(distance_y)>self.units_list[attacker].get_abil('range',0)):
-                    if (distance_y<0 and self.cells_list[list_plase-1][2]<3 and (self.cells_list[list_plase-1][3]==0)):
+                    if (distance_y<0 and (self.cells_list[list_plase-1][3]==0)):
                         army1_coord=self.bot_moving(attacker, 0, -1,fraction)      #move up
-                        print 'up'
-                    elif(self.cells_list[list_plase+1][2]<3 and (self.cells_list[list_plase+1][3]==0)):
+                    elif((self.cells_list[list_plase+1][3]==0)):
                         army1_coord=self.bot_moving(attacker, 0, 1,fraction)      #move down
-                        print 'down'
-                
-        print army1
-        print army1_coord
-        print army2
-        print army2_coord
                         
     def who_wins(self,army1,army2):
         countwarrs1=0
@@ -206,7 +192,9 @@ class Battle():
                     if(self.who_wins(army1,army2)>0):
                         break
         #print (self.who_wins(army1,army2))
-        return (self.who_wins(army1,army2))
-bat=Battle(2)
+        if(self.who_wins(army1,army2)==1):
+            return army1,army2
+        return army2,army1
+#bat=Battle(1)
 #bat.find_strength([0,10,0,0,0,0])
-bat.auto_battle([0,100,40,30,10,8],[1,50,20,10,10,1])
+#bat.auto_battle([0,100,20,0,0,8],[1,50,20,0,0,4])
