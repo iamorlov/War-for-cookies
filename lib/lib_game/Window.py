@@ -132,11 +132,9 @@ class Window():
         if (event != None):
             if self.stage == 0:
                 try:
-                    print 'last_x '+str(self.last_x)+'last_y = '+str(self.last_y)
                     self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army,self.x_start,self.y_start\
                      = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,self.last_x,self.last_y,self.file,self.x_start,self.y_start)
                 except AttributeError:
-                    print 'Attributte error'
                     self.stage,self.last_x,self.last_y,self.fraction,self.days,self.army_coords,self.id_army,self.x_start,self.y_start\
                      = self.mode.stage_0(event, self.fraction, self.days, self.action_to_map_coords, self.action_to_minimap_coords,0,0,self.file,0,0)           
                 days = 'Day '+str(self.days+1)
@@ -260,12 +258,35 @@ class Window():
                 armies_lists.append(self.core.load_army(self.file, cell[4]))
                 print(armies_lists)
                 return False, stage,last_x,last_y,armies_lists
-            elif (((cell[2]>=7) and (cell[2]<9)) and (cell[4] == 0)):
-                stage = 4
+            elif (((cell[2]>=7) and (cell[2]<9)) and (cell[3] != self.fraction)):
+                stage = 3
+                lose_fraction  = cell[3]
+                if lose_fraction > 0:
+                    if cell[2] == 7:
+                        frac = self.core.get_fraction_status(self.file, lose_fraction)
+                        self.core.change_fraction_status(self.file, lose_fraction, frac[1], frac[2], frac[3], frac[4]-1, frac[5])
+                        frac = self.core.get_fraction_status(self.file, self.fraction)
+                        self.core.change_fraction_status(self.file, self.fraction, frac[1], frac[2], frac[3], frac[4]+1, frac[5])
+                        self.core.change_cell(cell[0], cell[1], 7, self.fraction, 0, self.file)
+                    if cell[2] == 8:
+                        frac = self.core.get_fraction_status(self.file, lose_fraction)
+                        self.core.change_fraction_status(self.file, lose_fraction, frac[1], frac[2], frac[3], frac[4], frac[5]-1)
+                        frac = self.core.get_fraction_status(self.file, self.fraction)
+                        self.core.change_fraction_status(self.file, self.fraction, frac[1], frac[2], frac[3], frac[4], frac[5]+1)
+                        self.core.change_cell(cell[0], cell[1], 8, self.fraction, 0, self.file)                        
+                else:
+                    if cell[2] == 7:
+                        frac = self.core.get_fraction_status(self.file, self.fraction)
+                        self.core.change_fraction_status(self.file, self.fraction, frac[1], frac[2], frac[3], frac[4]+1, frac[5])
+                        self.core.change_cell(cell[0], cell[1], 7, self.fraction, 0, self.file)
+                    if cell[2] == 8:
+                        frac = self.core.get_fraction_status(self.file, self.fraction)
+                        self.core.change_fraction_status(self.file, self.fraction, frac[1], frac[2], frac[3], frac[4], frac[5]+1)
+                        self.core.change_cell(cell[0], cell[1], 8, self.fraction, 0, self.file)
                 return False, stage,last_x,last_y,armies_lists
-            elif (((cell[2]>=7) and (cell[2]<9)) and (cell[4] == 0)):
-                stage = 5
-                return False, stage,last_x,last_y,armies_lists            
+#            elif (((cell[2]>=7)) and (cell[4] == 0)):
+#                stage = 5
+#                return False, stage,last_x,last_y,armies_lists            
             else:
                 return False,3,last_x,self.last_y,armies_lists
 
@@ -280,8 +301,17 @@ class Window():
             self.display.blit(textures[i+1],first_textures)
         font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)       
 
-        pygame.display.flip()                
-            
+        pygame.display.flip()
+    
+    def winrar_window(self,fraction):                
+        textures = self.resources.textures_for_battle_gialog_window()
+        first_textures = textures[0].get_rect()
+        first_textures.center=(450,350)
+        font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
+        item = u'Fraction '+str()
+        font1 = font1.render(item,0,(20,20,20))
+        self.display.blit(font1,(385,360)) 
+        
     def action_to_minimap_coords(self,x,y): #вернуть стартовые х и у!
         self.Load_part_of_map(x,y)
         cells_list,x_coord_start,y_coord_start = self.core.load_cells(x, y, self.file)

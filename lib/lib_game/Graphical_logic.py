@@ -79,7 +79,7 @@ class Graphical_logic:
         fract = self.core.get_fraction_status(filename, fraction)
         print fract
         print 'FRACT'
-        self.core.change_fraction_status(filename, fraction, fract[1], fract[2]+fract[4], fract[3]+fract[5], fract[4], fract[5])
+        self.core.change_fraction_status(filename, fraction, fract[1], fract[2]+fract[4]*10, fract[3]+fract[5]*10, fract[4], fract[5])
         fract = self.core.get_fraction_status(filename, fraction)
         print fract                
         return fract
