@@ -92,7 +92,7 @@ class Resources():
     def textures_for_army(self):
         textures = []
         fraction = ['neutral','red','blue']
-        type_units=['','_infantry','_marines','_mob_inf','_tank','_artillery']
+        type_units=['','_infantry','_marines','_btr','_tank','_artillery']
         for i in range(len(fraction)):
             for j in range(len(type_units)):
                 texture = self.manager.get_units(fraction[i]+type_units[j]+".png")
@@ -104,20 +104,18 @@ class Resources():
         textures = []
         names = ['dialog','buttom']
         for i in range(len(names)):
-            if i ==2:
+            if i == 1:
                 for j in range(3):                       
-                    texture = self.manager.get_units(names[i]+'_'+str(j+1)+".png")
+                    texture = self.manager.get_menu(names[i]+'_'+str(j+1)+".png")
                     textures.append(texture)
             else:  
-                    texture = self.manager.get_units(names[i]+".png")
+                    texture = self.manager.get_menu(names[i]+".png")
                     textures.append(texture)                
         return textures
     
     def textures_for_menu(self):
         textures = []
-        names = ['','_1']
-        for i in range(len(names)):
-            for j in range(4):
-                texture = self.manager.get_units('0'+str(j+1)+names[i]+".png")
-                textures.append(texture)                
+        for j in range(4):
+            texture = self.manager.get_menu('0'+str(j+1)+".png")
+            textures.append(texture)               
         return textures        

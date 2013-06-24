@@ -7,6 +7,7 @@ from Graphical_logic import *
 from Events import *
 from Event_Handler import Event_Handler
 
+
 class Window():
      
     def __init__(self,map_name):
@@ -28,17 +29,6 @@ class Window():
         self.map_name = map_name
         self.stage = 0
         self.save_load_name = ''
-
-    def print_res(self):#процедура вывода ресурсов на екран
-        font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
-        font2 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)        
-        item = u'milk'
-        item2 = u'cookies'
-        font1 = font1.render(item,0,(20,20,20))
-        self.display.blit(font1,(1000,350))
-        font2 = font2.render(item2,0,(20,20,20))
-        self.display.blit(font2,(1000,450))
-        pygame.display.update()
         
     def Main_Window(self):
         self.display = pygame.display.set_mode((1280,720))
@@ -83,14 +73,11 @@ class Window():
         self.Minimaps_grid()
         
     def game_buttons(self):
-        x = 1150
-        y = 0
-        colour = self.resources.colours()
+        textures = self.resources.textures_for_menu()
         for i in range(4):
-            cell = Rect((x,y),(130,175))
-            pygame.draw.rect(self.display,colour[i],cell,0)
-            pygame.draw.rect(self.display,(0,0,0),cell,1)
-            y+=175
+            first_textures =textures[i].get_rect()
+            first_textures.center=(1215,90+180*i)
+            self.display.blit(textures[i],first_textures)  
         pygame.display.update()
 
     def reload_window(self,x,y):
@@ -120,7 +107,7 @@ class Window():
                     self.display.blit(textures[result_type],first_texture) 
                 if (fraction > 0) and (cell_type == 9):
                     first_texture = textures[cell_type+fraction-1].get_rect()
-                    first_texture.center=(45+self.big_step*i,25+self.big_step*j)
+                    first_texture.center=(350,25+self.big_step*j)
                     self.display.blit(textures[cell_type+fraction-1],first_texture)
                 elif((cell_type<3) and (army > 0)):
                     first_texture = textures[cell_type].get_rect()
@@ -217,30 +204,30 @@ class Window():
                 self.army_coords[1] += y
                 print 'last_x '+str(last_x)+'last_y = '+str(last_y)
                 try:
-                    if (self.army_coords[1] - self.x_start >7):
-                        self.x_start+=7
+                    if (self.army_coords[1] - self.x_start >6):
+                        self.x_start+=5
                         last_x = self.x_start+7
                         if (self.x_start>self.steps-1):
                             self.x_start = self.steps - self.big_steps
                         self.reload_window(last_x,last_y)
                         print 'last_x '+str(last_x)+'last_y = '+str(last_y)
-                    elif (self.army_coords[0]- self.y_start >7):
-                        self.y_start +=7
+                    elif (self.army_coords[0]- self.y_start >6):
+                        self.y_start +=5
                         last_y = self.y_start+7
                         if (self.y_start>self.steps-1):
                             self.y_start = self.steps - self.big_steps
                         print 'Event!'
                         self.reload_window(last_x,last_y)
                         print 'last_x '+str(last_x)+'last_y = '+str(last_y)
-                    elif (self.army_coords[1] - self.x_start <-7):
-                        self.x_start-=7
+                    elif (self.army_coords[1] - self.last_x <-6):
+                        self.x_start-=5
                         if (self.x_start<0):
                             self.x_start = 0
                             last_x = self.x_start+7
                         self.reload_window(last_x,last_y)
                         print 'last_x '+str(last_x)+'last_y = '+str(last_y)
-                    elif (self.army_coords[0]- self.y_start <-7):
-                        self.y_start -=7
+                    elif (self.army_coords[0]- self.last_y <-6):
+                        self.y_start -=5
                         last_y = self.y_start+7
                         if (self.y_start<0):
                             self.y_start = 0
@@ -260,15 +247,16 @@ class Window():
                 return False,3,last_x,self.last_y
 
     def battle_dialog_window(self):
-        cell = Rect((300,250),(300,200))
-        pygame.draw.rect(self.display,(204,204,204),cell,0)
+        textures = self.resources.textures_for_battle_gialog_window()
+        first_textures = textures[0].get_rect()
+        first_textures.center=(450,350)
+        self.display.blit(textures[0],first_textures)
+        for i in range(3):
+            first_textures = textures[i+1].get_rect()
+            first_textures.center=(350+100*i,450)
+            self.display.blit(textures[i+1],first_textures)
         font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)       
-        cell = Rect((300,400),(100,50))
-        pygame.draw.rect(self.display,(50,50,150),cell,0)
-        cell = Rect((400,400),(100,50))
-        pygame.draw.rect(self.display,(50,150,150),cell,0)
-        cell = Rect((500,400),(100,50))
-        pygame.draw.rect(self.display,(150,150,150),cell,0)
+
         pygame.display.flip()                
             
     def action_to_minimap_coords(self,x,y): #вернуть стартовые х и у!

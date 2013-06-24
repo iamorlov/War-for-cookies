@@ -24,7 +24,7 @@ class Events():
             return minimap_x, minimap_y
     
     def get_battle_mode(self,click_coords):
-        mode = click_coords[0]//100
+        mode = (click_coords[0]-300)//100
         return mode
     
     def get_buttons_type(self,stage,click_coords):
@@ -64,14 +64,15 @@ class Events():
             else:
                 return None
         if stage == 6:
-#            if (click_coords[1]>400 and click_coords<450):
+            if (click_coords[1]>450 and click_coords[1]<500):
                 mode = self.get_battle_mode(click_coords)
                 if mode == 0:
-                    stage = 8
-                if mode == 1:
                     stage = 7
+                if mode == 1:
+                    stage = 8
                 if mode == 2:
                     stage = 3
+
                 return ['battle_mode',stage]
 
     def keydown_terms(self,stage):
