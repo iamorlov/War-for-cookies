@@ -127,6 +127,9 @@ class MenuScene(lib.Scene):
          pygame.mixer.music.play()
          if(i==0):
           pygame.mixer.music.stop()
+    def clix(self):
+         pygame.mixer.music.load('data/music/clix1.ogg')
+         pygame.mixer.music.play()
     def video(self):
         overlay = pygame.display.set_mode((800,600))
         m=pygame.movie.Movie('data/video/preview234.mpg')
@@ -364,9 +367,11 @@ class MenuScene(lib.Scene):
                 if e.key == pygame.K_DOWN:
                     self.menu.down()
                     self.menu.background()
+                    self.clix()
                 elif e.key == pygame.K_UP:
                     self.menu.up()
                     self.menu.background()
+                    self.clix()
                 elif e.key == pygame.K_RETURN:
                     self.menu.call()
 
