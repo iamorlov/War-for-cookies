@@ -3,19 +3,20 @@ import os, math, unit_w
 from lib_game import Core
 from random import randint
 class Battle():
-    def __init__(self):
+    def __init__(self, filename):
         infantry=unit_w.Unit('data\\units\\infantry.txt')
         marines=unit_w.Unit('data\\units\\marines.txt')
         mob_infantry=unit_w.Unit('data\\units\\mobinf.txt')
         tank=unit_w.Unit('data\\units\\tank.txt')
         artillery=unit_w.Unit('data\\units\\artillery.txt')
+        filename=('data\\battle_maps\\'+str(filename))
         self.core=Core()
         self.units_list=[infantry,marines,mob_infantry,tank,artillery]
         self.hp_last1=[infantry.get_abil('xp',0),marines.get_abil('xp',0),mob_infantry.get_abil('xp',0),tank.get_abil('xp',0),artillery.get_abil('xp',0)]
         self.hp_last2=[infantry.get_abil('xp',0),marines.get_abil('xp',0),mob_infantry.get_abil('xp',0),tank.get_abil('xp',0),artillery.get_abil('xp',0)]
         self.move_last1=[infantry.get_abil('move',0),marines.get_abil('move',0),mob_infantry.get_abil('move',0),tank.get_abil('move',0),artillery.get_abil('move',0)]
         self.move_last1=[infantry.get_abil('move',0),marines.get_abil('move',0),mob_infantry.get_abil('move',0),tank.get_abil('move',0),artillery.get_abil('move',0)]
-        self.cells_list=core.load_battle_cells(self,current_name)
+        self.cells_list=self.core.load_battle_cells(filename)
         self.coord_army1=get_army_coords(self.cells_list,0)
         self.coord_army2=get_army_coords(self.cells_list,0)
         #остаток здоровья и остаток хода
@@ -173,6 +174,6 @@ class Battle():
                 if(who_wins()):
                     break
         return (who_wins())
-bat=Battle()
+bat=Battle(2)
 #bat.find_strength([0,10,0,0,0,0])
 bat.autobattle([0,10,0,0,0,0],[0,0,20,0,0,0])

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import pygame, sys,resources, battle, core,events
+import pygame, sys,resources, battle, Core,events
 class Battle_window():
     def __init__(self, x,y, current_name):# Где начался бой
         pygame.init()

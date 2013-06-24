@@ -50,41 +50,12 @@ class Core():
         file.close()
     
     def get_cell_information(self,line):
-        #Ололо я індус
-        result = []
-        x = re.search('[(][0-9]{1,3}[;]', line)
-        x = x.group(0)
-        len_x = len(x)
-        x = x[1:]
-        x = x[:-1]
-        
-        result.append(int(x))
-        y = re.search('[(][0-9]{1,3}[;][0-9]{1,3}[;]', line)
-        y = y.group(0)
-        len_y = len(y)
-        y = y[len_x:]
-        y = y[:-1]
-
-        result.append(int(y))
-        t = re.search('[(][0-9]{1,3}[;][0-9]{1,3}[;][0-9]{1,2}[;]', line)
-        t = t.group(0)
-        len_t = len(t)
-        t = t[len_y:]
-        t = t[:-1]
-
-        result.append(int(t))
-        f = re.search('[(][0-9]{1,3}[;][0-9]{1,3}[;][0-9]{1,2}[;][0-2][;]', line)
-        f = f.group(0)
-        temp_len = len(f)
-        f = f[len_t:]
-        f = f[:-1]
-
-        result.append(int(f))
-        id_army = re.search('[(][0-9]{1,3}[;][0-9]{1,3}[;][0-9]{1,2}[;][0-2][;][0-9]+', line)
-        id_army = id_army.group(0)
-        id_army = id_army[temp_len:]
-        result.append(int(id_army))
-        return result               
+        line=line[1:]
+        line=line[:-1]
+        result=line.split(';')
+        for i in range(len(result)):
+            result[i]=int(result[i])
+        print result
 
     def get_army_information(self,line):
         #Ололо я індус дубль 2
@@ -191,12 +162,12 @@ class Core():
         for i in range(len(lines)):
             l+=lines[i]
         map_file.seek(0)
-        max1 = map_file.readline()
-        max2 = map_file.readline()
+        max1 = int(map_file.readline())
+        max2 = int(map_file.readline())
         map_file.close()
         list_coords = []
         a = re.findall('[(][0-9]{1,3}[;][0-9]{1,3}[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
-        for i in range(int(max1)*int(max2)):
+        for i in range(max1*max2):
            list_coords.append(self.get_cell_information(a[i]))
         return list_coords
 
@@ -240,5 +211,8 @@ class Core():
         new_line = '('+str(id_army)+';'+str(unit_1)+';'+str(unit_2)+';'+str(unit_3)+';'+str(unit_4)+';'+str(unit_5)+';'+str(move_max)+';'+str(move_current)+';'+str(fraction)+')' 
         file = open(current_name,'w')
         file.writelines(l.replace(base_line,new_line))
-        file.close()                   
+        file.close() 
+core=Core()
+core.get_cell_information_cool('(0;0;3;0;0)')
+core.get_cell_information_cool('(0;0;3;0)')                  
 #[(][0-9]{1,3}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[)]
