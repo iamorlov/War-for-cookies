@@ -190,8 +190,8 @@ class Core():
         for i in range(len(lines)):
             l+=lines[i]        
         map_file.close()
+        print 'ID_ARMY = '+str(id_army)
         a = re.search('[(]'+str(id_army)+'[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,4}[;][0-9]{1,2}[;][0-9]{1,2}[;][0-9][)]',l)
-        print a.group(0)
         if a!= None:
             return self.get_army_information(a.group(0))        
 

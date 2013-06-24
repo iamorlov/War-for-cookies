@@ -114,16 +114,21 @@ class Event_Handler():
         return stage, name_for_loading
     
     def stage_3(self,event,stage,moving_army,filename,id_army,last_x,last_y):
+        armies_list = 0
         if (event[0] == 'move_army'):
             current_steps = self.graphical_logic.get_current_steps(id_army, filename)
             if current_steps > 0:
-                move, stage,last_x,last_y = moving_army(event[1],event[2],last_x,last_y)
+                try:
+                    move, stage,last_x,last_y,armies_list = moving_army(event[1],event[2],last_x,last_y)
+                except TypeError:
+                    move = False
                 if move == True:
                     self.graphical_logic.change_current_steps(id_army, filename, current_steps, -1)
 
         elif (event[0] == 'end_of_army_steps'):
             stage = event[1]
-        return stage,last_x,last_y
+            armies_list = 0
+        return stage,last_x,last_y,armies_list
     
     
     def stage_6(self,event,battle_dialog,stage):

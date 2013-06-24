@@ -168,7 +168,7 @@ class Window():
                     print self.save_load_name
 
             if self.stage == 3:
-                self.stage,self.last_x,self.last_y = self.mode.stage_3(event, self.stage, self.moving_army,self.file,self.id_army,self.last_x,self.last_y)
+                self.stage,self.last_x,self.last_y,self.armies_list = self.mode.stage_3(event, self.stage, self.moving_army,self.file,self.id_army,self.last_x,self.last_y)
 
 
             if self.stage == 6:
@@ -191,6 +191,7 @@ class Window():
 
 
     def moving_army(self,x,y,last_x,last_y):
+        armies_lists = 0
         cell = self.core.load_cell(self.army_coords[0],self.army_coords[1],self.file)
         if cell[4]!=0:
             self.id_army = cell[4]
@@ -239,12 +240,23 @@ class Window():
                 except AttributeError:
                     self.reload_window(0,0)
                     print 'last_x '+str(last_x)+'last_y = '+str(last_y)
-                return True,3, last_x,last_y
+                return True,3, last_x,last_y,0
             elif (((cell[2]>=0) and (cell[2]<3)) and(cell[3]!=self.fraction) and (cell[4] != 0)):
                 stage = 6
-                return False, stage,last_x,last_y
+                armies_lists = []
+                armies_lists.append(self.core.load_army(self.file, self.id_army))
+                cell = self.core.load_cell(self.army_coords[0]+x,self.army_coords[1]+y,self.file)
+                armies_lists.append(self.core.load_army(self.file, cell[4]))
+                print(armies_lists)
+                return False, stage,last_x,last_y,armies_lists
+            elif (((cell[2]>=7) and (cell[2]<9)) and (cell[4] == 0)):
+                stage = 4
+                return False, stage,last_x,last_y,armies_lists
+            elif (((cell[2]>=7) and (cell[2]<9)) and (cell[4] == 0)):
+                stage = 5
+                return False, stage,last_x,last_y,armies_lists            
             else:
-                return False,3,last_x,self.last_y
+                return False,3,last_x,self.last_y,armies_lists
 
     def battle_dialog_window(self):
         textures = self.resources.textures_for_battle_gialog_window()
