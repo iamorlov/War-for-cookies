@@ -91,32 +91,18 @@ class Battle():
     def bot_moving(self,unit_number, dir_x, dir_y,fraction):
         if (fraction==0):
             temp=self.cells_list[self.coord_army1[unit_number][0]*11+self.coord_army1[unit_number][1]]
-            if (temp[0]+dir_x>-1 and temp[0]+dir_x<20 and temp[1]+dir_y>-1 and temp[1]+dir_y<11):
-                destination=self.cells_list[(self.coord_army1[unit_number][0]+dir_x)*20+(self.coord_army1[unit_number][1]+dir_y)]
-                if (destination[3]<2 and destination[2]==0):
-                    self.cells_list[self.coord_army1[unit_number][0]*11+self.coord_army1[unit_number][1]][3]=0
-                    self.cells_list[(self.coord_army1[unit_number][0]+dir_x)*11+(self.coord_army1[unit_number][1]-dir_y)][3]=temp[3]
-                    self.coord_army1[unit_number][0]+=dir_x
-                    self.coord_army1[unit_number][1]+=dir_y
-                    return self.coord_army1
-                else:
-                    return self.coord_army2
-            else:
-                return self.coord_army2
+            self.cells_list[self.coord_army1[unit_number][0]*11+self.coord_army1[unit_number][1]][3]=0
+            self.cells_list[(self.coord_army1[unit_number][0]+dir_x)*11+(self.coord_army1[unit_number][1]-dir_y)][3]=temp[3]
+            self.coord_army1[unit_number][0]+=dir_x
+            self.coord_army1[unit_number][1]+=dir_y
+            return self.coord_army1
         elif (fraction==1):
-            temp=self.cells_list[self.coord_army2[unit_number][0]*11+self.coord_army2[unit_number][1]]
-            if (temp[0]+dir_x>-1 and temp[0]+dir_x<20 and temp[1]+dir_y>-1 and temp[1]+dir_y<11):
-                destination=self.cells_list[(self.coord_army2[unit_number][0]+dir_x)*20+(self.coord_army2[unit_number][1]+dir_y)]
-                if (destination[3]<2 and destination[2]==0):
-                    self.cells_list[self.coord_army2[unit_number][0]*11+self.coord_army2[unit_number][1]][3]=0
-                    self.cells_list[(self.coord_army2[unit_number][0]+dir_x)*11+(self.coord_army2[unit_number][1]-dir_y)][3]=temp[3]
-                    self.coord_army2[unit_number][0]+=dir_x
-                    self.coord_army2[unit_number][1]+=dir_y
-                    return self.coord_army2
-                else:
-                    return self.coord_army2
-            else:
-                return self.coord_army2
+            temp=self.cells_list[self.coord_army2[unit_number][0]*10+self.coord_army2[unit_number][1]]
+            self.cells_list[self.coord_army2[unit_number][0]*10+self.coord_army2[unit_number][1]][3]=0
+            self.cells_list[(self.coord_army2[unit_number][0]+dir_x)*10+(self.coord_army2[unit_number][1]-dir_y)][3]=temp[3]
+            self.coord_army2[unit_number][0]+=dir_x
+            self.coord_army2[unit_number][1]+=dir_y
+            return self.coord_army2
     def get_army_coords(self,fraction):
         coord_army=[[0,0],[0,0],[0,0],[0,0],[0,0]]
         for i in range(len(self.cells_list)):
@@ -154,16 +140,16 @@ class Battle():
             in_range_by_x=abs(distance_x)-self.units_list[attacker].get_abil('range',0)<=0
             in_range_by_y=abs(distance_y)-self.units_list[attacker].get_abil('range',0)<=0    
             if (in_range_by_x and in_range_by_y):#если кто-то уже в радиусе атаки
-                self.kick(army1,army2,attacker,victim+1)#то это его проблемы
+                army2=self.kick(army1,army2,attacker,victim)#то это его проблемы
                 print 'kick'
                 break
             
             if (abs(distance_x)>self.units_list[attacker].get_abil('range',0)):
                 if (distance_x<0):
-                    army1_coord=self.bot_moving(attacker, -1, 0,fraction)  #move left
+                    army1_coord=self.bot_moving(attacker, 1, 0,fraction)  #move left
                     print 'left'            
                 else:
-                    army1_coord=self.bot_moving(attacker, 1, 0,fraction)  #move right
+                    army1_coord=self.bot_moving(attacker, -1, 0,fraction)  #move right
                     print 'right'
             else:
                 if (abs(distance_y)>self.units_list[attacker].get_abil('range',0)):
@@ -174,17 +160,17 @@ class Battle():
                         army1_coord=self.bot_moving(attacker, 0, 1,fraction)      #move down
                         print 'down'
                 
-        print army1
-        print army1_coord
-        print army2
-        print army2_coord
+        #print army1
+        #print army1_coord
+        #print army2
+        #print army2_coord
                         
     def who_wins(self,army1,army2):
         countwarrs1=0
         countwarrs2=0
         for i in range(5):
             countwarrs1+=army1[i]
-            countwarrs2+=army1[i]#считаем кол-во войск
+            countwarrs2+=army2[i]#считаем кол-во войск
         if(countwarrs1>0 and countwarrs2>0):
             return 0
         elif(countwarrs1==0):
@@ -200,11 +186,11 @@ class Battle():
             for i in range(5):
                 if (army1[i]>0):
                     self.bot_1step(army1, army2, self.coord_army1, self.coord_army2, 0, i+1)
-                    if(self.who_wins(army1,army2)):
+                    if(self.who_wins(army1,army2)>0):
                         break
                 if (army2[i]>0):
                     self.bot_1step(army2, army1,self.coord_army2, self.coord_army1,1,i+1)
-                    if(self.who_wins(army1,army2)):
+                    if(self.who_wins(army1,army2)>0):
                         break
         print (self.who_wins(army1,army2))
         return (self.who_wins(army1,army2))
