@@ -104,6 +104,7 @@ class Core():
                     list_coords.append(self.get_cell_information(a.group(0)))
         print str(list_coords)+'\n'+str(x_coord_start)+'\n'+str(y_coord_start)
         return list_coords,x_coord_start,y_coord_start
+
     
     def load_battle_cells(self,current_name):
         map_file = open(current_name,'r')
@@ -142,11 +143,9 @@ class Core():
         max1 = int(map_file.readline())
         max2 = int(map_file.readline())        
         map_file.close()
-        cell = None
-        while cell == None:
-            cell = re.search('[(][0-9]{1,3}[;][0-9]{1,3}[;]'+str(fraction)+'[;][0-2][;][0-9]+[)]',l)
-            if cell!= None:#x,y,type,fraction,id_army
-                return self.get_cell_information(cell.group(0))
+        cell = re.search('[(][0-9]{1,3}[;][0-9]{1,3}[;]'+str(fraction)+'[;][0-2][;][0-9]+[)]',l)
+        if cell!= None:#x,y,type,fraction,id_army
+            return self.get_cell_information(cell.group(0))
 
         
     def load_cells_for_transparent_textures(self,x,y,current_name):
@@ -183,7 +182,7 @@ class Core():
         list_coords = []
         a = re.findall('[(][0-9]{1,3}[;][0-9]{1,3}[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
         for i in range(max1*max2):
-           list_coords.append(self.get_cell_information(a[i]))
+            list_coords.append(self.get_cell_information(a[i]))
         return list_coords
 
     def load_armies(self,current_name):

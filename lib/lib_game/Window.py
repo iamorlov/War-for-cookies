@@ -223,7 +223,7 @@ class Window():
             return 0,0,0
 
 
-    def moving_army(self,x,y,last_x,last_y):
+    def moving_army(self,x,y,last_x,last_y):## Диагноз - говнокод 90лвл(2:14 ночи)
         armies_lists = 0
         self.status_army(self.id_army)
         cell = self.core.load_cell(self.army_coords[0],self.army_coords[1],self.file)
@@ -234,6 +234,48 @@ class Window():
         if ((self.army_coords[0]+x>-1) and (self.army_coords[1]+y>-1) and (self.army_coords[1]+y<self.steps) and (self.army_coords[0]+x<self.steps)):
             cell = self.core.load_cell(self.army_coords[0]+x,self.army_coords[1]+y,self.file)
             if (((cell[2]>=0) and (cell[2]<3)) and (cell[4] == 0)):
+                self.core.change_cell(self.army_coords[0]+x,self.army_coords[1]+y,cell[2],self.fraction,self.id_army,self.file)
+                self.army_coords[0] += x
+                self.army_coords[1] += y
+                print 'last_x '+str(last_x)+'last_y = '+str(last_y)
+                try:
+                    if (self.army_coords[1] - self.x_start >6):
+                        self.x_start+=5
+                        last_x = self.x_start+7
+                        if (self.x_start>self.steps-1):
+                            self.x_start = self.steps - self.big_steps
+                        self.reload_window(last_x,last_y)
+                        print 'last_x '+str(last_x)+'last_y = '+str(last_y)
+                    elif (self.army_coords[0]- self.y_start >6):
+                        self.y_start +=5
+                        last_y = self.y_start+7
+                        if (self.y_start>self.steps-1):
+                            self.y_start = self.steps - self.big_steps
+                        print 'Event!'
+                        self.reload_window(last_x,last_y)
+                        print 'last_x '+str(last_x)+'last_y = '+str(last_y)
+                    elif (self.army_coords[1] - self.last_x <-6):
+                        self.x_start-=5
+                        if (self.x_start<0):
+                            self.x_start = 0
+                            last_x = self.x_start+7
+                        self.reload_window(last_x,last_y)
+                        print 'last_x '+str(last_x)+'last_y = '+str(last_y)
+                    elif (self.army_coords[0]- self.last_y <-6):
+                        self.y_start -=5
+                        last_y = self.y_start+7
+                        if (self.y_start<0):
+                            self.y_start = 0
+                        print 'Event!'
+                        self.reload_window(last_x,last_y)
+                        print 'last_x '+str(last_x)+'last_y = '+str(last_y)
+                    else:
+                        self.reload_window(last_x,last_y)
+                except AttributeError:
+                    self.reload_window(0,0)
+                    print 'last_x '+str(last_x)+'last_y = '+str(last_y)
+                return True,3, last_x,last_y,0
+            elif ((cell[2]==9) and (cell[3]==self.fraction)):
                 self.core.change_cell(self.army_coords[0]+x,self.army_coords[1]+y,cell[2],self.fraction,self.id_army,self.file)
                 self.army_coords[0] += x
                 self.army_coords[1] += y

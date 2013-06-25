@@ -83,4 +83,27 @@ class Graphical_logic:
         fract = self.core.get_fraction_status(filename, fraction)
         print fract                
         return fract
+
+    def troops_generator(self,fraction,filename):
+        fract = self.core.get_fraction_status(filename, fraction)
+        costs = [[1,10],[2,25],[4,40],[9,80],[10,140]]
+        current_resources  = [fract[2],fract[3]]
+        used_resources  = [0,0]
+        army = []
+        for i in range(5):
+            used_resources = [int(current_resources[0]*0.4),int(current_resources[1]*0.4)]
+            temp_units1 = used_resources[0]//costs[i][0]
+            temp_units2 = used_resources[1]//costs[i][1]
+            if temp_units1 >=temp_units2:
+                used_resources[0]=cost[i][0]*temp_units1
+                used_resources[1]=cost[i][1]*temp_units1
+                army.append(temp_units1)
+            else:
+                used_resources[0]=cost[i][0]*temp_units2
+                used_resources[1]=cost[i][1]*temp_units2
+                army.append(temp_units2)
+            current_resources[0] = current_resources[0]-used_resources[0]
+            current_resources[1] = current_resources[1]-used_resources[1]
+        base = self.core.load_base(fraction, filename)
+        
         
