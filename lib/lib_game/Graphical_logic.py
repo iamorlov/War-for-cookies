@@ -79,7 +79,7 @@ class Graphical_logic:
         fract = self.core.get_fraction_status(filename, fraction)
         print fract
         print 'FRACT'
-        self.core.change_fraction_status(filename, fraction, fract[1], fract[2]+fract[4]*10, fract[3]+fract[5]*10, fract[4], fract[5])
+        self.core.change_fraction_status(filename, fraction, fract[1], fract[2]+fract[4]*20, fract[3]+fract[5]*50, fract[4], fract[5])
         fract = self.core.get_fraction_status(filename, fraction)
         print fract                
         return fract
@@ -95,15 +95,18 @@ class Graphical_logic:
             temp_units1 = used_resources[0]//costs[i][0]
             temp_units2 = used_resources[1]//costs[i][1]
             if temp_units1 >=temp_units2:
-                used_resources[0]=cost[i][0]*temp_units1
-                used_resources[1]=cost[i][1]*temp_units1
+                used_resources[0]=costs[i][0]*temp_units1
+                used_resources[1]=costs[i][1]*temp_units1
                 army.append(temp_units1)
             else:
-                used_resources[0]=cost[i][0]*temp_units2
-                used_resources[1]=cost[i][1]*temp_units2
+                used_resources[0]=costs[i][0]*temp_units2
+                used_resources[1]=costs[i][1]*temp_units2
                 army.append(temp_units2)
             current_resources[0] = current_resources[0]-used_resources[0]
             current_resources[1] = current_resources[1]-used_resources[1]
         base = self.core.load_base(fraction, filename)
+        bottom_coord = self.core.load_cell(base[0]+1, base[1]+1, filename)
+        id_army = self.core.create_new_army(filename, army[0], army[1], army[2], army[3], army[4], 20, 20, fraction)
+        self.core.change_cell(bottom_coord[0], bottom_coord[1], bottom_coord[2], fraction, id_army, filename)
         
         

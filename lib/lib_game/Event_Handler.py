@@ -48,12 +48,18 @@ class Event_Handler():
         elif (event[0]=='end_of_players_steps'):
             if fraction == 1:
                 self.graphical_logic.add_resources_for_current_fraction(fraction, filename)
-                self.graphical_logic.change_all_armies_steps_for_fraction(fraction, filename)                
+                self.graphical_logic.change_all_armies_steps_for_fraction(fraction, filename)
+                if days%10 == 0:
+                    print ' pivo'
+                    self.graphical_logic.troops_generator(fraction, filename)                
                 fraction = 2
                 return 0,last_x,last_y,fraction,days, 0,0,x_start,y_start
             elif fraction == 2:
                 self.graphical_logic.add_resources_for_current_fraction(fraction, filename)
                 self.graphical_logic.change_all_armies_steps_for_fraction(fraction, filename)
+                if days%10 == 0:
+                    print 'vodka'
+                    self.graphical_logic.troops_generator(fraction, filename)    
                 fraction = 1
                 days +=1
                 return 0,last_x,last_y,fraction,days, 0,0,x_start,y_start

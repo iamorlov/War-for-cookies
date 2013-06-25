@@ -245,6 +245,21 @@ class Core():
         print (fract.group(0))
         return (self.get_fraction_information(fract.group(0)))
                 
+    def create_new_army(self,current_name,unit_1,unit_2,unit_3,unit_4,unit_5,move_max,move_current,fraction):
+        map_file = open(current_name,'r')
+        lines = map_file.readlines()
+        l = ''
+        for i in range(len(lines)):
+            l+=lines[i]        
+        map_file.close()
+        list_armies = self.load_armies(current_name)
+        result_id_army = list_armies[0][0]
+        for i in range(1,len(list_armies)):
+            result_id_army = max(result_id_army,list_armies[i][0])
+        map_file = open(current_name,'a')
+        map_file.write('\n('+str(result_id_army+1)+';'+str(unit_1)+';'+str(unit_2)+';'+str(unit_3)+';'+str(unit_4)+';'+str(unit_5)+';'+str(move_max)+';'+str(move_current)+';'+str(fraction)+')\n')        
+        map_file.close()
+        return result_id_army
             
     def change_army(self,current_name,id_army,unit_1,unit_2,unit_3,unit_4,unit_5,move_max,move_current,fraction):
         map_file = open(current_name,'r')
