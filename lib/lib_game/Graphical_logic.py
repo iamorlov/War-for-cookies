@@ -106,7 +106,11 @@ class Graphical_logic:
             current_resources[1] = current_resources[1]-used_resources[1]
         base = self.core.load_base(fraction, filename)
         bottom_coord = self.core.load_cell(base[0]+1, base[1]+1, filename)
+        print 'bottom coord'
+        print bottom_coord
         id_army = self.core.create_new_army(filename, army[0], army[1], army[2], army[3], army[4], 20, 20, fraction)
         self.core.change_cell(bottom_coord[0], bottom_coord[1], bottom_coord[2], fraction, id_army, filename)
-        
+        print 'bottom coord final'
+        bottom_coord = self.core.load_cell(bottom_coord[0], bottom_coord[1], filename)
+                
         

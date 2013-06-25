@@ -49,7 +49,7 @@ class Event_Handler():
             if fraction == 1:
                 self.graphical_logic.add_resources_for_current_fraction(fraction, filename)
                 self.graphical_logic.change_all_armies_steps_for_fraction(fraction, filename)
-                if days%10 == 0:
+                if (days+2)%10 == 0:
                     print ' pivo'
                     self.graphical_logic.troops_generator(fraction, filename)                
                 fraction = 2
@@ -57,7 +57,7 @@ class Event_Handler():
             elif fraction == 2:
                 self.graphical_logic.add_resources_for_current_fraction(fraction, filename)
                 self.graphical_logic.change_all_armies_steps_for_fraction(fraction, filename)
-                if days%10 == 0:
+                if (days+2)%10 == 0:
                     print 'vodka'
                     self.graphical_logic.troops_generator(fraction, filename)    
                 fraction = 1

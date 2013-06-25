@@ -44,7 +44,9 @@ class Core():
         a = re.search('[(]'+str(x)+'[;]'+str(y)+'[;][0-9]{1,2}[;][0-2][;][0-9]+[)]',l)
         if a!=None:
             base_line = a.group(0)
-        new_line = '('+str(x)+';'+str(y)+';'+str(t)+';'+str(f)+';'+str(id_army)+')' 
+        new_line = '('+str(x)+';'+str(y)+';'+str(t)+';'+str(f)+';'+str(id_army)+')'
+        print 'New Line'
+        print new_line 
         file = open(current_name,'w')
         file.writelines(l.replace(base_line,new_line))
         file.close()
