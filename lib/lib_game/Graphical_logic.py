@@ -105,6 +105,7 @@ class Graphical_logic:
             current_resources[0] = current_resources[0]-used_resources[0]
             current_resources[1] = current_resources[1]-used_resources[1]
         base = self.core.load_base(fraction, filename)
+        print str(base[0]+1)+'v v v'+str(base[0])
         bottom_coord = self.core.load_cell(base[0]+1, base[1]+1, filename)
         print 'bottom coord'
         print bottom_coord

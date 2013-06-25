@@ -2,6 +2,7 @@
 from pygame import *
 from Core import Core
 from Graphical_logic import Graphical_logic
+from battle import Battle
 
 
 '''
@@ -15,6 +16,7 @@ class Event_Handler():
     def __init__(self):
         self.core = Core()
         self.graphical_logic = Graphical_logic()
+        self.battle = Battle('1')
 
 #Уровень шаманизма - 90! NE ПbTauTeCb ПОНЯТb БЕЗНОГNМ 
     def stage_0(self,event,fraction,days,action_to_map_coords,action_to_minimap_coords,last_x,last_y,filename,x_start,y_start):
@@ -139,13 +141,16 @@ class Event_Handler():
         return stage,last_x,last_y,armies_list
     
     
-    def stage_6(self,event,battle_dialog,stage):
+    def stage_6(self,event,battle_dialog,stage,reload_window,last_x,last_y,armies_lists):
         print event
+        list = self.battle.auto_battle(armies_lists[0], armies_lists[1])
+        print list
         if event[0] == 'battle_mode':
             stage = event[1]
             print stage
             print event
             return stage
+        
         else:
             stage = 6
             return stage

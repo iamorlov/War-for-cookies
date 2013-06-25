@@ -6,7 +6,7 @@ from Resources import *
 from Graphical_logic import *
 from Events import *
 from Event_Handler import Event_Handler
-
+from battle import Battle
 
 class Window():
      
@@ -17,7 +17,7 @@ class Window():
         self.file = 'ingame_temp'#заміна self.file в Core.py
         #self.map_type - треба замінити в Core.py
         #self.x_coord_start self.x_coord_end - замінити в Core.py
-        
+        self.battle = Battle('1')
         self.resources = Resources()
         self.graphical_logic = Graphical_logic()
         self.w_event = Events()
@@ -109,7 +109,38 @@ class Window():
             except TypeError:         
                 pass
         pygame.display.flip()
-                
+    
+    def res_view(self,fraction):
+        list_1 = self.core.get_fraction_status(self.file, fraction)
+        
+        cell = Rect((750,350),(140,300+100))
+        pygame.draw.rect(self.display,(220,220,250),cell,0)
+        font1 = pygame.font.SysFont("Monospace", 20, bold=True, italic=False)
+        item = 'Milk'
+        font1_1 = font1.render(item,0,(20,20,20))
+        self.display.blit(font1_1,(800,350))
+        item = str(list_1[2])
+        font2 = font1.render(item,0,(20,20,20))
+        self.display.blit(font2,(800,350+40))                
+        item = 'cookies'
+        font3 = font1.render(item,0,(20,20,20))        
+        self.display.blit(font3,(800,350+80))
+        item = str(list_1[3])
+        font4 = font1.render(item,0,(20,20,20))
+        self.display.blit(font4,(800,350+120))
+        item = 'Farms'
+        font5 = font1.render(item,0,(20,20,20))
+        self.display.blit(font5,(800,350+160))
+        item = str(list_1[4])
+        font6 = font1.render(item,0,(20,20,20))
+        self.display.blit(font6,(800,350+160+40))                
+        item = 'Mines'
+        font7 = font1.render(item,0,(20,20,20))
+        self.display.blit(font7,(800,350+200+40))
+        item = str(list_1[5])
+        font8 = font1.render(item,0,(20,20,20))
+        self.display.blit(font8,(800,350+240+40))        
+                        
     def Load_part_of_map(self,x,y):
         textures = self.resources.textures()
         textures_army = self.resources.textures_for_army()
@@ -150,6 +181,7 @@ class Window():
 
     def event_handler(self):
         event = self.w_event.get_event(self.stage, self.big_step, self.step_p)
+        self.res_view(self.fraction)
         if (event != None):
             if self.stage == 0:
                 try:
@@ -200,7 +232,7 @@ class Window():
 
             if self.stage == 6:
                 self.battle_dialog_window()
-                self.stage = self.mode.stage_6(event, self.battle_dialog_window,self.stage,self.reload_window,self.last_x,self.last_y)
+                self.stage = self.mode.stage_6(event, self.battle_dialog_window,self.stage,self.reload_window,self.last_x,self.last_y,self.armies_list)
 
             if self.stage == 7:
                 pass
@@ -277,13 +309,21 @@ class Window():
                 return True,3, last_x,last_y,0
             
             elif ((((cell[2]>=0) and (cell[2]<3)) and(cell[3]!=self.fraction) and (cell[4] != 0))or ((cell[2]==9) and (cell[3]==self.fraction))):
-                stage = 6
                 armies_lists = []
+                stage = 6
                 armies_lists.append(self.core.load_army(self.file, self.id_army))
+                temp = []
+                for i in range(6):
+                    temp.append(armies_lists[0][i])
+                armies_lists[0] = temp
                 self.core.change_cell(self.army_coords[0],self.army_coords[1],cell[2],self.fraction,self.id_army,self.file)                
                 cell = self.core.load_cell(self.army_coords[0]+x,self.army_coords[1]+y,self.file)
                 armies_lists.append(self.core.load_army(self.file, cell[4]))
-                print(armies_lists)
+                temp = []
+                for i in range(6):
+                    temp.append(armies_lists[1][i])
+                armies_lists[1] = temp
+
                 return False, stage,last_x,last_y,armies_lists
             elif (((cell[2]>=7) and (cell[2]<9)) and (cell[3] != self.fraction)):
                 stage = 3

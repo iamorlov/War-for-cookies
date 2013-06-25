@@ -145,7 +145,7 @@ class Core():
         max1 = int(map_file.readline())
         max2 = int(map_file.readline())        
         map_file.close()
-        cell = re.search('[(][0-9]{1,3}[;][0-9]{1,3}[;]'+str(fraction)+'[;][0-2][;][0-9]+[)]',l)
+        cell = re.search('[(][0-9]{1,3}[;][0-9]{1,3}[;][0-9]{1,2}[;]'+str(fraction)+'[;][0-9]+[)]',l)
         if cell!= None:#x,y,type,fraction,id_army
             return self.get_cell_information(cell.group(0))
 
